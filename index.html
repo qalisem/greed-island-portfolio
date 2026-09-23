@@ -1,0 +1,1247 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Greed Island: Qasem Ali</title>
+<meta name="description" content="Qasem Ali, software developer. A Hunter × Hunter Greed Island themed portfolio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Shippori+Mincho+B1:wght@700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --room: #f3f3f0;         /* arrival-room white */
+  --ink: #0e0f11;
+  --ink-2: #2a2c30;
+  --mute: #8d9096;
+  --book: #3a3372;         /* the Book's cover */
+  --book-2: #262150;
+  --pink: #e59ad2;         /* the Book's title */
+  --card: #383a37;
+  --card-plate: #dcdcc6;
+  --card-paper: #f1f0e6;
+  --red: #cf2027;          /* license emblem */
+  --lic-blue: #cfe3f2;
+  --sea: #0f2a44;
+
+  --f-ui: "Chakra Petch", "Rajdhani", "Arial Narrow", sans-serif;
+  --f-title: "Shippori Mincho B1", "Hiragino Mincho ProN", "Times New Roman", serif;
+  --f-body: "Zen Kaku Gothic New", "Hiragino Sans", "Helvetica Neue", Arial, sans-serif;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --top: calc(env(safe-area-inset-top, 0px) + 64px);
+  --bottom: calc(env(safe-area-inset-bottom, 0px) + 84px);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; overflow: hidden; background: var(--ink); color: var(--room); }
+body { font: 500 16px/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+
+#app { position: fixed; inset: 0; overflow: hidden; }
+.screen { position: absolute; inset: 0; display: none; overflow: hidden; }
+.screen.on { display: block; }
+.scroll { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: var(--top) var(--gutter) var(--bottom); }
+
+/* ---------- shared game UI ---------- */
+.ui-label { font-family: var(--f-ui); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; font-size: 13px; }
+.topbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 30; height: var(--top);
+  padding: env(safe-area-inset-top, 0px) var(--gutter) 0; display: flex; align-items: center; gap: 16px;
+  background: linear-gradient(to bottom, rgba(14,15,17,.94), rgba(14,15,17,.8) 60%, rgba(14,15,17,0));
+}
+.back-btn {
+  display: flex; align-items: center; gap: 10px; background: var(--room); color: var(--ink); border: 0; cursor: pointer;
+  font-family: var(--f-ui); font-weight: 700; letter-spacing: .12em; font-size: 14px; padding: 8px 14px 8px 10px;
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%);
+}
+.back-btn kbd { font: inherit; font-size: 11px; background: var(--ink); color: var(--room); padding: 1px 6px; }
+.ep-tag { font-family: var(--f-ui); font-weight: 600; letter-spacing: .14em; font-size: 13px; color: var(--mute); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ep-tag b { color: var(--room); font-weight: 700; }
+.player-tag { margin-left: auto; font-family: var(--f-ui); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); white-space: nowrap; }
+.player-tag b { color: var(--pink); font-weight: 700; }
+@media (max-width: 560px) { .player-tag { display: none; } }
+
+.screen-title { margin: 0 0 6px; font-family: var(--f-ui); font-weight: 700; font-size: clamp(40px, 7vw, 78px); line-height: .95; letter-spacing: .02em; text-transform: uppercase; }
+.screen-sub { margin: 0 0 28px; color: #b9bcc2; max-width: 60ch; }
+
+.hints {
+  position: fixed; right: var(--gutter); bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); z-index: 40;
+  display: flex; gap: 14px; font-family: var(--f-ui); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: rgba(243,243,240,.55);
+  pointer-events: none;
+}
+.hints kbd { font: inherit; border: 1px solid rgba(243,243,240,.35); padding: 0 6px; margin-right: 5px; color: var(--room); }
+@media (pointer: coarse), (max-width: 760px) { .hints { display: none; } }
+
+/* the Book button: opens the binder from anywhere */
+.book-btn {
+  position: fixed; left: max(12px, env(safe-area-inset-left, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); z-index: 40;
+  display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 0;
+  font-family: var(--f-ui); font-weight: 700; letter-spacing: .14em; font-size: 13px; text-transform: uppercase;
+}
+.book-btn svg { width: 44px; height: 56px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.5)); transition: transform .2s; }
+.book-btn:hover svg { transform: translateY(-3px) rotate(-4deg); }
+.book-btn span { background: rgba(14,15,17,.75); padding: 4px 8px; }
+
+/* ---------- transitions ---------- */
+#titlecard { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; background: #050506; overflow: hidden; cursor: pointer; }
+#titlecard .tc-img { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; filter: grayscale(.35) contrast(1.05) brightness(.55); transform: scale(1.08); }
+#titlecard.run .tc-img { animation: tcImg 1.6s ease-out forwards; }
+@keyframes tcImg { to { opacity: 1; transform: scale(1); } }
+#titlecard .tc-inner { position: relative; text-align: center; padding: 0 var(--gutter); }
+#titlecard .tc-ep { font-family: var(--f-ui); font-weight: 600; letter-spacing: .3em; font-size: 14px; color: var(--mute); opacity: 0; }
+#titlecard .tc-title { margin: 14px 0 0; font-family: var(--f-title); font-weight: 800; font-size: clamp(34px, 6.4vw, 84px); line-height: 1.05; color: #fff; text-wrap: balance; }
+#titlecard .tc-title .w { display: inline-block; opacity: 0; transform: translateY(18px); }
+#titlecard .tc-title .x { display: inline-block; color: var(--red); margin: 0 .22em; opacity: 0; transform: scale(2.4) rotate(-20deg); }
+#titlecard.run .tc-ep { animation: fadeIn .4s ease-out .1s forwards; }
+#titlecard.run .tc-title .w { animation: wordIn .45s cubic-bezier(.2,.9,.3,1) forwards; }
+#titlecard.run .tc-title .x { animation: xIn .35s cubic-bezier(.3,1.6,.5,1) forwards; }
+#titlecard .tc-skip { position: absolute; bottom: calc(env(safe-area-inset-bottom, 0px) + 22px); left: 50%; transform: translateX(-50%); font-family: var(--f-ui); font-size: 12px; letter-spacing: .2em; color: rgba(255,255,255,.35); text-transform: uppercase; }
+#titlecard.out { animation: tcOut .35s ease-in forwards; }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes wordIn { to { opacity: 1; transform: none; } }
+@keyframes xIn { to { opacity: 1; transform: none; } }
+@keyframes tcOut { to { opacity: 0; } }
+
+#wipe { position: fixed; inset: 0; z-index: 85; pointer-events: none; }
+#wipe i { position: absolute; left: -20vw; width: 140vw; height: 36vh; transform: translateX(-120%) skewX(-18deg); }
+#wipe i:nth-child(1) { top: -4vh; background: var(--room); }
+#wipe i:nth-child(2) { top: 30vh; background: var(--ink); height: 40vh; }
+#wipe i:nth-child(3) { top: 68vh; background: var(--book); }
+#wipe.run i { animation: wipe .55s cubic-bezier(.76,0,.24,1) forwards; }
+#wipe.run i:nth-child(2) { animation-delay: .04s; }
+#wipe.run i:nth-child(3) { animation-delay: .08s; }
+@keyframes wipe { 0% { transform: translateX(-120%) skewX(-18deg); } 45%, 55% { transform: translateX(0) skewX(-18deg); } 100% { transform: translateX(120%) skewX(-18deg); } }
+
+/* ---------- boot + arrival room ---------- */
+#s-boot { background: var(--room); }
+.maze { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.power { position: absolute; inset: 0; z-index: 5; background: #000; display: grid; place-items: center; text-align: center; transition: opacity .6s; }
+.power.gone { opacity: 0; pointer-events: none; }
+.power .joy { font-family: var(--f-ui); font-weight: 700; font-size: clamp(28px, 5vw, 52px); letter-spacing: .5em; padding-left: .5em; color: #fff; opacity: 0; animation: fadeIn .8s .2s forwards; }
+.power .joy-sub { font-family: var(--f-ui); letter-spacing: .3em; font-size: 12px; color: #777; margin-top: 18px; text-transform: uppercase; opacity: 0; animation: fadeIn .6s .7s forwards; }
+.power .bar { width: min(280px, 60vw); height: 3px; background: #222; margin: 22px auto 0; overflow: hidden; }
+.power .bar i { display: block; height: 100%; width: 0; background: var(--pink); animation: load 1.3s .6s ease-in-out forwards; }
+@keyframes load { to { width: 100%; } }
+.guide-img {
+  position: absolute; inset: 0; background-size: cover; background-position: 32% 18%;
+  -webkit-mask-image: radial-gradient(ellipse 85% 90% at 45% 40%, #000 68%, transparent 100%);
+          mask-image: radial-gradient(ellipse 85% 90% at 45% 40%, #000 68%, transparent 100%);
+  opacity: 0; transform: scale(1.06); transition: opacity 1s ease, transform 8s ease-out;
+}
+.guide-img.in { opacity: 1; transform: scale(1); }
+#s-contact .guide-img { background-position: 38% 22%; }
+
+.dialog {
+  position: absolute; z-index: 10; left: 50%; transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(20px, 5vh, 48px));
+  width: min(880px, calc(100% - 2 * var(--gutter)));
+  background: rgba(255,255,255,.96); color: var(--ink); border: 3px solid var(--ink);
+  box-shadow: 0 0 0 5px var(--room), 0 0 0 8px var(--ink), 0 18px 40px rgba(0,0,0,.25);
+  padding: 26px clamp(18px, 3vw, 30px) 20px; cursor: pointer;
+}
+.dialog .who { position: absolute; top: -18px; left: 18px; background: var(--ink); color: var(--room); font-family: var(--f-ui); font-weight: 700; letter-spacing: .16em; font-size: 13px; padding: 5px 12px; }
+.dialog .who small { color: var(--pink); font-weight: 600; margin-left: 8px; letter-spacing: .1em; }
+.dialog .line { margin: 0; font-size: clamp(16px, 1.9vw, 20px); font-weight: 700; line-height: 1.55; min-height: 3.1em; }
+.dialog .more { position: absolute; right: 18px; bottom: 10px; font-size: 14px; animation: bob .8s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(4px); } }
+.choices { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px; }
+.choices button, .choices a {
+  width: 100%; display: flex; align-items: baseline; gap: 12px; text-align: left; text-decoration: none; cursor: pointer;
+  background: transparent; border: 2px solid transparent; padding: 8px 12px; font-weight: 700; font-size: 16px; color: var(--ink);
+}
+.choices .arrow { width: 14px; flex-shrink: 0; color: var(--book); visibility: hidden; }
+.choices .sel { background: var(--ink); color: var(--room); }
+.choices .sel .arrow { visibility: visible; color: var(--pink); }
+.choices .detail { font-weight: 500; opacity: .7; font-size: 14px; overflow-wrap: anywhere; }
+
+/* ---------- world map (main menu) ---------- */
+#s-map { background: var(--sea); }
+.map-stage { position: absolute; left: 50%; top: 50%; width: max(100vw, calc(100vh * 1.326)); aspect-ratio: 1057 / 797; transform: translate(-50%, -50%); }
+.map-stage img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; filter: saturate(.9) contrast(1.05); animation: drift 40s ease-in-out infinite alternate; }
+@keyframes drift { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.08) translate(-1.5%, 1%); } }
+.map-shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 40% 50%, transparent 40%, rgba(6,16,28,.75) 100%), linear-gradient(to left, rgba(8,10,14,.82), transparent 55%); pointer-events: none; }
+.pin { position: absolute; transform: translate(-50%, -50%); background: none; border: 0; padding: 0; cursor: pointer; display: grid; justify-items: center; gap: 6px; }
+.pin .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--room); border: 4px solid var(--ink); position: relative; }
+.pin .dot::after { content: ""; position: absolute; inset: -12px; border-radius: 50%; border: 2px solid var(--room); opacity: .0; animation: ping 2.2s ease-out infinite; }
+@keyframes ping { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.4); opacity: 0; } }
+.pin .plate { background: rgba(14,15,17,.85); color: var(--room); font-family: var(--f-ui); font-weight: 700; letter-spacing: .14em; font-size: 12px; padding: 3px 9px; white-space: nowrap; text-transform: uppercase; }
+.pin.sel .dot { background: var(--pink); transform: scale(1.3); }
+.pin.sel .plate { background: var(--room); color: var(--ink); }
+.map-menu { position: absolute; z-index: 5; right: var(--gutter); top: 50%; transform: translateY(-50%); width: min(430px, 44vw); display: grid; gap: 8px; }
+.map-menu .head { margin-bottom: 10px; }
+.map-menu .head .ui-label { color: var(--pink); }
+.map-menu .head h1 { margin: 4px 0 0; font-family: var(--f-ui); font-weight: 700; font-size: clamp(34px, 4.4vw, 54px); line-height: .95; letter-spacing: .02em; text-transform: uppercase; }
+.map-menu .head p { margin: 8px 0 0; color: #e2e5ea; font-size: 15px; }
+.mi {
+  display: grid; grid-template-columns: 58px 1fr; align-items: center; text-align: left; cursor: pointer;
+  background: rgba(14,15,17,.72); border: 0; color: var(--room); padding: 0; min-height: 60px;
+  transition: transform .18s cubic-bezier(.2,.9,.3,1), background .15s;
+}
+.mi .no { align-self: stretch; display: grid; place-items: center; font-family: var(--f-ui); font-weight: 700; font-size: 15px; background: rgba(255,255,255,.08); letter-spacing: .06em; }
+.mi .txt { padding: 8px 16px; }
+.mi .lbl { display: block; font-family: var(--f-ui); font-weight: 700; font-size: 22px; letter-spacing: .08em; text-transform: uppercase; line-height: 1.1; }
+.mi .desc { display: block; font-size: 13.5px; color: #aeb2b9; }
+.mi.sel { background: var(--room); color: var(--ink); transform: translateX(-14px); }
+.mi.sel .no { background: var(--book); color: var(--pink); }
+.mi.sel .desc { color: #4a4d53; }
+.credit a { color: var(--pink); }
+.credit { position: absolute; z-index: 5; left: var(--gutter); top: calc(env(safe-area-inset-top, 0px) + 16px); max-width: 52ch; margin: 0; font-size: 12px; color: rgba(243,243,240,.55); line-height: 1.45; }
+@media (max-width: 760px) {
+  .map-menu { left: var(--gutter); right: var(--gutter); width: auto; top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); transform: none; }
+  .map-menu .head p { display: none; }
+  .mi { min-height: 50px; }
+  .mi .lbl { font-size: 18px; }
+  .mi .desc { display: none; }
+  .mi.sel { transform: none; }
+  .pin .plate { display: none; }
+  .credit { left: var(--gutter); right: var(--gutter); bottom: auto; top: calc(var(--top) - 8px); }
+}
+
+/* ---------- Greed Island card (SVG, real-card proportions) ---------- */
+.gi-card { display: block; width: 15em; height: auto; aspect-ratio: 1530 / 2130; filter: drop-shadow(0 .6em 1.1em rgba(0,0,0,.45)); }
+.gi-card .halo * { stroke: #fff !important; stroke-width: 38px !important; fill: #fff !important; stroke-dasharray: none !important; }
+.gi-desc { margin: 0; font-family: var(--f-body); font-weight: 700; font-size: 64px; line-height: 1.55; color: #161616; }
+
+/* ---------- binder (projects) ---------- */
+#s-projects { background: #16171a; }
+#s-projects::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 0%, rgba(58,51,114,.45), transparent 60%); pointer-events: none; }
+.binder-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: clamp(20px, 3vw, 44px); align-items: start; max-width: 1280px; margin: 0 auto; }
+.binder {
+  background: #e9e9e4; border-radius: 6px; padding: clamp(14px, 2vw, 22px); color: var(--ink);
+  box-shadow: 0 0 0 4px #b8b8b0, 0 24px 50px rgba(0,0,0,.5); position: relative;
+}
+.binder .bhead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; font-family: var(--f-ui); font-weight: 700; letter-spacing: .14em; font-size: 13px; text-transform: uppercase; }
+.binder .bhead b { color: var(--book); }
+.slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(6px, 1vw, 12px); }
+.slot {
+  position: relative; aspect-ratio: 479 / 666; background: #202225; border: 0; border-radius: 4px; cursor: pointer; padding: 0;
+  display: grid; place-items: center; overflow: hidden; font-size: clamp(5.5px, .72vw, 9px);
+  transition: transform .15s, box-shadow .15s;
+}
+.slot .num { font-family: var(--f-ui); font-weight: 700; font-size: clamp(11px, 1.2vw, 15px); color: #e8e8e8; letter-spacing: .08em; display: flex; align-items: center; gap: 6px; }
+.slot .num::before, .slot .num::after { content: ""; width: 10px; height: 1px; background: #8a8a8a; }
+.slot .gi-card { width: 100%; filter: none; }
+.slot.sel { box-shadow: 0 0 0 3px var(--ink), 0 0 0 6px var(--pink); transform: translateY(-3px); z-index: 2; }
+.slot.zero { background: var(--book); }
+.slot.zero .num { color: var(--pink); }
+.card-view { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(18px, 2.4vw, 32px); align-items: start; }
+.card-view .big { font-size: clamp(15px, 1.55vw, 21px); perspective: 900px; }
+.card-view .big .gi-card { animation: cardIn .45s cubic-bezier(.2,.9,.3,1); }
+@keyframes cardIn { from { transform: rotateY(-70deg) translateX(-30px); opacity: 0; } to { transform: none; opacity: 1; } }
+.info .ui-label { color: var(--pink); }
+.info h2 { margin: 6px 0 2px; font-family: var(--f-ui); font-weight: 700; font-size: clamp(34px, 4vw, 52px); line-height: 1; text-transform: uppercase; letter-spacing: .02em; }
+.info .kind { margin: 0 0 14px; font-weight: 700; color: #c9ccd2; }
+.info p { margin: 0 0 14px; color: #d3d6db; max-width: 60ch; }
+.info dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0 0 16px; font-size: 14.5px; }
+.info dt { font-family: var(--f-ui); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; color: var(--mute); padding-top: 2px; }
+.info dd { margin: 0; }
+.info ul { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
+.info li { display: grid; grid-template-columns: 22px 1fr; gap: 6px; font-size: 15px; }
+.info li::before { content: "◆"; color: var(--pink); font-size: 12px; padding-top: 4px; }
+.info .link { display: inline-flex; gap: 8px; align-items: center; background: var(--room); color: var(--ink); text-decoration: none; font-family: var(--f-ui); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 9px 14px; font-size: 14px; }
+@media (max-width: 1000px) {
+  .binder-wrap { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .card-view { grid-template-columns: 1fr; }
+  .card-view .big { justify-self: center; font-size: 15px; }
+}
+
+/* ---------- license (about) ---------- */
+#s-about { background: #111215; }
+#s-about::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 28% 50%, rgba(207,227,242,.14), transparent 55%); pointer-events: none; }
+.about-wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; max-width: 1180px; margin: 0 auto; min-height: 100%; }
+.lic-stage { perspective: 1100px; display: grid; justify-items: center; gap: 14px; }
+.license { width: min(320px, 72vw, calc((100vh - 200px) * .64)); aspect-ratio: 300 / 470; position: relative; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.2,.8,.2,1); cursor: pointer; border: 0; padding: 0; background: none; }
+.license.flip { transform: rotateY(180deg); }
+.lic-face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 6.7% / 4.3%; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.55);
+}
+.lic-face > svg { display: block; width: 100%; height: 100%; }
+.lic-back { transform: rotateY(180deg); }
+.lic-sheen { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.55) 45%, rgba(190,230,255,.35) 50%, transparent 62%); background-size: 250% 250%; background-position: var(--sx, 50%) var(--sy, 50%); mix-blend-mode: soft-light; }
+.lic-ui { font-family: var(--f-ui); }
+.flip-hint { font-family: var(--f-ui); font-size: 12px; letter-spacing: .16em; color: var(--mute); text-transform: uppercase; }
+.about-text .ui-label { color: var(--pink); }
+.about-text p { color: #d3d6db; max-width: 58ch; font-size: 17px; }
+.about-text .facts { display: grid; grid-template-columns: max-content 1fr; gap: 10px 18px; margin-top: 22px; }
+.about-text .facts dt { font-family: var(--f-ui); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; color: var(--mute); padding-top: 3px; }
+.about-text .facts dd { margin: 0; font-weight: 700; }
+@media (max-width: 860px) { .about-wrap { grid-template-columns: 1fr; } }
+
+/* ---------- experience: quest log ---------- */
+#s-experience { background: #141418; }
+#s-experience::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 85% 0%, rgba(32,58,122,.35), transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(45,107,62,.25), transparent 50%); pointer-events: none; }
+.q-route { max-width: 1100px; margin: 0 0 30px; padding: 16px 18px 18px; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.09); }
+.q-route h3 { margin: 0 0 12px; font-family: var(--f-ui); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; color: var(--mute); }
+.q-months { display: grid; grid-template-columns: repeat(8, 1fr); row-gap: 8px; position: relative; }
+.q-months .m { font-family: var(--f-ui); font-weight: 600; font-size: 12px; letter-spacing: .1em; color: #aeb2b9; text-transform: uppercase; border-left: 1px solid rgba(255,255,255,.14); padding: 0 0 4px 6px; }
+.q-months .m b { display: block; color: var(--pink); font-weight: 700; font-size: 11px; min-height: 1.3em; }
+.q-bar { height: 30px; display: flex; align-items: center; padding: 0 10px; font-family: var(--f-ui); font-weight: 700; letter-spacing: .08em; font-size: 13px; text-transform: uppercase; color: #fff; border: 2px solid #0e0f11; box-shadow: 3px 3px 0 #0e0f11; white-space: nowrap; overflow: hidden; }
+.quests { display: grid; gap: 26px; max-width: 1100px; position: relative; }
+.quest {
+  --qc: #203a7a; position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(18px, 3vw, 36px); align-items: start;
+  background: linear-gradient(100deg, color-mix(in srgb, var(--qc) 30%, transparent), rgba(255,255,255,.03) 45%); border: 1px solid rgba(255,255,255,.09);
+  padding: clamp(16px, 2.4vw, 28px);
+}
+.quest .mini { font-size: 13px; display: grid; gap: 8px; justify-items: center; }
+.quest .mini small { font-family: var(--f-ui); font-weight: 600; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+.q-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+.q-no { font-family: var(--f-ui); font-weight: 700; letter-spacing: .16em; font-size: 12px; color: var(--mute); text-transform: uppercase; }
+.stamp { font-family: var(--f-ui); font-weight: 700; letter-spacing: .2em; font-size: 15px; color: #ff6b62; border: 3px double #ff6b62; padding: 3px 10px 2px; transform: rotate(-7deg); text-transform: uppercase; opacity: .92; }
+.quest h3 { margin: 0; font-family: var(--f-ui); font-weight: 700; font-size: clamp(30px, 3.6vw, 44px); line-height: 1; text-transform: uppercase; letter-spacing: .02em; }
+.quest .when { font-family: var(--f-ui); font-weight: 600; letter-spacing: .12em; font-size: 13px; color: var(--pink); text-transform: uppercase; margin: 8px 0 16px; }
+.q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 22px; }
+.q-grid section { min-width: 0; }
+.q-grid .wide { grid-column: 1 / -1; }
+.q-grid h4 { margin: 0 0 7px; font-family: var(--f-ui); font-weight: 600; letter-spacing: .16em; font-size: 11.5px; color: var(--mute); text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+.q-grid h4::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,.12); }
+.quest p { margin: 0; color: #d3d6db; max-width: 66ch; }
+.flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0; list-style: none; padding: 0; font-family: var(--f-ui); font-weight: 600; font-size: 13px; letter-spacing: .06em; }
+.flow li { background: var(--room); color: var(--ink); padding: 4px 10px; }
+.flow li.to { background: none; color: var(--pink); padding: 0; }
+.gains, .equip { display: flex; flex-wrap: wrap; gap: 8px; }
+.gains span { border: 1px solid rgba(229,154,210,.6); color: #f3d6ea; padding: 4px 10px; font-size: 14px; font-weight: 700; }
+.gains span::before { content: "✦ "; color: var(--pink); }
+.equip span { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); padding: 4px 10px; font-size: 14px; font-weight: 700; }
+@media (max-width: 760px) { .quest { grid-template-columns: 1fr; } .quest .mini { justify-items: start; } .q-grid { grid-template-columns: 1fr; } .q-route .q-bar { font-size: 11px; padding: 0 6px; } }
+
+/* ---------- Nen hexagon (skills) ---------- */
+#s-skills { background: #0f1014; }
+.nen-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 56px); align-items: center; max-width: 1180px; margin: 0 auto; }
+.nen-svg { width: 100%; max-width: 560px; justify-self: center; }
+.nen-svg .edge { stroke: rgba(243,243,240,.5); stroke-width: 2; fill: none; }
+.nen-svg .spoke { stroke: rgba(243,243,240,.14); stroke-width: 1.5; }
+.nen-node { cursor: pointer; }
+.nen-node circle { fill: #1c1d22; stroke: var(--room); stroke-width: 2.5; transition: fill .2s; }
+.nen-node .kan { fill: var(--room); font-family: var(--f-body); font-weight: 900; font-size: 30px; text-anchor: middle; dominant-baseline: central; }
+.nen-node .en { fill: #b9bcc2; font-family: var(--f-ui); font-weight: 700; font-size: 14px; letter-spacing: .12em; text-anchor: middle; text-transform: uppercase; }
+.nen-node.sel circle { fill: var(--book); stroke: var(--pink); stroke-width: 4; }
+.nen-node.sel .en { fill: var(--pink); }
+.nen-node:focus-visible { outline: none; }
+.nen-node:focus-visible circle { stroke: var(--pink); stroke-width: 5; }
+.nen-center { fill: var(--room); font-family: var(--f-body); font-weight: 900; font-size: 64px; text-anchor: middle; dominant-baseline: central; opacity: .9; }
+.nen-panel .ui-label { color: var(--pink); }
+.nen-panel h2 { margin: 6px 0 0; font-family: var(--f-ui); font-weight: 700; font-size: clamp(34px, 4vw, 50px); line-height: 1; text-transform: uppercase; }
+.nen-panel .jp { font-family: var(--f-body); font-weight: 900; color: var(--mute); font-size: 18px; letter-spacing: .1em; }
+.nen-panel p { color: #d3d6db; max-width: 52ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { background: var(--room); color: var(--ink); font-weight: 700; padding: 5px 11px; font-size: 14.5px; }
+@media (max-width: 860px) { .nen-wrap { grid-template-columns: 1fr; } .nen-svg { max-width: 420px; } }
+.nen-side { display: grid; gap: 18px; align-content: start; }
+.nen-credit { margin: -8px 0 0; font-size: 12px; color: var(--mute); }
+.nen-credit a { color: var(--pink); }
+.nen-stage { position: relative; display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: end; }
+.nen-stage canvas { width: 320px; height: 220px; image-rendering: pixelated; image-rendering: crisp-edges; display: block; background: #16171c; border: 3px solid var(--room); box-shadow: 0 0 0 3px var(--ink), 6px 6px 0 3px rgba(0,0,0,.45); }
+.nen-who { font-family: var(--f-ui); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 15px; line-height: 1.35; padding-bottom: 6px; }
+.nen-who small { display: block; color: var(--mute); font-weight: 600; font-size: 12px; letter-spacing: .14em; }
+@media (max-width: 460px) { .nen-stage { grid-template-columns: 1fr; } .nen-stage canvas { width: 100%; height: auto; aspect-ratio: 64 / 44; } }
+.sound-btn {
+  position: fixed; right: var(--gutter); top: calc(env(safe-area-inset-top, 0px) + 13px); z-index: 60;
+  width: 42px; height: 38px; display: grid; place-items: center; cursor: pointer; padding: 0;
+  background: rgba(14,15,17,.8); color: var(--room); border: 1px solid rgba(243,243,240,.3);
+}
+.sound-btn:hover { border-color: var(--pink); }
+.sound-btn svg { width: 22px; height: 22px; }
+.sound-btn .waves { stroke: var(--pink); }
+.sound-btn .mute { display: none; stroke: var(--mute); }
+.sound-btn[aria-pressed="false"] .waves { display: none; }
+.sound-btn[aria-pressed="false"] .mute { display: inline; }
+.sound-btn.playing .waves { animation: waves 1.4s ease-in-out infinite; }
+@keyframes waves { 50% { opacity: .45; } }
+.player-tag { margin-right: 58px; }
+
+/* ---------- card close-up ---------- */
+.card-btn { display: block; padding: 0; border: 0; background: none; cursor: zoom-in; transition: transform .15s; }
+.card-btn:hover { transform: translateY(-4px) rotate(-1.5deg); }
+.card-view .big .gi-card { cursor: zoom-in; }
+#cardZoom { position: fixed; inset: 0; z-index: 88; display: grid; place-items: center; gap: 16px; align-content: center;
+  background: rgba(8,9,11,.86); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); cursor: zoom-out; padding: var(--top) var(--gutter) 24px; }
+#cardZoom .gi-card { width: min(86vw, calc((100vh - 150px) * 1530 / 2130)); font-size: 16px; animation: zoomIn .35s cubic-bezier(.2,.9,.3,1); }
+@keyframes zoomIn { from { transform: rotateY(-60deg) scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+#cardZoom .cz-close { font-family: var(--f-ui); font-weight: 700; letter-spacing: .14em; font-size: 13px; text-transform: uppercase; background: var(--room); color: var(--ink); border: 0; padding: 8px 14px; cursor: pointer; }
+
+/* ---------- contact ---------- */
+#s-contact { background: var(--room); }
+</style>
+
+<div id="app">
+  <!-- ============ BOOT: Joystation power-on, then Elena in the arrival room ============ -->
+  <section class="screen on" id="s-boot" aria-label="Welcome">
+    <canvas class="maze" aria-hidden="true"></canvas>
+    <div class="guide-img" style="background-image:url('assets/elena.webp')" role="img" aria-label="Elena, the Greed Island game guide"></div>
+    <div class="power" id="power">
+      <div>
+        <div class="joy">JOYSTATION</div>
+        <div class="bar"><i></i></div>
+        <div class="joy-sub">Loading · Greed Island</div>
+      </div>
+    </div>
+    <div class="dialog" id="bootDialog" hidden>
+      <span class="who">ELENA <small>GAME GUIDE</small></span>
+      <p class="line" aria-live="polite"></p>
+      <ul class="choices" hidden></ul>
+      <span class="more" aria-hidden="true">▼</span>
+    </div>
+  </section>
+
+  <!-- ============ WORLD MAP (main menu) ============ -->
+  <section class="screen" id="s-map" aria-label="Main menu">
+    <div class="map-stage">
+      <img src="assets/gi-map.webp" alt="">
+      <div class="map-shade"></div>
+      <button class="pin" data-go="about" style="left:25%; top:50%"><span class="dot"></span><span class="plate">License</span></button>
+      <button class="pin" data-go="projects" style="left:36%; top:34%"><span class="dot"></span><span class="plate">Binder</span></button>
+      <button class="pin" data-go="experience" style="left:50%; top:22%"><span class="dot"></span><span class="plate">Quests</span></button>
+      <button class="pin" data-go="skills" style="left:54%; top:58%"><span class="dot"></span><span class="plate">Nen</span></button>
+      <button class="pin" data-go="contact" style="left:38%; top:78%"><span class="dot"></span><span class="plate">Harbor</span></button>
+    </div>
+    <div class="map-menu" role="menu" aria-label="Sections">
+      <div class="head">
+        <span class="ui-label">Greed Island · Player</span>
+        <h1>Qasem Ali</h1>
+        <p>Software developer. Mobile apps, data pipelines and cloud backends.</p>
+      </div>
+      <button class="mi" role="menuitem" data-go="projects"><span class="no">01</span><span class="txt"><span class="lbl">Projects</span><span class="desc">The binder: things I've built</span></span></button>
+      <button class="mi" role="menuitem" data-go="about"><span class="no">02</span><span class="txt"><span class="lbl">About me</span><span class="desc">My Hunter License</span></span></button>
+      <button class="mi" role="menuitem" data-go="experience"><span class="no">03</span><span class="txt"><span class="lbl">Experience</span><span class="desc">Where I've worked</span></span></button>
+      <button class="mi" role="menuitem" data-go="skills"><span class="no">04</span><span class="txt"><span class="lbl">Skills</span><span class="desc">Sorted by Nen type</span></span></button>
+      <button class="mi" role="menuitem" data-go="contact"><span class="no">05</span><span class="txt"><span class="lbl">Contact</span><span class="desc">Email, GitHub, LinkedIn</span></span></button>
+    </div>
+    <p class="credit">Fan-made. Hunter × Hunter © Yoshihiro Togashi / Shueisha / Madhouse. Screenshots via Hunterpedia. Pixel art of Gon, Killua, Kurapika &amp; Leorio by <a href="https://www.deviantart.com/umjammerlucas/gallery" target="_blank" rel="noopener">umjammerlucas</a>.</p>
+  </section>
+
+  <!-- ============ ABOUT: Hunter License ============ -->
+  <section class="screen" id="s-about" aria-labelledby="about-h">
+    <div class="scroll">
+      <div class="about-wrap">
+        <div class="lic-stage">
+          <button class="license" id="license" aria-label="Hunter License. Click to flip.">
+            <div class="lic-face">
+              <svg viewBox="0 0 300 470" aria-hidden="true">
+                <defs>
+                  <linearGradient id="licBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bcd9f1"/><stop offset=".42" stop-color="#e8f3fb"/><stop offset="1" stop-color="#b6d5ef"/></linearGradient>
+                  <linearGradient id="licBand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".65" stop-color="#fbfbfb"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+                </defs>
+                <rect x="1.5" y="1.5" width="297" height="467" rx="20" fill="#f6f6f6" stroke="#555" stroke-width="2"/>
+                <rect x="7" y="7" width="286" height="456" rx="16" fill="none" stroke="#b4b4b4"/>
+                <path d="M14 30 a16 16 0 0 1 16 -16 h240 a16 16 0 0 1 16 16 V276 H14 Z" fill="#1b1b1b"/>
+                <rect x="38" y="36" width="224" height="128" fill="#fff"/>
+                <image href="assets/hunter-logo.png" x="67" y="46" width="166" height="108" preserveAspectRatio="xMidYMid meet"/>
+                <rect x="38" y="182" width="224" height="70" fill="url(#licBand)"/>
+                <line x1="42.0" y1="186" x2="42.0" y2="248" stroke="#666" stroke-width="1.3"/><line x1="46.4" y1="186" x2="46.4" y2="248" stroke="#777" stroke-width="1.3"/><line x1="50.8" y1="186" x2="50.8" y2="248" stroke="#777" stroke-width="1.3"/><line x1="55.2" y1="186" x2="55.2" y2="248" stroke="#888" stroke-width="1.3"/><line x1="59.6" y1="186" x2="59.6" y2="248" stroke="#888" stroke-width="1.3"/><line x1="64.0" y1="186" x2="64.0" y2="248" stroke="#999" stroke-width="1.3"/><line x1="68.4" y1="186" x2="68.4" y2="248" stroke="#999" stroke-width="1.3"/><line x1="72.8" y1="186" x2="72.8" y2="248" stroke="#aaa" stroke-width="1.3"/><line x1="77.2" y1="186" x2="77.2" y2="248" stroke="#aaa" stroke-width="1.3"/><line x1="81.6" y1="186" x2="81.6" y2="248" stroke="#bbb" stroke-width="1.3"/><line x1="86.0" y1="186" x2="86.0" y2="248" stroke="#bbb" stroke-width="1.3"/><line x1="90.4" y1="186" x2="90.4" y2="248" stroke="#ccc" stroke-width="1.3"/><line x1="94.8" y1="186" x2="94.8" y2="248" stroke="#ccc" stroke-width="1.3"/><line x1="99.2" y1="186" x2="99.2" y2="248" stroke="#ddd" stroke-width="1.3"/><line x1="103.6" y1="186" x2="103.6" y2="248" stroke="#ddd" stroke-width="1.3"/><line x1="108.0" y1="186" x2="108.0" y2="248" stroke="#e4e4e4" stroke-width="1.3"/>
+                <path d="M14 276 H286 V440 a16 16 0 0 1 -16 16 H30 a16 16 0 0 1 -16 -16 Z" fill="url(#licBlue)" stroke="#6b7c8a"/>
+                <rect x="30" y="290" width="240" height="38" rx="3" fill="#fff" stroke="#111" stroke-width="2.5"/>
+                <text class="lic-ui" x="150" y="316" text-anchor="middle" font-weight="700" font-size="20" letter-spacing="4" fill="#111">QASEM ALI</text>
+                <g id="licGlyphs" stroke="#111" stroke-width="1.35" fill="none" stroke-linecap="square"></g>
+              </svg>
+              <div class="lic-sheen"></div>
+            </div>
+            <div class="lic-face lic-back">
+              <svg viewBox="0 0 300 470" aria-hidden="true">
+                <rect x="1.5" y="1.5" width="297" height="467" rx="20" fill="#f6f6f6" stroke="#555" stroke-width="2"/>
+                <rect x="7" y="7" width="286" height="456" rx="16" fill="none" stroke="#b4b4b4"/>
+                <rect x="14" y="14" width="272" height="442" rx="14" fill="#cfe6f9" stroke="#5f7383" stroke-width="1.5"/>
+                <rect x="226" y="14" width="30" height="442" fill="#1d1414"/>
+                <g fill="none" stroke="#111" stroke-width="2.4"><rect x="34" y="44" width="15" height="15" rx="2"/><rect x="34" y="64" width="15" height="15" rx="2"/><rect x="34" y="84" width="15" height="15" rx="2"/><rect x="34" y="104" width="15" height="15" rx="2"/><rect x="34" y="138" width="15" height="15" rx="2"/><rect x="34" y="158" width="15" height="15" rx="2"/><rect x="34" y="178" width="15" height="15" rx="2"/><rect x="34" y="198" width="15" height="15" rx="2"/><rect x="34" y="232" width="15" height="15" rx="2"/><rect x="34" y="252" width="15" height="15" rx="2"/><rect x="34" y="272" width="15" height="15" rx="2"/><rect x="34" y="306" width="15" height="15" rx="2"/><rect x="34" y="326" width="15" height="15" rx="2"/><rect x="34" y="346" width="15" height="15" rx="2"/><rect x="34" y="380" width="15" height="15" rx="2"/><rect x="34" y="400" width="15" height="15" rx="2"/><rect x="34" y="420" width="15" height="15" rx="2"/><rect x="34" y="440" width="15" height="15" rx="2"/></g>
+                <g class="lic-ui">
+                  <text x="70" y="62" font-size="11" font-weight="700" letter-spacing="1.2" fill="#111">HUNTER ASSOCIATION</text>
+                  <text x="70" y="100" font-size="10.5" font-weight="600" letter-spacing="1.6" fill="#4b5a66">NAME</text><text x="70" y="116" font-size="13.5" font-weight="700" fill="#111">Qasem Ali</text><text x="70" y="146" font-size="10.5" font-weight="600" letter-spacing="1.6" fill="#4b5a66">BASE</text><text x="70" y="162" font-size="13.5" font-weight="700" fill="#111">Mississauga, ON</text><text x="70" y="192" font-size="10.5" font-weight="600" letter-spacing="1.6" fill="#4b5a66">TRAINING</text><text x="70" y="208" font-size="13.5" font-weight="700" fill="#111">B.Sc. CS, TMU</text><text x="70" y="224" font-size="13.5" font-weight="700" fill="#111">Expected 2028/2029</text><text x="70" y="254" font-size="10.5" font-weight="600" letter-spacing="1.6" fill="#4b5a66">SPECIALTY</text><text x="70" y="270" font-size="13.5" font-weight="700" fill="#111">Mobile, data, cloud</text><text x="70" y="300" font-size="10.5" font-weight="600" letter-spacing="1.6" fill="#4b5a66">NEN TYPE</text><text x="70" y="316" font-size="13.5" font-weight="700" fill="#111">Conjurer</text><text x="70" y="346" font-size="10.5" font-weight="600" letter-spacing="1.6" fill="#4b5a66">FAVOURITE ARC</text><text x="70" y="362" font-size="13.5" font-weight="700" fill="#111">Yorknew City</text>
+                </g>
+              </svg>
+              <div class="lic-sheen"></div>
+            </div>
+          </button>
+          <span class="flip-hint">Flip the card for my details · click or press →</span>
+        </div>
+        <div class="about-text">
+          <span class="ui-label">Player profile</span>
+          <h2 class="screen-title" id="about-h" tabindex="-1">About me</h2>
+          <p>I'm a Computer Science student at Toronto Metropolitan University (graduating 2028/2029), based in Mississauga, Ontario. I build mobile apps, data pipelines and cloud backends, and I like shipping things that real people use.</p>
+          <p>My biggest project is Safr, a navigation app I built on my own, now in beta with 30+ testers. I've also worked as an Android &amp; web developer at LiveAI and a data engineer at Stush Foods.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS: the binder ============ -->
+  <section class="screen" id="s-projects" aria-labelledby="proj-h">
+    <div class="scroll">
+      <span class="ui-label" style="color:var(--pink)">Book · Specified slots</span>
+      <h2 class="screen-title" id="proj-h" tabindex="-1">Projects</h2>
+      <p class="screen-sub">Every project I've shipped is a card in my binder. Pick a slot to read the card.</p>
+      <div class="binder-wrap">
+        <div class="binder">
+          <div class="bhead"><span>Binder · <b>Qasem Ali</b></span><span id="slotCount"></span></div>
+          <div class="slots" id="slots" role="listbox" aria-label="Project cards"></div>
+        </div>
+        <div class="card-view" id="cardView" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE: spell cards ============ -->
+  <section class="screen" id="s-experience" aria-labelledby="exp-h">
+    <div class="scroll">
+      <span class="ui-label" style="color:var(--pink)">Quest log</span>
+      <h2 class="screen-title" id="exp-h" tabindex="-1">Experience</h2>
+      <p class="screen-sub">Every job so far, filed as a spell card. Click a card to see it up close.</p>
+      <div class="q-route" id="qRoute"></div>
+      <div class="quests" id="quests"></div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS: Nen hexagon ============ -->
+  <section class="screen" id="s-skills" aria-labelledby="nen-h">
+    <div class="scroll">
+      <span class="ui-label" style="color:var(--pink)">Water divination results</span>
+      <h2 class="screen-title" id="nen-h" tabindex="-1">Skills</h2>
+      <p class="screen-sub">Sorted into the six Nen types. Pick a type to see what's in it.</p>
+      <div class="nen-wrap">
+        <svg class="nen-svg" id="nenSvg" viewBox="0 0 520 520" role="group" aria-label="Nen types"></svg>
+        <div class="nen-side">
+          <div class="nen-stage">
+            <canvas id="nenSprite" width="64" height="44" role="img" aria-label=""></canvas>
+            <div class="nen-who" id="nenWho"></div>
+          </div>
+          <p class="nen-credit">Pixel art of Gon, Killua, Kurapika &amp; Leorio by <a href="https://www.deviantart.com/umjammerlucas/gallery" target="_blank" rel="noopener">umjammerlucas</a> · Chrollo &amp; Illumi drawn to match.</p>
+          <div class="nen-panel" id="nenPanel" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT: Eeta ============ -->
+  <section class="screen" id="s-contact" aria-label="Contact">
+    <canvas class="maze" aria-hidden="true"></canvas>
+    <div class="guide-img" style="background-image:url('assets/eeta.webp')" role="img" aria-label="Eeta, the Greed Island game guide"></div>
+    <div class="dialog" id="contactDialog">
+      <span class="who">EETA <small>GAME GUIDE</small></span>
+      <p class="line">Leaving already? Qasem is open to internships and new projects. How would you like to reach him?</p>
+      <ul class="choices" id="contactChoices">
+        <li><a href="mailto:qasemali200502@gmail.com"><span class="arrow">▶</span><span>Email</span><span class="detail">qasemali200502@gmail.com</span></a></li>
+        <li><a href="https://github.com/qalisem" target="_blank" rel="noopener"><span class="arrow">▶</span><span>GitHub</span><span class="detail">github.com/qalisem</span></a></li>
+        <li><a href="https://linkedin.com/in/qasem-ali1" target="_blank" rel="noopener"><span class="arrow">▶</span><span>LinkedIn</span><span class="detail">linkedin.com/in/qasem-ali1</span></a></li>
+        <li><button data-go="map"><span class="arrow">▶</span><span>Back to the map</span></button></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- shared chrome -->
+  <header class="topbar" id="topbar" hidden>
+    <button class="back-btn" data-go="map"><kbd>ESC</kbd>MAP</button>
+    <span class="ep-tag" id="epTag"></span>
+    <span class="player-tag">Player <b>Qasem Ali</b></span>
+  </header>
+  <button class="book-btn" id="bookBtn" hidden aria-label="Open the Book (projects)">
+    <svg viewBox="0 0 44 56" aria-hidden="true"><use href="#book-icon"/></svg><span>Book · B</span>
+  </button>
+  <button class="sound-btn" id="musicBtn" hidden aria-pressed="true" aria-label="Sound on (music and effects)" title="Sound">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" stroke="currentColor"/>
+      <path class="waves" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>
+      <path class="mute" d="M17 9l5 6M22 9l-5 6"/>
+    </svg>
+  </button>
+  <div id="cardZoom" hidden role="dialog" aria-modal="true" aria-label="Card close-up"><div class="cz-card"></div><button class="cz-close">Close · Esc</button></div>
+  <div class="hints" id="hints" hidden><span><kbd>↑↓</kbd>Select</span><span><kbd>⏎</kbd>Confirm</span><span><kbd>ESC</kbd>Back</span><span><kbd>B</kbd>Book</span></div>
+</div>
+
+<div id="wipe" aria-hidden="true"><i></i><i></i><i></i></div>
+<div id="titlecard" hidden aria-live="polite"><div class="tc-img"></div><div class="tc-inner"><div class="tc-ep"></div><h2 class="tc-title"></h2></div><span class="tc-skip">Click to skip</span></div>
+
+<svg id="gi-defs" width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- the Book, as a small icon -->
+    <g id="book-icon">
+      <rect x="4" y="2" width="36" height="50" rx="3" fill="#3a3372" stroke="#0e0f11" stroke-width="2"/>
+      <rect x="4" y="46" width="36" height="6" rx="2" fill="#d9d9d2" stroke="#0e0f11" stroke-width="1.5"/>
+      <path d="M11 11 q4 -5 8 0 t8 0 t8 0" fill="none" stroke="#e59ad2" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="10" y="18" width="24" height="22" fill="#d6d6d0" stroke="#0e0f11" stroke-width="1.5"/>
+      <circle cx="22" cy="29" r="7" fill="none" stroke="#0e0f11" stroke-width="1.6"/>
+      <circle cx="22" cy="29" r="2.6" fill="#0e0f11"/>
+    </g>
+  </defs>
+</svg>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wait = ms => new Promise(r => setTimeout(r, reduced ? Math.min(ms, 60) : ms));
+
+  /* ================= sound effects: little game-UI blips made with Web Audio ================= */
+  let soundOn = true;
+  try { soundOn = localStorage.getItem('gi-music') !== 'off'; } catch (_) {}
+  const sfx = (() => {
+    let ctx = null;
+    const wake = () => { if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) {} } if (ctx && ctx.state === 'suspended') ctx.resume(); };
+    addEventListener('pointerdown', wake); addEventListener('keydown', wake);
+    function tone(f, dur, { type = 'square', vol = 0.045, to = f, at = 0 } = {}) {
+      if (!soundOn || !ctx || ctx.state !== 'running') return;
+      const t = ctx.currentTime + at, o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type; o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(to, t + dur);
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + dur + 0.02);
+    }
+    function swish(dur = 0.16) {
+      if (!soundOn || !ctx || ctx.state !== 'running') return;
+      const n = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate), d = n.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+      const src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+      f.type = 'bandpass'; f.frequency.setValueAtTime(900, ctx.currentTime); f.frequency.exponentialRampToValueAtTime(3200, ctx.currentTime + dur);
+      g.gain.value = 0.12; src.buffer = n; src.connect(f).connect(g).connect(ctx.destination); src.start();
+    }
+    return {
+      move: () => tone(1320, 0.045, { vol: 0.03 }),                                        // cursor moves
+      ok: () => { tone(660, 0.07); tone(990, 0.1, { at: 0.07 }); },                         // confirm
+      back: () => { tone(740, 0.07, { vol: 0.04 }); tone(440, 0.1, { vol: 0.04, at: 0.06 }); },
+      book: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.14, { type: 'triangle', vol: 0.06, at: i * 0.055 })),
+      flip: () => swish(0.18),
+      tick: () => tone(1800, 0.02, { vol: 0.02 }),                                          // dialogue text
+      open: () => { swish(0.12); tone(880, 0.12, { type: 'triangle', vol: 0.05, to: 1320 }); },
+    };
+  })();
+
+  /* ================= content ================= */
+  const PROJECTS = [
+    { no: '001', name: 'Safr', rank: 'SS-1', art: 'safr', kind: 'Mobile app · Solo developer',
+      flavor: 'A navigation app that knows when and where to pray. Covers 3,373 mosques across the US and Canada, and works in the car.',
+      summary: 'An iOS and Android navigation app built around prayer times. I designed and built all of it, from the app itself to the cloud system that keeps its data up to date.',
+      stack: 'Flutter, Swift, Python, Google Cloud, Firebase',
+      points: ['Native Apple CarPlay screen. Apple approved Safr for its CarPlay maps program.', 'Public iOS beta on TestFlight with 30+ testers.', 'A daily cloud job collects schedules from 2,904 mosque websites and sends them straight to the app.', '47,000 lines of Dart, Swift and Python, written solo.'],
+      link: ['getsafr.app', 'https://getsafr.app'] },
+    { no: '002', name: 'CampusClaims', rank: 'A-2', art: 'campus', kind: 'Web app · Team project, now maintainer',
+      flavor: 'Lost something on campus? Post it, see it pinned on the map, and message whoever found it. Used on two campuses.',
+      summary: 'A lost-and-found app for two university campuses. Post something you lost or found, see it pinned on a campus map, and message the person who has it.',
+      stack: 'Next.js, React, TypeScript, Supabase',
+      points: ['Every post is pinned to its building on a custom Google Map.', 'Real-time one-to-one messaging between students.', 'Search that still finds items when you make typos.', 'Access rules on every database table, so people only see what they should.'],
+      link: ['Open CampusClaims', 'https://campus-claims-opty.vercel.app'] },
+    { no: '003', name: 'NVIDIA Stock Forecast Agent', plate: 'NVDA Forecast', rank: 'A-3', art: 'synt', kind: 'AI agent · Client: AI SYNT (Riipen project)',
+      flavor: 'An agent that reads six market signals and guesses which way NVIDIA moves next. Trusts whichever signals were right lately.',
+      summary: "An AI agent that forecasts which way NVIDIA's stock will move by watching six related market indices. I adapted it from an algorithm the client first built for gold.",
+      stack: 'TypeScript, AWS S3',
+      points: ['Three indices that move with chip stocks and three that move against them.', 'Signals that were right over the last ten days count for more.', 'Moved from local storage to AWS S3 without touching the forecasting code.'] },
+    { no: '004', name: 'Hardball', rank: 'B-4', art: 'hardball', kind: 'Full-stack tool',
+      flavor: 'Shows where all 30 NBA teams stand against the salary cap under the 2025–26 rules.',
+      summary: 'A web tool that shows where every NBA team stands against the salary cap under the 2025–26 rules.',
+      stack: 'React, Flask, AWS',
+      points: ['Cap positions for all 30 franchises.', 'React front end talking to a Flask API I wrote.', 'Hosted on AWS (Elastic Beanstalk, S3, CloudFront), with keys kept out of the code.'],
+      link: ['Open Hardball', 'https://dz3csw06yjedg.cloudfront.net/'] },
+  ];
+  const SLOT_TOTAL = 12; // 000 + 001..011
+
+  const JOBS = [
+    { no: '1001', quest: '02', color: '#203a7a', start: 3, end: 7, equip: ['Kotlin', 'Android (.aar)', 'sherpa-onnx', 'On-device speech'], name: 'LiveAI', rank: 'A-25', art: 'voice', role: 'Android & Web Developer', when: 'Mar 2026 – Jul 2026 · Remote',
+      flavor: 'Turns speech into text and tells you who said it, all on the phone. No internet needed.',
+      text: 'I built SherpaVoiceKit, an Android library that turns speech into text and recognizes who is speaking, all on the phone itself with no internet connection. I delivered it in four stages, each one code-reviewed.',
+      flow: ['Microphone', 'Detect speech', 'Transcribe', 'Identify speaker'], gains: ['Runs fully on the device, in real time'] },
+    { no: '1002', quest: '01', color: '#2d6b3e', start: 0, end: 3, equip: ['Python', 'pandas', 'Power BI'], name: 'Stush Foods', rank: 'B-40', art: 'data', role: 'Data Engineer & Analyst', when: 'Dec 2025 – Mar 2026 · Remote',
+      flavor: 'Takes messy files from three distributors and turns them into one clean promotions calendar.',
+      text: 'I built a Python tool that takes promotion data from three distributors, sent in seven different file formats, and combines it into one clean calendar. It feeds a five-page Power BI dashboard the team uses.',
+      gains: ['100% of promotions matched across 50+ retail accounts', 'Found a $6,900 reporting error'] },
+  ];
+
+  // Nen types, clockwise from the top (the real order of the hexagon)
+  const NEN = [
+    { kan: '強', jp: '強化系', en: 'Enhancer', ch: 'gon', who: 'Gon Freecss', aura: '#ffd23f', area: 'Core languages', blurb: 'Enhancers make what they already have stronger. These are the languages I reach for first.', items: ['Python', 'TypeScript', 'JavaScript', 'Kotlin', 'Swift', 'Dart', 'SQL', 'C/C++', 'Bash'] },
+    { kan: '変', jp: '変化系', en: 'Transmuter', ch: 'killua', who: 'Killua Zoldyck', aura: '#8fdcff', area: 'Web & interfaces', blurb: 'Transmuters change the shape of their aura. For me, that\'s turning data into interfaces people can use.', items: ['React', 'Next.js', 'TypeScript', 'Flutter UI', 'REST APIs'] },
+    { kan: '具', jp: '具現化系', en: 'Conjurer', ch: 'kurapika', who: 'Kurapika', aura: '#ff6b6b', area: 'Mobile apps', blurb: 'Conjurers make real objects out of nothing. My type: I like building whole apps from zero.', items: ['Flutter', 'Swift', 'CarPlay', 'UIKit', 'Kotlin', 'Android', 'Firebase', 'TestFlight'] },
+    { kan: '特', jp: '特質系', en: 'Specialist', ch: 'chrollo', who: 'Chrollo Lucilfer', aura: '#c38bff', area: 'AI', blurb: 'Specialists have abilities that don\'t fit anywhere else. For me, that\'s AI work.', items: ['LLM APIs', 'Structured output', 'AI agents', 'On-device speech recognition'] },
+    { kan: '操', jp: '操作系', en: 'Manipulator', ch: 'illumi', who: 'Illumi Zoldyck', aura: '#7ee08a', area: 'Data', blurb: 'Manipulators control things. I control data: cleaning it, moving it and making it reliable.', items: ['pandas', 'Data pipelines', 'Data validation', 'Postgres', 'Supabase', 'Power BI'] },
+    { kan: '放', jp: '放出系', en: 'Emitter', ch: 'leorio', who: 'Leorio Paradinight', aura: '#ff9a3d', area: 'Cloud & deployment', blurb: 'Emitters send their aura away from the body. Cloud work is shipping code to run somewhere else.', items: ['Google Cloud Run', 'AWS', 'S3', 'CloudFront', 'Elastic Beanstalk', 'Docker', 'GitHub Actions', 'Linux'] },
+  ];
+
+  /* ================= Greed Island cards =================
+     Built to the real card's proportions (1530 × 2130): three cream header plates joined by
+     knobbed double rules, a cream-framed art window, and a marble-bordered text box
+     (pink for specified-slot cards, blue for spell cards). */
+  (function paintCardTextures() {
+    // charcoal hatching laid over every art background, like the printed cards
+    let seed = 7; const r = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    let hatch = '';
+    for (let i = 0; i < 150; i++) {
+      const x = r() * 420 - 10, y = r() * 420 - 10, len = 30 + r() * 110, a = -0.45 + (r() - 0.5) * 0.5;
+      const dx = Math.cos(a) * len, dy = Math.sin(a) * len, bend = (r() - 0.5) * 26;
+      hatch += `<path d="M${x.toFixed(1)} ${y.toFixed(1)} q${(dx / 2).toFixed(1)} ${(dy / 2 + bend).toFixed(1)} ${dx.toFixed(1)} ${dy.toFixed(1)}" stroke-width="${(2 + r() * 7).toFixed(1)}" opacity="${(0.25 + r() * 0.45).toFixed(2)}"/>`;
+    }
+    function marble(base, blots, veins) {
+      const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d');
+      g.fillStyle = base; g.fillRect(0, 0, 512, 512);
+      for (let i = 0; i < 420; i++) {
+        g.fillStyle = blots[i % blots.length]; g.globalAlpha = 0.55 + r() * 0.45; g.beginPath();
+        const cx = r() * 512, cy = r() * 512, rad = 6 + r() * 30;
+        for (let k = 0; k <= 9; k++) { const q = k / 9 * Math.PI * 2, rr = rad * (0.6 + r() * 0.6); g[k ? 'lineTo' : 'moveTo'](cx + Math.cos(q) * rr, cy + Math.sin(q) * rr); }
+        g.fill();
+      }
+      g.globalAlpha = 0.8; g.strokeStyle = veins; g.lineWidth = 2.5;
+      for (let i = 0; i < 70; i++) { g.beginPath(); let x = r() * 512, y = r() * 512; g.moveTo(x, y); for (let k = 0; k < 5; k++) { x += (r() - 0.5) * 40; y += (r() - 0.5) * 40; g.lineTo(x, y); } g.stroke(); }
+      return c.toDataURL('image/png');
+    }
+    const pink = marble('#a8335f', ['#d9668f', '#7c1d43', '#f0a3c0', '#c24a78', '#5e1231'], '#2a0715');
+    const blue = marble('#2c4a9a', ['#5f86d6', '#1b2d66', '#a8c3f3', '#3d64bf', '#101d45'], '#070f2a');
+    $('#gi-defs defs').insertAdjacentHTML('beforeend', `
+      <pattern id="gi-hatch" width="400" height="400" patternUnits="userSpaceOnUse"><g fill="none" stroke="#000" stroke-linecap="round">${hatch}</g></pattern>
+      <pattern id="gi-marble-pink" width="512" height="512" patternUnits="userSpaceOnUse"><image href="${pink}" width="512" height="512"/></pattern>
+      <pattern id="gi-marble-blue" width="512" height="512" patternUnits="userSpaceOnUse"><image href="${blue}" width="512" height="512"/></pattern>`);
+  })();
+
+  // Each art is one object, cel-shaded with heavy black outlines, sitting on a coloured field of
+  // charcoal scribbles with a white halo around it — the way every Greed Island card is drawn.
+  const O = 'stroke="#111" stroke-width="9" stroke-linejoin="round"';
+  const ART = {
+    safr: { k: 1, bg: '#1f6f6a', s: `<g transform="translate(720 402) rotate(-11)">
+        <path d="M-70 150 C-150 190 -175 300 -130 400 L250 420 C270 330 250 210 170 150 Z" fill="#f6cfa6" ${O}/>
+        <path d="M150 170 C230 220 250 320 240 400 L200 400 C205 320 190 250 140 210Z" fill="#e3ae86"/>
+        <rect x="-165" y="-318" width="330" height="600" rx="46" fill="#1c1c22" ${O}/>
+        <rect x="-140" y="-290" width="280" height="540" rx="24" fill="#f1ead6"/>
+        <g stroke="#dccfae" stroke-width="16" fill="none" stroke-linecap="round"><path d="M-140 -60 L140 20"/><path d="M-140 120 L140 60"/><path d="M-60 -290 L-20 250"/><path d="M70 -290 L40 250"/></g>
+        <path d="M-40 230 C-40 150 -100 110 -30 40 S60 -30 64 -96" fill="none" stroke="#e59ad2" stroke-width="18" stroke-linecap="round"/>
+        <circle cx="-40" cy="226" r="16" fill="#2f5fb8" stroke="#111" stroke-width="6"/>
+        <path d="M64 -196 c-26 0 -44 19 -44 42 c0 30 44 66 44 66 s44 -36 44 -66 c0 -23 -18 -42 -44 -42z" fill="#1f6f6a" ${O}/>
+        <path d="M48 -150 a16 16 0 0 1 32 0 v10 h-32z" fill="#fff"/><rect x="84" y="-172" width="6" height="32" fill="#fff"/>
+        <rect x="-124" y="-276" width="248" height="70" rx="14" fill="#fff" stroke="#111" stroke-width="6"/>
+        <path d="M-100 -254 a16 16 0 1 0 14 26 a12 12 0 1 1 -14 -26z" fill="#e2b53c"/>
+        <text x="-70" y="-230" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="30" fill="#111">ASR · 12 MIN</text>
+        <rect x="-40" y="-308" width="80" height="12" rx="6" fill="#3a3a44"/>
+        <rect x="142" y="-120" width="80" height="58" rx="28" fill="#f6cfa6" ${O}/><rect x="146" y="-50" width="84" height="58" rx="28" fill="#f6cfa6" ${O}/><rect x="142" y="20" width="80" height="58" rx="28" fill="#f6cfa6" ${O}/><rect x="132" y="90" width="74" height="54" rx="26" fill="#f6cfa6" ${O}/>
+        <path d="M-168 40 C-212 70 -218 150 -170 190 C-140 212 -106 196 -104 166 C-100 120 -120 80 -150 50Z" fill="#f6cfa6" ${O}/>
+        <path d="M-120 380 L260 420 L250 480 L-130 460Z" fill="#2f5fb8" ${O}/></g>` },
+    campus: { k: 1, bg: '#c8612d', back: `
+        <rect x="610" y="120" width="180" height="290" fill="#efd9b4" ${O}/>
+        <path d="M596 124 Q700 10 804 124Z" fill="#6f8fb0" ${O}/><circle cx="700" cy="210" r="46" fill="#fff" ${O}/><path d="M700 210 V178 M700 210 L724 222" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+        <rect x="230" y="400" width="940" height="300" fill="#efd9b4" ${O}/>
+        <path d="M200 404 L700 250 L1200 404Z" fill="#e6c998" ${O}/><circle cx="700" cy="350" r="26" fill="#c8a870" stroke="#111" stroke-width="6"/>
+        ${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<rect x="${278 + i * 116}" y="424" width="40" height="266" fill="#f8ecd4" stroke="#111" stroke-width="6"/>`).join('')}
+        ${[0, 1, 2, 3, 4, 5, 6].map(i => `<rect x="${334 + i * 116}" y="470" width="44" height="90" rx="20" fill="#6b4a3a" stroke="#111" stroke-width="5"/>`).join('')}
+        <rect x="190" y="690" width="1020" height="30" fill="#e2cfa6" ${O}/><rect x="150" y="720" width="1100" height="60" fill="#d9c294" ${O}/>`,
+      s: `<g transform="translate(830 590) rotate(-14) scale(.92)">
+        <circle cx="-300" r="118" fill="#d9a441" ${O}/><circle cx="-300" r="82" fill="none" stroke="#a97b25" stroke-width="10"/><circle cx="-300" r="48" fill="#c8612d" ${O}/>
+        <rect x="-205" y="-56" width="46" height="112" rx="10" fill="#d9a441" ${O}/>
+        <rect x="-160" y="-34" width="450" height="68" rx="12" fill="#d9a441" ${O}/><rect x="-152" y="4" width="434" height="22" fill="#a97b25"/>
+        <path d="M200 30 H290 V160 H256 V124 H230 V160 H200 Z" fill="#d9a441" ${O}/></g>
+        <path d="M514 520 C470 470 380 450 330 432" fill="none" stroke="#111" stroke-width="7"/>
+        <g transform="translate(250 420) rotate(-12)">
+          <path d="M-60 -34 H150 V150 H-150 V56 Z" fill="#efe0b0" ${O}/><circle cx="-92" cy="36" r="16" fill="#c8612d" ${O}/>
+          <text x="20" y="62" text-anchor="middle" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="58" fill="#c8323a" transform="rotate(-6)">FOUND!</text>
+          <text x="20" y="118" text-anchor="middle" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="30" fill="#333">RM 204</text></g>` },
+    synt: { k: 1.3, bg: '#1b2a5c', s: `<g transform="translate(697 392) rotate(-9)">
+        ${[-1, 1].map(sg => Array.from({ length: 8 }, (_, i) => { const p = -168 + i * 48; return `<rect x="${p - 9}" y="${sg < 0 ? -246 : 206}" width="18" height="40" fill="#e0b84a" stroke="#111" stroke-width="5"/><rect x="${sg < 0 ? -246 : 206}" y="${p - 9}" width="40" height="18" fill="#e0b84a" stroke="#111" stroke-width="5"/>`; }).join('')).join('')}
+        <rect x="-210" y="-210" width="420" height="420" rx="22" fill="#3fae49" ${O}/><rect x="-201" y="80" width="402" height="121" fill="#2e8a38"/>
+        <circle cx="-172" cy="-172" r="10" fill="#e0b84a"/><circle cx="172" cy="172" r="10" fill="#e0b84a"/>
+        <rect x="-128" y="-128" width="256" height="256" rx="12" fill="#1a1d22" ${O}/>
+        <path d="M-100 78 L-56 36 L-16 52 L28 -6 L66 -24 L96 -84" fill="none" stroke="#8cf07a" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M70 -92 L104 -98 L100 -62" fill="none" stroke="#8cf07a" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="0" y="112" text-anchor="middle" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="30" fill="#5d6470">NVDA</text></g>` },
+    hardball: { k: 1.15, bg: '#5a2d7a', s: `
+        ${Array.from({ length: 5 }, (_, i) => { const y = 590 - i * 40; return `<ellipse cx="1030" cy="${y + 28}" rx="104" ry="32" fill="#b8912e" ${O}/><rect x="926" y="${y}" width="208" height="28" fill="#d6ab3c"/><line x1="926" y1="${y}" x2="926" y2="${y + 28}" stroke="#111" stroke-width="9"/><line x1="1134" y1="${y}" x2="1134" y2="${y + 28}" stroke="#111" stroke-width="9"/><ellipse cx="1030" cy="${y}" rx="104" ry="32" fill="#e8c34a" ${O}/>`; }).join('')}
+        <text x="1030" y="444" text-anchor="middle" font-family="Shippori Mincho B1, serif" font-weight="800" font-size="46" fill="#9a7520">$</text>
+        <g transform="translate(560 392)">
+          <circle r="240" fill="#e07a2e" ${O}/><path d="M170 -170 A240 240 0 0 1 -170 170 A215 215 0 0 0 170 -170Z" fill="#b85a1e"/>
+          <path d="M-240 0 H240 M0 -240 V240 M-170 -170 C-80 -80 -80 80 -170 170 M170 -170 C80 -80 80 80 170 170" fill="none" stroke="#111" stroke-width="10"/>
+          <ellipse cx="-96" cy="-118" rx="46" ry="26" fill="#fff" opacity=".45" transform="rotate(-35 -96 -118)"/></g>` },
+    voice: { k: 1.0, bg: '#203a7a', s: `<g transform="translate(697 356)">
+        ${[1, 2, 3].map(k => `<path d="M${-170 - k * 55} ${-120 - k * 10} Q${-230 - k * 70} -40 ${-170 - k * 55} ${40 + k * 10}" fill="none" stroke="#e59ad2" stroke-width="16" stroke-linecap="round"/><path d="M${170 + k * 55} ${-120 - k * 10} Q${230 + k * 70} -40 ${170 + k * 55} ${40 + k * 10}" fill="none" stroke="#e59ad2" stroke-width="16" stroke-linecap="round"/>`).join('')}
+        <path d="M-150 -30 V70 A150 150 0 0 0 150 70 V-30" fill="none" stroke="#111" stroke-width="34"/><path d="M-150 -30 V70 A150 150 0 0 0 150 70 V-30" fill="none" stroke="#565d68" stroke-width="18"/>
+        <rect x="-112" y="-236" width="224" height="330" rx="112" fill="#cfd6de" ${O}/>
+        ${[-190, -150, -110, -70, -30, 10, 50].map(y => `<line x1="-92" y1="${y}" x2="92" y2="${y}" stroke="#8a93a0" stroke-width="6"/>`).join('')}
+        ${[-60, -20, 20, 60].map(x => `<line x1="${x}" y1="-214" x2="${x}" y2="72" stroke="#8a93a0" stroke-width="6"/>`).join('')}
+        <rect x="-120" y="16" width="240" height="44" rx="8" fill="#e0b84a" ${O}/>
+        <rect x="-20" y="220" width="40" height="120" fill="#3a3f47" ${O}/><ellipse cy="350" rx="150" ry="34" fill="#2b2f36" ${O}/></g>` },
+    data: { k: 1.08, bg: '#2d6b3e', s: `<g transform="translate(697 408) rotate(-6)">
+        <rect x="-310" y="-232" width="620" height="460" rx="18" fill="#f6f3e8" ${O}/>
+        <path d="M-301 -150 V-213 Q-301 -223 -291 -223 H291 Q301 -223 301 -213 V-150 Z" fill="#c8323a"/><line x1="-306" y1="-150" x2="306" y2="-150" stroke="#111" stroke-width="8"/>
+        <text x="0" y="-172" text-anchor="middle" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="48" fill="#fff">PROMOS</text>
+        ${Array.from({ length: 8 }, (_, i) => `<circle cx="${-262 + i * 75}" cy="-236" r="17" fill="none" stroke="#111" stroke-width="9"/>`).join('')}
+        ${Array.from({ length: 24 }, (_, i) => { const c = i % 6, rr = Math.floor(i / 6); return `<rect x="${-280 + c * 94}" y="${-130 + rr * 86}" width="86" height="76" fill="none" stroke="#9a9a9a" stroke-width="4"/>`; }).join('')}
+        ${[[1, 0], [4, 1], [2, 2], [5, 3], [0, 3]].map(([c, rr]) => `<circle cx="${-237 + c * 94}" cy="${-92 + rr * 86}" r="30" fill="none" stroke="#c8323a" stroke-width="9"/>`).join('')}
+        <g transform="translate(230 150) rotate(-38)"><rect x="-150" y="-16" width="260" height="32" rx="6" fill="#2f5fb8" ${O}/><path d="M110 -16 L160 0 L110 16Z" fill="#f3ead2" ${O}/></g></g>` },
+    school: { k: 1.12, bg: '#6a2233', s: `
+        <rect x="430" y="560" width="540" height="72" rx="8" fill="#2f5fb8" ${O}/><line x1="450" y1="600" x2="950" y2="600" stroke="#f6f3e8" stroke-width="10"/>
+        <rect x="400" y="488" width="560" height="72" rx="8" fill="#e2b53c" ${O}/><line x1="420" y1="528" x2="940" y2="528" stroke="#f6f3e8" stroke-width="10"/>
+        <rect x="450" y="416" width="500" height="72" rx="8" fill="#c8323a" ${O}/><line x1="470" y1="456" x2="930" y2="456" stroke="#f6f3e8" stroke-width="10"/>
+        <path d="M555 300 V390 Q697 450 839 390 V300" fill="#262626" ${O}/>
+        <path d="M697 130 L1000 240 L697 350 L394 240 Z" fill="#1c1c1c" ${O}/>
+        <path d="M697 240 L910 280 V420" fill="none" stroke="#e2b53c" stroke-width="12"/><rect x="892" y="410" width="36" height="70" rx="6" fill="#e2b53c" ${O}/>
+        <circle cx="697" cy="240" r="18" fill="#e2b53c" ${O}/>` },
+  };
+
+  function cardArt(kind) {
+    const a = ART[kind];
+    return `<rect width="1394" height="776" fill="${a.bg}"/><rect width="1394" height="776" fill="url(#gi-hatch)"/>
+      ${a.back ? `<g>${a.back}</g><rect width="1394" height="776" fill="url(#gi-hatch)" opacity=".35"/>` : ''}
+      <g transform="translate(697 388) scale(${a.k}) translate(-697 -388)"><g class="halo">${a.s}</g><g>${a.s}</g></g>`;
+  }
+  const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  function cardHTML(c, spell) {
+    const name = c.plate || c.name;
+    const fs = Math.min(104, 560 / (name.length * 0.56));
+    const fit = name.length * 0.56 * fs > 560 ? ' textLength="560" lengthAdjust="spacingAndGlyphs"' : '';
+    const plates = [[40, 415], [415, 1115], [1115, 1490]];
+    return `<svg class="gi-card" viewBox="0 0 1530 2130" role="img" aria-label="Card ${esc(c.no)}: ${esc(c.name)}">
+      <rect width="1530" height="2130" rx="72" fill="#2b2a2c"/><rect x="10" y="10" width="1510" height="2110" rx="64" fill="none" stroke="#454347" stroke-width="6"/>
+      ${plates.map(([x1, x2]) => `<rect x="${x1}" y="66" width="${x2 - x1}" height="236" fill="#ecead6" stroke="#161616" stroke-width="7"/><rect x="${x1 + 16}" y="82" width="${x2 - x1 - 32}" height="204" fill="none" stroke="#161616" stroke-width="3"/>`).join('')}
+      ${[415, 1115].map(x => `<rect x="${x - 9}" y="66" width="18" height="236" fill="#ecead6" stroke="#161616" stroke-width="5"/>`).join('')}
+      ${[40, 415, 1115, 1490].flatMap(x => [66, 302].map(y => `<circle cx="${x}" cy="${y}" r="17" fill="#ecead6" stroke="#161616" stroke-width="6"/>`)).join('')}
+      <text x="227" y="226" text-anchor="middle" font-family="Shippori Mincho B1, 'Times New Roman', serif" font-weight="800" font-size="${c.no.length > 3 ? 118 : 138}" fill="#161616">${esc(c.no)}</text>
+      <text x="765" y="${184 + fs * 0.35}" text-anchor="middle" font-family="Shippori Mincho B1, 'Times New Roman', serif" font-weight="800" font-size="${fs.toFixed(0)}" fill="#161616"${fit}>${esc(name)}</text>
+      <text x="1302" y="222" text-anchor="middle" font-family="Shippori Mincho B1, 'Times New Roman', serif" font-weight="800" font-size="104" fill="#161616">${esc(c.rank)}</text>
+      <rect x="40" y="340" width="1450" height="830" fill="#e9e7cf" stroke="#111" stroke-width="7"/>
+      <svg x="68" y="367" width="1394" height="776" viewBox="0 0 1394 776" preserveAspectRatio="xMidYMid slice">${cardArt(c.art)}</svg>
+      <rect x="68" y="367" width="1394" height="776" fill="none" stroke="#111" stroke-width="7"/>
+      <rect x="32" y="1218" width="1466" height="836" fill="url(#gi-marble-${spell ? 'blue' : 'pink'})" stroke="#111" stroke-width="7"/>
+      <rect x="88" y="1272" width="1354" height="728" fill="#e4e4e2" stroke="#111" stroke-width="8"/>
+      <foreignObject x="140" y="1318" width="1250" height="640"><div xmlns="http://www.w3.org/1999/xhtml" class="gi-desc">${esc(c.flavor)}</div></foreignObject>
+      <text x="64" y="2104" font-family="Chakra Petch, sans-serif" font-weight="600" font-size="34" fill="#cfcfcf">©Q.ALI 2026</text>
+      <text x="1466" y="2104" text-anchor="end" font-family="Chakra Petch, sans-serif" font-weight="600" font-size="34" fill="#cfcfcf">NOT FOR SALE</text>
+    </svg>`;
+  }
+
+  /* ================= the arrival room: glitchy maze, drawn live ================= */
+  function Maze(canvas) {
+    const ctx = canvas.getContext('2d');
+    let W = 0, H = 0, blocks = [], raf = 0, running = false;
+    function size() {
+      const dpr = Math.min(2, devicePixelRatio || 1), r = canvas.getBoundingClientRect();
+      W = r.width; H = r.height; canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function spawn(z) {
+      const horiz = Math.random() < 0.55;
+      return { x: Math.random() * 2 - 1, y: Math.random() * 2 - 1, w: horiz ? 0.1 + Math.random() * 0.35 : 0.02 + Math.random() * 0.04, h: horiz ? 0.02 + Math.random() * 0.04 : 0.1 + Math.random() * 0.3, z };
+    }
+    for (let i = 0; i < 140; i++) blocks.push(spawn(0.25 + Math.random() * 1.2));
+    function draw(dt) {
+      ctx.fillStyle = '#f3f3f0'; ctx.fillRect(0, 0, W, H);
+      const cx = W / 2, cy = H * 0.42, s = Math.max(W, H) * 0.55;
+      const glitch = Math.random() < 0.04 ? (Math.random() * 10 - 5) : 0;
+      const layers = [['rgba(0,210,255,.55)', -3], ['rgba(255,40,140,.5)', 3], ['#16171a', 0]];
+      blocks.sort((a, b) => b.z - a.z);
+      for (const [col, off] of layers) {
+        ctx.fillStyle = col;
+        for (const b of blocks) {
+          const k = s / b.z, x = cx + b.x * k, y = cy + b.y * k;
+          const a = Math.min(1, (1.45 - b.z) * 1.4);
+          if (a <= 0) continue;
+          ctx.globalAlpha = col === '#16171a' ? a : a * 0.8;
+          ctx.fillRect(x + off + (Math.abs(b.y) < 0.1 ? glitch : 0), y, b.w * k, b.h * k);
+        }
+      }
+      ctx.globalAlpha = 1;
+      for (const b of blocks) { b.z -= dt * 0.06; if (b.z < 0.22) Object.assign(b, spawn(1.45)); }
+    }
+    let last = 0;
+    function loop(t) { raf = requestAnimationFrame(loop); const dt = Math.min(0.05, (t - (last || t)) / 1000); last = t; draw(dt); }
+    return {
+      start() { if (running) return; running = true; size(); if (reduced) draw(0); else { last = 0; raf = requestAnimationFrame(loop); } },
+      stop() { running = false; cancelAnimationFrame(raf); },
+      resize() { if (running) { size(); if (reduced) draw(0); } },
+    };
+  }
+  const mazes = { boot: Maze($('#s-boot .maze')), contact: Maze($('#s-contact .maze')) };
+  addEventListener('resize', () => Object.values(mazes).forEach(m => m.resize()));
+
+  /* ================= screens + transitions ================= */
+  const SCREENS = {
+    boot: {},
+    map: { ep: 'EP 01', words: ['Arrival', 'And', 'Island'] },
+    projects: { ep: 'EP 02', words: ['Binder', 'And', 'Proof'], img: 'assets/binder-gon.webp', tag: 'Projects' },
+    about: { ep: 'EP 03', words: ['License', 'And', 'Player'], tag: 'About me' },
+    experience: { ep: 'EP 04', words: ['Quest', 'And', 'Record'], tag: 'Experience' },
+    skills: { ep: 'EP 05', words: ['Aura', 'And', 'Ability'], tag: 'Skills' },
+    contact: { ep: 'EP 06', words: ['Departure', 'And', 'Contact'], tag: 'Contact' },
+  };
+  let current = 'boot', busy = false;
+  const seen = new Set();
+
+  async function titleCard(sc) {
+    const tc = $('#titlecard');
+    $('.tc-ep', tc).textContent = sc.ep;
+    $('.tc-title', tc).innerHTML = sc.words.map((w, i) => `<span class="w" style="animation-delay:${0.15 + i * 0.28}s">${w}</span>`).join('<span class="x">×</span>');
+    $$('.x', tc).forEach((x, i) => { x.style.animationDelay = (0.3 + i * 0.28) + 's'; }); // each × lands after the word before it
+    $('.tc-img', tc).style.backgroundImage = sc.img ? `url('${sc.img}')` : 'none';
+    tc.hidden = false; tc.classList.remove('out'); void tc.offsetWidth; tc.classList.add('run');
+    let skip; const skipped = new Promise(r => { skip = r; tc.onclick = r; });
+    const keySkip = e => { if (['Enter', ' ', 'Escape'].includes(e.key)) skip(); };
+    addEventListener('keydown', keySkip);
+    await Promise.race([wait(sc.img ? 2700 : 2300), skipped]);
+    removeEventListener('keydown', keySkip);
+    return tc;
+  }
+  async function hideTitleCard(tc) {
+    tc.classList.add('out'); await wait(330); tc.hidden = true; tc.classList.remove('run', 'out');
+  }
+  async function wipe(mid) {
+    const w = $('#wipe'); w.classList.remove('run'); void w.offsetWidth; w.classList.add('run');
+    await wait(260); mid(); await wait(320); w.classList.remove('run');
+  }
+  function show(name) {
+    $$('.screen').forEach(s => { const on = s.id === 's-' + name; s.classList.toggle('on', on); s.setAttribute('aria-hidden', String(!on)); });
+    current = name;
+    const inner = !['boot', 'map'].includes(name);
+    $('#topbar').hidden = !inner;
+    $('#bookBtn').hidden = name === 'boot' || name === 'projects';
+    $('#hints').hidden = name === 'boot' || name === 'contact';
+    if (inner) $('#epTag').innerHTML = `${SCREENS[name].ep} · <b>${SCREENS[name].tag}</b>`;
+    $('.player-tag').hidden = name === 'about';
+    name === 'skills' ? sprite.start() : sprite.stop();
+    music.play(name);
+    Object.entries(mazes).forEach(([k, m]) => (k === name ? m.start() : m.stop()));
+    if (name === 'contact') { requestAnimationFrame(() => $('#s-contact .guide-img').classList.add('in')); selectChoice(0); }
+    const scroller = $('#s-' + name + ' .scroll'); if (scroller) scroller.scrollTop = 0;
+    const h = $('#s-' + name + ' [tabindex="-1"]'); if (h) h.focus({ preventScroll: true });
+    if (name === 'map') { selectMenu(menuIdx); layoutMap(); }
+  }
+  async function go(name, { push = true } = {}) {
+    if (busy || name === current || !SCREENS[name]) return;
+    busy = true;
+    (name === 'projects' ? sfx.book : name === 'map' && current !== 'boot' ? sfx.back : sfx.ok)();
+    if (push && location.hash !== '#' + name) history.pushState(null, '', '#' + name);
+    if (!seen.has(name) && name !== 'boot') {
+      seen.add(name);
+      const tc = await titleCard(SCREENS[name]);
+      show(name);
+      await hideTitleCard(tc);
+    } else {
+      await wipe(() => show(name));
+    }
+    busy = false;
+  }
+  addEventListener('popstate', () => go(location.hash.slice(1) || 'map', { push: false }));
+  document.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t) { e.preventDefault(); go(t.dataset.go); } });
+  $('#bookBtn').addEventListener('click', () => go('projects'));
+  document.addEventListener('click', e => {
+    const t = e.target.closest('a, button');
+    if (!t || t.closest('[data-go], .slot, #license, .card-btn, #musicBtn, #cardZoom, #bookBtn')) return;
+    sfx.ok();
+  });
+
+  /* ================= boot ================= */
+  const LINES = [
+    'Welcome to Greed Island.',
+    'You\'re about to enter the portfolio of player Qasem Ali, a software developer from Mississauga, Ontario.',
+    'Players here collect cards. Every project Qasem has built is a card in his Binder.',
+  ];
+  const bootDlg = $('#bootDialog');
+  let lineIdx = 0, typing = null, bootChoices = false;
+  function typeLine(text) {
+    const el = $('.line', bootDlg); clearInterval(typing);
+    if (reduced) { el.textContent = text; return; }
+    let i = 0; el.textContent = '';
+    typing = setInterval(() => { el.textContent = text.slice(0, ++i); if (i >= text.length) { clearInterval(typing); typing = null; } }, 22);
+  }
+  function advanceBoot() {
+    if (bootChoices) return;
+    sfx.tick();
+    if (typing) { clearInterval(typing); typing = null; $('.line', bootDlg).textContent = LINES[lineIdx]; return; }
+    lineIdx++;
+    if (lineIdx < LINES.length) { typeLine(LINES[lineIdx]); return; }
+    bootChoices = true;
+    $('.line', bootDlg).textContent = 'Where would you like to start?';
+    $('.more', bootDlg).hidden = true;
+    const ul = $('.choices', bootDlg); ul.hidden = false;
+    ul.innerHTML = [['map', 'Enter the island', 'Main menu'], ['projects', 'Open the Book', 'Jump straight to projects']]
+      .map(([g, a, b]) => `<li><button data-go="${g}"><span class="arrow">▶</span><span>${a}</span><span class="detail">${b}</span></button></li>`).join('');
+    selectChoice(0);
+  }
+  bootDlg.addEventListener('click', e => { if (!e.target.closest('button')) advanceBoot(); });
+  async function boot() {
+    const direct = location.hash.slice(1);
+    const skipIntro = (() => { try { return sessionStorage.getItem('gi-booted') === '1'; } catch (_) { return false; } })();
+    mazes.boot.start();
+    music.play('boot');
+    if (SCREENS[direct] && direct !== 'boot') { $('#power').classList.add('gone'); seen.add('map'); show(direct); if (direct !== 'map') seen.add(direct); return; }
+    if (!skipIntro) await wait(2100);
+    $('#power').classList.add('gone');
+    try { sessionStorage.setItem('gi-booted', '1'); } catch (_) {}
+    $('#s-boot .guide-img').classList.add('in');
+    await wait(500);
+    bootDlg.hidden = false; typeLine(LINES[0]);
+  }
+
+  /* ================= dialog choices (boot + contact) ================= */
+  let choiceIdx = 0;
+  function activeChoices() { return current === 'boot' ? $$('#bootDialog .choices button') : $$('#contactChoices a, #contactChoices button'); }
+  function selectChoice(i) {
+    const list = activeChoices(); if (!list.length) return;
+    const prev = choiceIdx; choiceIdx = (i + list.length) % list.length; if (prev !== choiceIdx) sfx.move();
+    list.forEach((el, k) => el.classList.toggle('sel', k === choiceIdx));
+  }
+  document.addEventListener('mouseover', e => { const el = e.target.closest('.choices a, .choices button'); if (el) { const i = activeChoices().indexOf(el); if (i >= 0) selectChoice(i); } });
+
+  /* ================= map menu ================= */
+  let menuIdx = 0;
+  const menuItems = $$('.mi');
+  function selectMenu(i) {
+    const prev = menuIdx; menuIdx = (i + menuItems.length) % menuItems.length; if (prev !== menuIdx) sfx.move();
+    menuItems.forEach((m, k) => m.classList.toggle('sel', k === menuIdx));
+    const target = menuItems[menuIdx].dataset.go;
+    $$('.pin').forEach(p => p.classList.toggle('sel', p.dataset.go === target));
+  }
+  menuItems.forEach((m, i) => m.addEventListener('mouseenter', () => selectMenu(i)));
+
+  // Keep every pin in the open water left of the menu: size and slide the map so the
+  // right-most pin (as a % of the map) lands before the menu starts, while still covering the screen.
+  const stage = $('.map-stage'), menuEl = $('.map-menu');
+  const pinXs = $$('.pin').map(p => parseFloat(p.style.left) / 100);
+  const PIN_MAX = Math.max(...pinXs) + 0.02, PIN_MIN = Math.min(...pinXs);
+  function layoutMap() {
+    if (current !== 'map') return;
+    const W = innerWidth, H = innerHeight;
+    if (W <= 760) { stage.removeAttribute('style'); return; } // phones: menu sits at the bottom instead
+    const limit = menuEl.getBoundingClientRect().left - 70;
+    const S = Math.max(W, H * 1057 / 797, (W - limit) / (1 - PIN_MAX));
+    const left = Math.max(Math.min((W - S) / 2, limit - PIN_MAX * S), 50 - PIN_MIN * S); // never push the left-most pin off screen
+    Object.assign(stage.style, { width: S + 'px', left: left + 'px', top: (H - S * 797 / 1057) / 2 + 'px', transform: 'none' });
+  }
+  addEventListener('resize', layoutMap);
+  $$('.pin').forEach(p => p.addEventListener('mouseenter', () => selectMenu(menuItems.findIndex(m => m.dataset.go === p.dataset.go))));
+
+  /* ================= binder ================= */
+  const slotsEl = $('#slots');
+  $('#slotCount').textContent = `${PROJECTS.length} / ${SLOT_TOTAL - 1} filled`;
+  const slotData = Array.from({ length: SLOT_TOTAL }, (_, i) => i === 0 ? { zero: true, no: '000' } : (PROJECTS[i - 1] || { empty: true, no: String(i).padStart(3, '0') }));
+  slotsEl.innerHTML = slotData.map((s, i) => `<button class="slot${s.zero ? ' zero' : ''}" role="option" data-i="${i}" aria-label="${s.name ? `Card ${s.no}: ${s.name}` : s.zero ? 'Card 000: coming soon' : `Slot ${s.no}: empty`}">${s.name ? cardHTML(s) : `<span class="num">${s.no}</span>`}</button>`).join('');
+  let slotIdx = 1;
+  function selectSlot(i) {
+    const prev = slotIdx; slotIdx = (i + SLOT_TOTAL) % SLOT_TOTAL; if (prev !== slotIdx) sfx.move();
+    $$('.slot').forEach((el, k) => { el.classList.toggle('sel', k === slotIdx); el.setAttribute('aria-selected', String(k === slotIdx)); });
+    const s = slotData[slotIdx], view = $('#cardView');
+    if (s.name) {
+      view.innerHTML = `<div class="big">${cardHTML(s)}</div><div class="info">
+        <span class="ui-label">Card ${s.no} · Rank ${s.rank.split('-')[0]}</span><h2>${s.name}</h2><p class="kind">${s.kind}</p>
+        <p>${s.summary}</p><ul>${s.points.map(p => `<li>${p}</li>`).join('')}</ul>
+        <dl><dt>Built with</dt><dd>${s.stack}</dd></dl>
+        ${s.link ? `<a class="link" href="${s.link[1]}" target="_blank" rel="noopener">${s.link[0]} ↗</a>` : ''}</div>`;
+    } else if (s.zero) {
+      view.innerHTML = `<div class="info"><span class="ui-label">Card 000 · Coming soon</span><h2>???</h2><p class="kind">The final card</p>
+        <p>In Greed Island, card 000 is the last and rarest card in the game. This slot is saved for whatever I build next.</p>
+        <a class="link" href="https://github.com/qalisem" target="_blank" rel="noopener">See what I'm building on GitHub ↗</a></div>`;
+    } else {
+      view.innerHTML = `<div class="info"><span class="ui-label">Slot ${s.no} · Empty</span><h2>—</h2><p>No card here yet. The next project goes in this slot.</p></div>`;
+    }
+  }
+  slotsEl.addEventListener('click', e => { const b = e.target.closest('.slot'); if (b) selectSlot(+b.dataset.i); });
+  selectSlot(1);
+
+  /* ================= experience ================= */
+  // field route: Dec 2025 → Jul 2026, one bar per job
+  const MONTHS = [['Dec', '2025'], ['Jan', '2026'], ['Feb'], ['Mar'], ['Apr'], ['May'], ['Jun'], ['Jul']];
+  $('#qRoute').innerHTML = `<h3>Field route · Dec 2025 → Jul 2026</h3><div class="q-months">
+    ${MONTHS.map(([m, y]) => `<span class="m"><b>${y || ''}</b>${m}</span>`).join('')}
+    ${[...JOBS].reverse().map((j, i) => `<div class="q-bar" style="grid-column:${j.start + 1} / ${j.end + 2}; grid-row:${i + 2}; background:${j.color}">${j.name}</div>`).join('')}</div>`;
+  $('#quests').innerHTML = JOBS.map(j => `<article class="quest" style="--qc:${j.color}">
+    <div class="mini"><button class="card-btn" aria-label="See the ${j.name} card up close">${cardHTML(j, true)}</button><small>Click to inspect</small></div>
+    <div>
+      <div class="q-top"><span class="q-no">Quest ${j.quest}</span><span class="stamp">Cleared</span></div>
+      <h3>${j.name}</h3><div class="when">${j.role} · ${j.when}</div>
+      <div class="q-grid">
+        <section class="wide"><h4>Objective</h4><p>${j.text}</p></section>
+        ${j.flow ? `<section class="wide"><h4>Route</h4><ol class="flow" aria-label="How the audio flows">${j.flow.map((f, i) => `${i ? '<li class="to" aria-hidden="true">→</li>' : ''}<li>${f}</li>`).join('')}</ol></section>` : ''}
+        <section><h4>Rewards</h4><div class="gains">${j.gains.map(g => `<span>${g}</span>`).join('')}</div></section>
+        <section><h4>Equipment</h4><div class="equip">${j.equip.map(g => `<span>${g}</span>`).join('')}</div></section>
+      </div>
+    </div></article>`).join('');
+
+  /* ================= 8-bit Nen users (EarthBound-style pixel art) ================= */
+  const SPRITES = {"gon":{"pal":{"k":"#290909","a":"#2cd837","b":"#22b14c","c":"#000000","d":"#32ec2d","e":"#fdd3bd","f":"#460c1a","g":"#9c4d41","h":"#fd9c8a","i":"#862f47","j":"#fb9da0","l":"#c67666","m":"#c44f00","n":"#ff7f2a","o":"#156f30","p":"#37b758","q":"#ffc90e","r":"#c3c3c3"},"rows":[".................",".................",".................","........k........",".......kak.......","......kbcbk......",".....kbcccbk.....",".k..kbcccccbk..k.","kakkbcccccccbkkdk","kabbcccccccccbddk",".kbcccccccccccdk.",".kbccckccckcccdk.",".kkkckekckekckkk.","fffekgeekeegkefff","khieekeeeeekeeihk","khieekeeeeekeeihk",".kijjjeeeeejjjik.","..kgjjeeeeejjgk..","...kleegkkeelk...","....kgheeehgk....","...kmkkgggkkmk...","...kmnnnnnnnmk...","..kbobbbnbbbopk..","..kbobnbnbnbobk..",".kbboqbbnbbqobb..",".knibbbbnbbbbink.",".kekcccrrrccckek.","..kkbbbbbbbbbkkk.","....kbbkkkbbk....","....keek.keek....","....kook.kook....","...kbddk.kddbk...","...kkkk...kkkk..."],"eyes":[[5,14],[11,14],[5,15],[11,15]]},"killua":{"pal":{"k":"#290909","s":"#fddffd","t":"#fbcafb","g":"#9c4d41","e":"#fdd3bd","j":"#fb9da0","l":"#c67666","h":"#fd9c8a","i":"#862f47","u":"#99d9ea","v":"#7092be","w":"#3f48cc","x":"#ffaec9","y":"#fdbfb5","z":"#a349a4"},"rows":["............k......",".........k.ksk.....","...k...kkskssk.....","..k.k.ksssssssk....","..k..ksssssssssk...","...k.sssssssssssk..","..k..ssksksksssssk.",".k.sssk.kskskssssk.","k.sssk..ssssskssssk",".k.ssskssssskssssk.","k.ssssssssssssssssk",".k.ssssssssssssssk.","..k.tkgkekekgktsk..",".kektekekekeketkek.",".keetekeeeeeketgek.","..kktjjeeeeejjtkk..","...kgjjeeeeejjgk...","....kljegkkejlk....",".....kkheeehkk.....","....kiuvwwwvuik....","....kttvwwwvttk....","...kttttvwvttttk...","...kwxtttwtttxwk...","..kwwxtttttttxwwk..","..kwxtttttttttxwk..","..kyktttttttttkyk..","..kykwwvvvvvwwkyk..","...kkkvvkkkvvkkk...",".....kvvk.kvvk.....",".....keek.keek.....",".....kssk.kssk.....","....kzszk.kzszk....","....kkkk...kkkk...."],"eyes":[[6,13],[12,13],[6,14],[12,14]]},"kurapika":{"pal":{"k":"#290909","A":"#efe96d","B":"#fff200","f":"#460c1a","e":"#fdd3bd","g":"#9c4d41","h":"#fd9c8a","j":"#fb9da0","l":"#c67666","C":"#ed1c24","w":"#3f48cc","D":"#403a61","i":"#862f47","E":"#c4d9c4","F":"#00a2e8"},"rows":[".................",".................",".................","....kkkkkkkkk....","...kABBBBBBBBk...","..kABBBBBBBBBBk..","..kAkBBBkBBBBBk..",".kABBkBkBBBBBBBk.",".kABBBkBBBBBBBBk.",".kkBkBBkBkBBkBkk.",".kfBegkekekgeBfk.","khgBekeeeeekeBghk","khgBekeeeeekeBghk",".kkjjeeeeeeejjkk.","..kgjjeeeeejjgk..","...kleegkkeelk...","....kgheeehgk....","...kCkkgggkkCk...","...kwCCCCCCCwk...","..k.wwwwCwwww.k..","..k.DwwCCCwwD.k..",".k..DwwCwCwwD..k.",".k.iwwwwCwwwwi.k.",".k.kCCCCCwwwwk.k.",".kekwwwwCwwwwkek.",".kekCCCCCCCCCkek.","..kk...kkk...kk..","....k..k.k..k....","....k..k.k..k....","....k..k.k..k....","....kEEk.kEEk....","...kFeek.keeFk...","...kkkk...kkkk..."],"eyes":[[5,11],[11,11],[5,12],[11,12]]},"leorio":{"pal":{"k":"#290909","e":"#fdd3bd","G":"#b97a57","h":"#fd9c8a","H":"#fba779","g":"#9c4d41","r":"#c3c3c3","y":"#fdbfb5","I":"#091253","b":"#22b14c","J":"#20c191","K":"#03061d"},"rows":["...k.k.k.k.k.k.k...","..kkkkkkkkkkkkkkk..","..kkkkkkkkkkkkkkk..","..kkkkkkkkkkkkkkk..","..kkkkkkkkkkkkkkk..","..kkkeeeeeeeeekkk..","..kkeeeeeeeeeeekk..","..kkeeGeeeeeGeekk..",".kkkeekeeeeekeekkk.",".kekeekeeeeekeekek.",".kekeeekeeekeeekek.","..kkkkk.kkk.kkkkk..","...khhekeHekehhk...","...khheeeeeeehhk...","....kheegkkeehk....",".....kheeeeehk.....","....krkyeeeykrk....","...kIIrkgggkrIIk...","...kIIIr.b.rIIIk...","..kIIIIrJJbrIIIIk..","..kIKIIrJJbrIIKIk..",".kIIKIIrJJbrIIKIIk.",".kIkIIIrJJbrIIIkIk.","kIIkIIII.J.IIIIkIIk","k..kIIIIIIIIIIIk..k","keekkIIIIKIIIIkkeek",".keekIIIIIIIIIkeek.","..kkkIIIIkIIIIkkk..","....kIIIkkkIIIk....",".....kIIk.kIIk.....",".....kIIk.kIIk.....","....kgggk.kgggk....","....kkkk...kkkk...."],"eyes":[[7,12],[11,12]]},"chrollo":{"pal":{"c":"#000000","h":"#fd9c8a","j":"#fb9da0","W":"#f4f4f4","K":"#03061d","L":"#4a5a8a","R":"#3a3a40","F":"#00a2e8","l":"#c67666","e":"#fdd3bd","g":"#9c4d41","k":"#290909"},"rows":[".................",".................",".................","....kkkkkkkkk....","...kccccccccck...","..kccRRccccccck..","..kccccccccccck..",".kccccccccccccck.",".kcceeeeeeeeecck.",".kceeeeeLeeeeeck.",".kceeeeLLLeeeeck.","khceekeeLeekeechk","kheeekeeeeekeeehk",".FkjjeeeeeeejjkF.","..kgjjeeeeejjgk..","...kleegkkeelk...","....kgheeehgk....","..kWWkkgggkkWWk..","..kWWWWcccWWWWk..",".kccWWWcccWWWcck.",".kccccccWcccccck.",".kccccccWcccccck.",".kckccccWcccckck.",".kckccccWcccckck.",".kekccccccccckek.",".kekccccccccckek.","..kkccccccccckk..","...kcccckcccck...","....kKKk.kKKk....","....kKKk.kKKk....","....kKKk.kKKk....","...kcccK.Kccck...","...kkkk...kkkk..."],"eyes":[[5,11],[11,11],[5,12],[11,12]]},"illumi":{"pal":{"c":"#000000","x":"#ffaec9","N":"#25493d","R":"#3a3a40","M":"#3f7a66","e":"#fdd3bd","g":"#9c4d41","r":"#c3c3c3","k":"#290909"},"rows":[".................",".................",".................","....kkkkkkkkk....","...kccccccccck...","..kccccccccccck..",".kccccccccccccck.",".kcccRRcccccccck.",".kccccccccccccck.",".kccccccccccccck.","kcceeeeeeeeeeecck","kcceecceeecceecck","kcceecceeecceecck","kcceeeeeeeeeeecck","kcckeeeeeeeeekcck","kccckeeegeeekccck","kcccckeeeeekcccck","kccckkkgggkkkccck","kccckMMMMMMMkccck","kcckMMxMMMxMMkcck","kcckMMrMMMrMMkcck","kcckMMMMNMMMMkcck","kcckMMMMNMMMMkcck","kcekMMMMNMMMMkcek","kcekNNNNNNNNNkcek",".kckMMMMMMMMMkck.","..kkMMMMMMMMMkk..","...kMMMMkMMMMk...","....kNNk.kNNk....","....kNNk.kNNk....","....kNNk.kNNk....","...kNcck.kccNk...","...kkkk...kkkk..."],"eyes":[[5,11],[6,11],[10,11],[11,11],[5,12],[6,12],[10,12],[11,12]]}};
+  const sprite = (() => {
+    const cv = $('#nenSprite'), g = cv.getContext('2d');
+    const GW = 64, GH = 44, FLOOR = 40;
+    let OX = 0, W = 17;
+    let cur = null, t = 0, pop = 0, timer = 0;
+    const px = (x, y, c, a = 1) => { g.globalAlpha = a; g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), 1, 1); };
+    const ring = (cx, cy, r, c, a) => { for (let k = 0; k < 40; k++) { const q = k / 40 * Math.PI * 2; px(cx + Math.cos(q) * r, cy + Math.sin(q) * r * 0.8, c, a); } };
+    function silhouette(rows) { const m = new Set(); rows.forEach((r, y) => [...r].forEach((c, x) => { if (c !== '.') m.add(x + ',' + y); })); return m; }
+    function draw() {
+      g.globalAlpha = 1; g.clearRect(0, 0, GW, GH);
+      // floor
+      for (let x = 0; x < GW; x++) { px(x, FLOOR, (x >> 1) % 2 ? '#262833' : '#2e3140'); for (let y = FLOOR + 1; y < GH; y++) px(x, y, y === GH - 1 ? '#191a21' : '#1d1f27'); }
+      if (!cur) return;
+      const d = SPRITES[cur.ch];
+      const POP = [16, 10, 4, -2, 1, 0];
+      const lift = pop < POP.length ? POP[pop] : ((t >> 3) % 2);   // pop in, then a slow 1px idle bob
+      const blink = t % 46 < 2, eyes = new Set((d.eyes || []).map(e => e.join(',')));
+      W = d.rows[0].length; OX = Math.floor((GW - W) / 2);
+      const y0 = FLOOR - d.rows.length + lift;
+      // shadow
+      for (let x = OX + 3; x < OX + W - 3; x++) px(x, FLOOR - 1, '#0c0d11', .55);
+      // aura: the silhouette dilated by a pixel, flickering upward like flame
+      const sil = silhouette(d.rows);
+      sil.forEach(k => {
+        const [x, y] = k.split(',').map(Number);
+        [[1, 0], [-1, 0], [0, -1], [0, 1]].forEach(([dx, dy]) => {
+          if (sil.has((x + dx) + ',' + (y + dy))) return;
+          const f = Math.random(); if (f < .35) return;
+          px(OX + x + dx, y0 + y + dy - (dy === -1 && f > .8 ? 1 : 0), cur.aura, .35 + f * .35);
+        });
+      });
+      // body
+      d.rows.forEach((r, y) => [...r].forEach((c, x) => {
+        if (c === '.') return;
+        const col = blink && eyes.has(x + ',' + y) ? d.pal.e : d.pal[c];
+        px(OX + x, y0 + y, col);
+      }));
+      effect(cur.ch, y0);
+      g.globalAlpha = 1;
+    }
+    function effect(ch, y0) {
+      const hx = OX + W - 1, hy = y0 + 24; // right hand
+      if (ch === 'gon') { // Jajanken: rock
+        const p = t % 36; if (p > 20) { for (let k = 0; k < 6; k++) px(hx + 1 + Math.random() * 4, hy - 2 + Math.random() * 4, k % 2 ? '#fff4b0' : '#ffd23f'); ring(hx + 2, hy, (p - 20) / 2, '#ffd23f', .8); }
+      } else if (ch === 'killua') { // Godspeed lightning
+        for (let b = 0; b < 3; b++) { let x = OX - 4 + Math.random() * (W + 8), y = y0 + 2 + Math.random() * 10; for (let s = 0; s < 10; s++) { px(x, y, s % 3 ? '#8fdcff' : '#ffffff'); x += Math.random() * 3 - 1.5; y += 1 + Math.random() * 2; } }
+      } else if (ch === 'kurapika') { // chains from the right hand
+        for (let k = 0; k < 11; k++) { const x = hx + 1 + k * 2, y = hy + Math.sin(t / 3 + k / 1.6) * 2.2; px(x, y, '#d8dee8'); px(x + (k % 2), y + (k % 2 ? 0 : 1), '#9aa3b2'); }
+        px(hx + 23, hy + Math.sin(t / 3 + 11 / 1.6) * 2.2, '#f2d27a');
+      } else if (ch === 'chrollo') { // Skill Hunter: the floating book
+        const bx = OX - 12, by = y0 + 16 + ((t >> 2) % 2);
+        for (let x = 0; x < 8; x++) for (let y = 0; y < 6; y++) px(bx + x, by + y, x === 0 || x === 7 || y === 0 || y === 5 ? '#1c1010' : '#6b1e2a');
+        px(bx + 3, by + 2, '#e8d9b0'); px(bx + 4, by + 2, '#e8d9b0'); px(bx + 3, by + 3, '#e8d9b0'); px(bx + 4, by + 3, '#e8d9b0');
+        if ((t >> 1) % 6 < 3) for (let y = 1; y < 5; y++) px(bx + 8 + ((t >> 1) % 3), by + y, '#f4f1e6');
+      } else if (ch === 'illumi') { // needles
+        for (let k = 0; k < 4; k++) { const x = hx + 2 + ((t * 1.5 + k * 7) % 26), y = y0 + 16 + k * 4; for (let s = 0; s < 4; s++) px(x + s, y, '#d6dde6'); px(x + 4, y, '#e05a8a'); }
+      } else if (ch === 'leorio') { // Emitter: the punch that travels through a warp
+        const p = t % 30; px(hx + 1, hy, '#f1cfa8'); ring(hx + 3, hy, 2, '#ff9a3d', .9);
+        if (p < 14) { ring(hx + 8 + p, hy - 4, 1 + p / 3, '#ff9a3d', 1 - p / 14); }
+      }
+    }
+    function tick() { t++; if (pop < 6) pop++; draw(); }
+    return {
+      set(n) { cur = n; pop = reduced ? 6 : 0; draw(); },
+      start() { if (!timer) { draw(); if (!reduced) timer = setInterval(tick, 85); } },
+      stop() { clearInterval(timer); timer = 0; },
+    };
+  })();
+
+  /* ================= soundtrack: one track per screen, crossfaded ================= */
+  // Tracks live in assets/music/ (AAC in .mp4, 128 kbps). Missing files are skipped; the button hides if none exist.
+  const TRACKS = { boot: 'boot.mp4', map: 'map.mp4', projects: 'projects.mp4', about: 'about.mp4', experience: 'experience.mp4', skills: 'skills.mp4', contact: 'contact.mp4' };
+  const music = (() => {
+    const btn = $('#musicBtn'), VOL = 0.35;
+    const have = {}; let on = soundOn, unlocked = false, want = null, playing = null, el = null;
+    const probe = Promise.all(Object.entries(TRACKS).map(([k, f]) =>
+      fetch('assets/music/' + f, { method: 'HEAD' }).then(r => { const ty = r.headers.get('content-type') || ''; if (r.ok && !ty.includes('html')) have[k] = 'assets/music/' + f; }).catch(() => {})));
+    probe.then(() => { if (Object.keys(have).length) { btn.hidden = false; render(); if (want) apply(); } });
+    function render() { btn.setAttribute('aria-pressed', String(on)); btn.setAttribute('aria-label', on ? 'Sound on (music and effects)' : 'Sound off'); btn.classList.toggle('playing', !!(on && el && !el.paused)); }
+    function fade(a, to, ms, done) {
+      const from = a.volume, t0 = performance.now();
+      (function step(now) { const k = Math.min(1, (now - t0) / ms); a.volume = from + (to - from) * k; if (k < 1) requestAnimationFrame(step); else if (done) done(); })(t0);
+    }
+    function apply() {
+      const src = have[want] || (playing ? null : have.map || Object.values(have)[0]);
+      if (!on || !unlocked) { if (el && !el.paused) fade(el, 0, 400, () => { el.pause(); render(); }); return; }
+      if (!src) { if (el && el.paused) el.play().then(render).catch(() => {}); return; } // no track for this screen: keep the current one
+      if (src === playing && el) { if (el.paused) { el.volume = 0; el.play().then(() => { fade(el, VOL, 700); render(); }).catch(() => {}); } return; }
+      const old = el; el = new Audio(src); el.loop = true; el.volume = 0; playing = src;
+      el.play().then(() => { fade(el, VOL, 900); render(); }).catch(() => {});
+      if (old) fade(old, 0, 700, () => old.pause());
+    }
+    const unlock = () => { if (unlocked) return; unlocked = true; apply(); };
+    addEventListener('pointerdown', unlock, { once: false }); addEventListener('keydown', unlock);
+    btn.addEventListener('click', e => { e.stopPropagation(); on = soundOn = !on; try { localStorage.setItem('gi-music', on ? 'on' : 'off'); } catch (_) {} unlocked = true; apply(); render(); if (on) sfx.ok(); });
+    return { play(name) { want = name; apply(); } };
+  })();
+
+  /* ================= Nen hexagon ================= */
+  const svg = $('#nenSvg'), C = 260, R = 190;
+  const pts = NEN.map((_, i) => { const a = -Math.PI / 2 + i * Math.PI / 3; return [C + Math.cos(a) * R, C + Math.sin(a) * R]; });
+  svg.innerHTML = `<polygon class="edge" points="${pts.map(p => p.join(',')).join(' ')}"/>
+    ${pts.map(([x, y]) => `<line class="spoke" x1="${C}" y1="${C}" x2="${x}" y2="${y}"/>`).join('')}
+    <text class="nen-center" x="${C}" y="${C}">念</text>
+    ${NEN.map((n, i) => { const [x, y] = pts[i]; const below = y > C; return `<g class="nen-node" data-i="${i}" tabindex="0" role="button" aria-label="${n.en}: ${n.area}"><circle cx="${x}" cy="${y}" r="38"/><text class="kan" x="${x}" y="${y}">${n.kan}</text><text class="en" x="${x}" y="${below ? y + 60 : y - 50}">${n.en}</text></g>`; }).join('')}`;
+  let nenIdx = 2;
+  function selectNen(i) {
+    const prev = nenIdx; nenIdx = (i + NEN.length) % NEN.length; const n = NEN[nenIdx]; if (prev !== nenIdx) sfx.ok();
+    $$('.nen-node').forEach((g, k) => g.classList.toggle('sel', k === nenIdx));
+    $('#nenWho').innerHTML = `${n.who}<small>${n.en} · ${n.jp}</small>`;
+    $('#nenSprite').setAttribute('aria-label', `Pixel-art ${n.who}, a ${n.en}`);
+    sprite.set(n);
+    $('#nenPanel').innerHTML = `<span class="ui-label">${n.en} · ${nenIdx === 2 ? 'My type' : 'Type ' + (nenIdx + 1)}</span><h2>${n.area}</h2><div class="jp" lang="ja">${n.jp}</div><p>${n.blurb}</p><div class="chips">${n.items.map(t => `<span>${t}</span>`).join('')}</div>`;
+  }
+  svg.addEventListener('click', e => { const g = e.target.closest('.nen-node'); if (g) selectNen(+g.dataset.i); });
+  svg.addEventListener('keydown', e => { const g = e.target.closest('.nen-node'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectNen(+g.dataset.i); } });
+  selectNen(2);
+
+  /* ================= license ================= */
+  const lic = $('#license');
+  // Decorative glyph rows in the style of the Hunter alphabet (hidden from screen readers)
+  (() => {
+    const G = ['M1 1H9M5 1V11', 'M5 1V11M1 11H9', 'M2 2L4 6M8 1L3 11', 'M2 2L8 10M8 2L2 10', 'M8 1V11H2', 'M5 1L1 8H9M6 5V11',
+      'M4 1L6 3L2 11M6 3L9 11', 'M1 1H9M5 1V11M1 11H9', 'M1 6H9M5 1V11', 'M2 1V11M2 6H8', 'M1 11L5 1L9 11', 'M1 1H9L5 11Z',
+      'M5 1V11M2 6a3 3 0 1 0 6 0a3 3 0 1 0 -6 0', 'M1 3H9M1 9H9M5 3V9', 'M8 2Q1 6 8 10', 'M2 1V11M8 1V11M2 6H8', 'M1 2H9M3 2V11M7 2V11', 'M1 11H9M5 1L2 7H8'];
+    let seed = 405;
+    const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+    let out = '';
+    [342, 368, 394, 420].forEach(y => {
+      for (let i = 0, x = 30; i < 23; i++, x += 10.5) {
+        const r = rnd();
+        if (r < 0.07) out += `<circle cx="${x + 4.5}" cy="${y + 6}" r="1.4" fill="#111" stroke="none"/>`;
+        else if (r > 0.12) out += `<path transform="translate(${x} ${y}) scale(.9)" d="${G[Math.floor(rnd() * G.length)]}"/>`;
+      }
+    });
+    $('#licGlyphs').innerHTML = out;
+  })();
+
+  lic.addEventListener('click', () => { lic.classList.toggle('flip'); sfx.flip(); });
+  lic.addEventListener('pointermove', e => {
+    const r = lic.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+    $$('.lic-sheen', lic).forEach(s => { s.style.setProperty('--sx', `${px * 100}%`); s.style.setProperty('--sy', `${py * 100}%`); });
+    if (!reduced) lic.style.transform = `${lic.classList.contains('flip') ? 'rotateY(180deg) ' : ''}rotateX(${(0.5 - py) * 10}deg) rotateY(${(px - 0.5) * 14}deg)`;
+  });
+  lic.addEventListener('pointerleave', () => { lic.style.transform = ''; });
+  new MutationObserver(() => { lic.style.transform = ''; }).observe(lic, { attributes: true, attributeFilter: ['class'] });
+
+  /* ================= card close-up ================= */
+  const zoom = $('#cardZoom');
+  function openCard(svg) { $('.cz-card', zoom).innerHTML = svg.outerHTML; zoom.hidden = false; sfx.open(); $('.cz-close', zoom).focus(); }
+  function closeCard() { if (zoom.hidden) return false; zoom.hidden = true; sfx.back(); return true; }
+  document.addEventListener('click', e => {
+    const c = e.target.closest('.card-btn .gi-card, .card-view .big .gi-card');
+    if (c) { openCard(c); return; }
+    if (!zoom.hidden && e.target.closest('#cardZoom')) closeCard();
+  });
+
+  /* ================= keyboard ================= */
+  addEventListener('keydown', e => {
+    if (busy || e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key;
+    if (!zoom.hidden) { if (k === 'Escape' || k === 'Enter' || k === ' ') { e.preventDefault(); closeCard(); } return; }
+    if ((k === 'b' || k === 'B') && current !== 'boot') { go('projects'); return; }
+    if ((k === 'Escape' || k === 'Backspace') && !['boot', 'map'].includes(current)) { e.preventDefault(); go('map'); return; }
+    const up = k === 'ArrowUp', down = k === 'ArrowDown', left = k === 'ArrowLeft', right = k === 'ArrowRight', ok = k === 'Enter';
+    if (!(up || down || left || right || ok)) return;
+    if (current === 'boot') {
+      if (!bootChoices) { if (ok || down || right) { e.preventDefault(); advanceBoot(); } return; }
+      e.preventDefault();
+      if (up || down) selectChoice(choiceIdx + (down ? 1 : -1));
+      if (ok) activeChoices()[choiceIdx].click();
+    } else if (current === 'map') {
+      e.preventDefault();
+      if (up || left) selectMenu(menuIdx - 1);
+      if (down || right) selectMenu(menuIdx + 1);
+      if (ok) go(menuItems[menuIdx].dataset.go);
+    } else if (current === 'projects') {
+      e.preventDefault();
+      const cols = getComputedStyle(slotsEl).gridTemplateColumns.split(' ').length;
+      if (left) selectSlot(slotIdx - 1); if (right) selectSlot(slotIdx + 1);
+      if (up) selectSlot(slotIdx - cols); if (down) selectSlot(slotIdx + cols);
+      if (ok) { const l = $('#cardView .link'); if (l) l.click(); }
+    } else if (current === 'about') {
+      if (left || right || ok) { e.preventDefault(); lic.classList.toggle('flip'); sfx.flip(); }
+    } else if (current === 'skills') {
+      e.preventDefault();
+      if (right || down) selectNen(nenIdx + 1); if (left || up) selectNen(nenIdx - 1);
+    } else if (current === 'contact') {
+      e.preventDefault();
+      if (up || down) selectChoice(choiceIdx + (down ? 1 : -1));
+      if (ok) activeChoices()[choiceIdx].click();
+    }
+  });
+
+  boot();
+})();
+</script>
