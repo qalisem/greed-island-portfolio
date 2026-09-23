@@ -471,12 +471,6 @@ body[data-screen="map"] .hints .map-only { display: inline; }
         <div class="joy-sub">Loading · Greed Island</div>
       </div>
     </div>
-    <div class="dialog" id="bootDialog" hidden>
-      <span class="who">GREED ISLAND <small>SYSTEM</small></span>
-      <p class="line" aria-live="polite"></p>
-      <ul class="choices" hidden></ul>
-      <span class="more" aria-hidden="true">▼</span>
-    </div>
     <button class="skip-intro" id="skipIntro">Skip intro →</button>
   </section>
 
@@ -1320,43 +1314,18 @@ body[data-screen="map"] .hints .map-only { display: inline; }
   });
 
   /* ================= boot ================= */
-  const LINES = [
-    'Player registered: Qasem Ali, a software developer from Mississauga, Ontario.',
-    'Players here collect cards. Every project Qasem has built is a card in his Binder.',
-    'Say "Book" at any time (press B) to open it.',
-  ];
-  const bootDlg = $('#bootDialog');
-  let lineIdx = 0, typing = null, bootChoices = false;
-  function typeLine(text) {
-    const el = $('.line', bootDlg); clearInterval(typing);
-    if (reduced) { el.textContent = text; return; }
-    let i = 0; el.textContent = '';
-    typing = setInterval(() => { el.textContent = text.slice(0, ++i); if (i >= text.length) { clearInterval(typing); typing = null; } }, 22);
-  }
-  function advanceBoot() {
-    if (bootChoices) return;
-    sfx.tick();
-    if (typing) { clearInterval(typing); typing = null; $('.line', bootDlg).textContent = LINES[lineIdx]; return; }
-    lineIdx++;
-    if (lineIdx < LINES.length) { typeLine(LINES[lineIdx]); return; }
-    bootChoices = true;
-    $('.line', bootDlg).textContent = 'Where would you like to start?';
-    $('.more', bootDlg).hidden = true;
-    const ul = $('.choices', bootDlg); ul.hidden = false;
-    ul.innerHTML = [['map', 'Enter the island', 'Main menu'], ['projects', 'Open the Book', 'Jump straight to projects']]
-      .map(([g, a, b]) => `<li><button data-go="${g}"><span class="arrow">▶</span><span>${a}</span><span class="detail">${b}</span></button></li>`).join('');
-    selectChoice(0);
-  }
-  bootDlg.addEventListener('click', e => { if (!e.target.closest('button')) advanceBoot(); });
   const markBooted = () => { try { sessionStorage.setItem('gi-booted', '1'); } catch (_) {} };
   async function arrive(fast) {
     world.stop(); $('#bootWorld').classList.add('gone'); $('#skipIntro').hidden = true;
     mazes.boot.start(); if (!fast) mazes.boot.warp(14);
     const w = $('#welcome'); w.hidden = false; w.classList.add('in');
     markBooted();
-    await wait(fast ? 300 : 1300);
-    bootDlg.hidden = false; typeLine(LINES[0]);
+    landing = true;
+    await Promise.race([wait(fast ? 900 : 2200), new Promise(r => { landNow = r; })]);  // a click or Enter skips the wait
+    landing = false; go('map');
   }
+  let landing = false, landNow = () => {};
+  $('#s-boot').addEventListener('click', e => { if (landing && !e.target.closest('#skipIntro, #musicBtn')) landNow(); });
   $('#skipIntro').addEventListener('click', () => { world.stop(); markBooted(); go('map'); });
   async function boot() {
     const direct = location.hash.slice(1);
@@ -1752,10 +1721,7 @@ body[data-screen="map"] .hints .map-only { display: inline; }
     const up = k === 'ArrowUp', down = k === 'ArrowDown', left = k === 'ArrowLeft', right = k === 'ArrowRight', ok = k === 'Enter';
     if (!(up || down || left || right || ok)) return;
     if (current === 'boot') {
-      if (!bootChoices) { if (ok || down || right) { e.preventDefault(); if (!bootDlg.hidden) advanceBoot(); } return; }
-      e.preventDefault();
-      if (up || down) selectChoice(choiceIdx + (down ? 1 : -1));
-      if (ok) activeChoices()[choiceIdx].click();
+      if (ok && landing) { e.preventDefault(); landNow(); }
     } else if (current === 'map') {
       e.preventDefault();
       if (up || left) selectMenu(menuIdx - 1);
