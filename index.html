@@ -171,6 +171,15 @@ a { color: inherit; }
 .welcome span { display: block; font-family: var(--f-ui); font-weight: 700; font-size: clamp(13px, 1.9vw, 26px); letter-spacing: .5em; color: #2a2c30; margin-bottom: 14px; padding-left: .5em; }
 .welcome.in { animation: welcomeIn 1s cubic-bezier(.2,.9,.3,1) both; }
 @keyframes welcomeIn { from { opacity: 0; letter-spacing: .25em; filter: blur(10px); } to { opacity: 1; letter-spacing: normal; filter: none; } }
+.ring-scene { position: absolute; z-index: 6; left: var(--gutter); right: var(--gutter); top: calc(16% + clamp(120px, 15vw, 200px)); display: grid; justify-items: center; gap: 10px; text-align: center;
+  padding: 20px 0 26px; background: radial-gradient(ellipse 50% 55% at 50% 50%, rgba(243,243,240,.95) 50%, rgba(243,243,240,0) 100%); opacity: 0; transform: translateY(18px); transition: opacity .5s, transform .6s cubic-bezier(.2,.9,.3,1); }
+.ring-scene.in { opacity: 1; transform: none; }
+.gi-ring { width: min(200px, 46vw); height: auto; animation: ringSpin 2.6s linear infinite; filter: drop-shadow(0 10px 14px rgba(0,0,0,.25)); }
+@keyframes ringSpin { from { transform: perspective(700px) rotateY(0deg); } to { transform: perspective(700px) rotateY(360deg); } }
+.ring-cap { margin: 0; display: grid; gap: 2px; color: var(--ink); }
+.ring-cap span { font-family: var(--f-body); font-weight: 900; font-size: 15px; letter-spacing: .2em; color: #4a4d53; }
+.ring-cap b { font-family: var(--f-ui); font-weight: 700; font-size: clamp(22px, 2.6vw, 30px); letter-spacing: .06em; text-transform: uppercase; }
+.ring-cap small { font-family: var(--f-ui); font-weight: 600; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #5a5d64; }
 .skip-intro { position: absolute; z-index: 20; right: calc(var(--gutter) + 54px); top: calc(env(safe-area-inset-top, 0px) + 13px); height: 38px; font-family: var(--f-ui); font-weight: 700; letter-spacing: .14em; font-size: 12px; text-transform: uppercase;
   background: rgba(14,15,17,.72); color: #f3f3f0; border: 1px solid rgba(243,243,240,.35); padding: 0 14px; cursor: pointer; }
 .skip-intro:hover { border-color: var(--pink); }
@@ -214,6 +223,7 @@ a { color: inherit; }
 .map-pan { position: absolute; inset: 0; transform-origin: 0 0; will-change: transform; }
 .map-stage img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; filter: saturate(.9) contrast(1.05); -webkit-user-drag: none; user-select: none; pointer-events: none; }
 .map-zoom { position: absolute; z-index: 6; left: 12px; top: 50%; transform: translateY(-50%); display: grid; gap: 6px; }
+@media (max-width: 760px) { .map-zoom { left: auto; right: 12px; top: calc(env(safe-area-inset-top, 0px) + 62px); transform: none; } }
 .map-zoom button { width: 38px; height: 38px; display: grid; place-items: center; background: rgba(14,15,17,.8); color: var(--room); border: 1px solid rgba(243,243,240,.3); font: 700 20px/1 var(--f-ui); cursor: pointer; }
 .map-zoom button:hover { border-color: var(--pink); }
 #s-map .map-menu, #s-map .map-zoom, #s-map .credit, #s-map .pin { transition: opacity .35s; }
@@ -463,6 +473,18 @@ body[data-screen="map"] .hints .map-only { display: inline; }
       </div>
     </div>
     <h1 class="welcome" id="welcome" hidden><span>Welcome to</span>Greed Island</h1>
+    <div class="ring-scene" id="ringScene" hidden>
+      <svg class="gi-ring" viewBox="0 0 220 150" aria-hidden="true">
+        <defs><linearGradient id="ringMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f6f9"/><stop offset=".45" stop-color="#aeb5bf"/><stop offset=".7" stop-color="#e4e8ee"/><stop offset="1" stop-color="#7d848f"/></linearGradient></defs>
+        <ellipse cx="110" cy="84" rx="86" ry="46" fill="none" stroke="#2a2c30" stroke-width="26"/>
+        <ellipse cx="110" cy="84" rx="86" ry="46" fill="none" stroke="url(#ringMetal)" stroke-width="20"/>
+        <ellipse cx="110" cy="84" rx="86" ry="46" fill="none" stroke="#6b717b" stroke-width="2" stroke-dasharray="3 7"/>
+        <g transform="translate(110 38)"><rect x="-26" y="-22" width="52" height="30" rx="8" fill="#2a2c30"/><rect x="-22" y="-19" width="44" height="24" rx="6" fill="#aeb5bf"/>
+          <ellipse cx="-11" cy="-7" rx="8" ry="7" fill="#3fae49" stroke="#1b5e22" stroke-width="2"/><ellipse cx="11" cy="-7" rx="8" ry="7" fill="#3fae49" stroke="#1b5e22" stroke-width="2"/>
+          <ellipse cx="-13" cy="-9" rx="3" ry="2" fill="#bff5c4"/><ellipse cx="9" cy="-9" rx="3" ry="2" fill="#bff5c4"/></g>
+      </svg>
+      <p class="ring-cap"><span lang="ja">プレイヤー登録完了</span><b>Player: Qasem Ali</b><small>Registration complete · Ring received</small></p>
+    </div>
     <div class="flash" id="flash" aria-hidden="true"></div>
     <div class="power" id="power">
       <div>
@@ -687,6 +709,18 @@ body[data-screen="map"] .hints .map-only { display: inline; }
       warp: () => { swish(0.8); tone(1600, 0.7, { type: 'triangle', vol: 0.05, to: 200 }); },
       whoosh: () => swish(0.5),
       bump: () => tone(90, 0.09, { vol: 0.06, to: 70 }),
+      meow: (quiet) => {                       // sawtooth through a moving band-pass: rises then falls, like "mee-ow"
+        if (!soundOn || !ctx || ctx.state !== 'running') return;
+        const t = ctx.currentTime, o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain(), v = quiet ? 0.05 : 0.11;
+        const pitch = 1 + (Math.random() - 0.5) * 0.15;
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(480 * pitch, t); o.frequency.linearRampToValueAtTime(880 * pitch, t + 0.13);
+        o.frequency.linearRampToValueAtTime(760 * pitch, t + 0.34); o.frequency.linearRampToValueAtTime(470 * pitch, t + 0.58);
+        f.type = 'bandpass'; f.Q.value = 3.5;
+        f.frequency.setValueAtTime(800, t); f.frequency.linearRampToValueAtTime(1700, t + 0.16); f.frequency.linearRampToValueAtTime(650, t + 0.58);
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.07); g.gain.setValueAtTime(v, t + 0.34); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.62);
+        o.connect(f).connect(g).connect(ctx.destination); o.start(t); o.stop(t + 0.64);
+      },
     };
   })();
 
@@ -1018,7 +1052,21 @@ body[data-screen="map"] .hints .map-only { display: inline; }
     area(0, 0, 14, 1); area(2, 1, 3, 1, 'window'); area(11, 1, 12, 1, 'poster');
     area(1, 2, 2, 4, 'bed'); area(5, 2, 7, 2, 'laptop'); area(6, 3, 6, 3, 'chair'); area(13, 1, 14, 2, 'books');
     area(8, 3, 9, 4, 'tv'); area(8, 5, 9, 5, 'joy'); area(14, 8, 14, 8, 'plant');
-    const free = (x, y) => x >= 0 && y >= 0 && x < COLS && y < ROWS && !blocked.has(x + ',' + y);
+    const open = (x, y) => x >= 0 && y >= 0 && x < COLS && y < ROWS && !blocked.has(x + ',' + y);
+    const free = (x, y) => open(x, y) && !(x === cat.x && y === cat.y);   // can't walk through Lilli
+
+    /* ---- Lilli, the cat ---- */
+    const LILLI = {"pal":{"a":"#1f1a16","c":"#7e776d","d":"#a39884","b":"#56504a","f":"#2a2420","i":"#79a35e","n":"#d08c80","e":"#b07a6a"},"frames":{"stand":[".a...a.........a","aea.aea.......ac","accaacca......ac","afcccfca.....acb","acicccica....ac.","adcnccdca...acb.",".addddda.aaaac..","..aadcccfcfcfca.","...acfccfccfcca.","...acccbccbccca.","...abcca.acbca..","...adca..acda...","...aaa...aaa...."],"walkA":[".a...a.........a","aea.aea.......ac","accaacca......ac","afcccfca.....acb","acicccica....ac.","adcnccdca...acb.",".addddda.aaaac..","..aadcccfcfcfca.","...acfccfccfcca.","...acccbccbccca.","...abca..abcca..","..adca....acda..","..aaa.....aaa..."],"walkB":[".a...a.........a","aea.aea.......ac","accaacca......ac","afcccfca.....acb","acicccica....ac.","adcnccdca...acb.",".addddda.aaaac..","..aadcccfcfcfca.","...acfccfccfcca.","...acccbccbccca.","...abcca..abca..","....adca.acda...","....aaa..aaa...."],"sit":[".a...a..........","aea.aea.........","accaacca........","afcccfca........","acicccica.......","adcnccdca.......",".addddda........","..adcccfa..aa...","..acfccfca.aca..","..accccbca..ac..","..acdcbcca.aca..","..adca.acdaca...","..aaaa.aaaa....."]}};
+    const catFrames = {};
+    Object.entries(LILLI.frames).forEach(([name, rows]) => {
+      const c = document.createElement('canvas'); c.width = rows[0].length; c.height = rows.length; const x = c.getContext('2d');
+      rows.forEach((r, y) => [...r].forEach((ch, xx) => { if (ch !== '.') { x.fillStyle = LILLI.pal[ch]; x.fillRect(xx, y, 1, 1); } }));
+      const m = document.createElement('canvas'); m.width = c.width; m.height = c.height; const mx = m.getContext('2d');
+      mx.translate(c.width, 0); mx.scale(-1, 1); mx.drawImage(c, 0, 0);
+      catFrames[name] = { left: c, right: m };
+    });
+    const cat = { x: 11, y: 7, fx: 11, fy: 7, k: 1, face: 'left', sitting: true, next: 2, meowT: 4, bubble: 0, pets: 0 };
+    const CAT_LINES = [['LILLI: Mrrrp?'], ['LILLI is purring.'], ['LILLI wants food.', 'She always wants food.'], ['LILLI headbutts QASEM\'s leg.'], ['LILLI: MEOW.', '(That one sounded urgent.)']];
     const D = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 
     /* ---- state ---- */
@@ -1072,6 +1120,7 @@ body[data-screen="map"] .hints .map-only { display: inline; }
       if (onA) { onA(); return; }
       if (locked || moving) return;
       const [dx, dy] = D[dir], id = things[(px + dx) + ',' + (py + dy)];
+      if (px + dx === cat.x && py + dy === cat.y && cat.k >= 1) { interact('lilli'); return; }
       if (id) { sfx.move(); interact(id); }
       else if (dir === 'down' && py === ROWS - 1 && (px === 7)) { sfx.move(); interact('door'); }
     }
@@ -1112,6 +1161,10 @@ body[data-screen="map"] .hints .map-only { display: inline; }
       if (id === 'laptop') await say(['QASEM\'s laptop. The Safr repo is open:', '47,000 lines and counting.']);
       else if (id === 'joy') { mode === 'boot' ? await enterGame() : await backToIsland(); }
       else if (id === 'door' && mode === 'contact') await say(['The real world can wait. Why not check the laptop first?']);
+      else if (id === 'lilli') {
+        cat.face = px < cat.x ? 'left' : 'right'; cat.sitting = true; cat.bubble = 1.4; cat.next = 3; sfx.meow();
+        await say(cat.pets++ === 0 ? ['LILLI: Meow!', 'QASEM\'s cat. She has claimed this room.'] : CAT_LINES[Math.floor(Math.random() * CAT_LINES.length)]);
+      }
       else await say(LOOK[id] || ['...']);
       locked = false;
     }
@@ -1165,6 +1218,21 @@ body[data-screen="map"] .hints .map-only { display: inline; }
         else if (bumpCool <= 0) { sfx.bump(); bumpCool = 0.3; }
       }
       if (wipe) { wipe.k += dt / 0.7; if (wipe.k >= 1.35) { const d = wipe.done; wipe = null; d(); } }
+      // Lilli wanders, sits, and meows now and then
+      cat.next -= dt; cat.meowT -= dt; cat.bubble = Math.max(0, cat.bubble - dt);
+      if (cat.k < 1) cat.k = Math.min(1, cat.k + dt / 0.45);
+      else if (cat.next <= 0) {
+        cat.next = 1.4 + Math.random() * 3;
+        if (Math.random() < 0.6) {
+          const opts = Object.values(D).sort(() => Math.random() - 0.5);
+          for (const [ddx, ddy] of opts) {
+            const nx = cat.x + ddx, ny = cat.y + ddy;
+            const busy = (nx === px && ny === py) || (moving && nx === moving.tx && ny === moving.ty);
+            if (open(nx, ny) && !busy) { cat.fx = cat.x; cat.fy = cat.y; cat.x = nx; cat.y = ny; cat.k = 0; cat.sitting = false; if (ddx) cat.face = ddx < 0 ? 'left' : 'right'; break; }
+          }
+        } else cat.sitting = true;
+      }
+      if (cat.meowT <= 0) { cat.bubble = 1.3; sfx.meow(true); cat.meowT = 8 + Math.random() * 9; }
       if (whiteIn > 0) whiteIn = Math.max(0, whiteIn - dt / 0.9);
     }
     function draw() {
@@ -1191,7 +1259,19 @@ body[data-screen="map"] .hints .map-only { display: inline; }
           g.fillRect(Math.round(dx + 8 + Math.cos(a) * rr * 0.8), Math.round(dy + 15 + Math.sin(a) * rr * 1.3 - Math.random() * 4 * aura), 1, 1);
         }
       }
-      g.drawImage(spr, dx, dy);
+      const CX = cat.fx + (cat.x - cat.fx) * cat.k, CY = cat.fy + (cat.y - cat.fy) * cat.k;
+      const cfr = cat.k < 1 ? (Math.floor(t * 8) % 2 ? 'walkA' : 'walkB') : (cat.sitting ? 'sit' : 'stand');
+      const cspr = catFrames[cfr][cat.face], cdx = Math.round(CX * T), cdy = Math.round(CY * T) + T - cspr.height;
+      const drawCat = () => {
+        g.drawImage(cspr, cdx, cdy);
+        if (cat.bubble > 0) {   // little "Meow!" speech bubble
+          const bx = Math.min(240 - 34, Math.max(2, cdx - 8)), by = Math.max(1, cdy - 13);
+          g.fillStyle = '#282018'; g.fillRect(bx, by, 32, 11); g.fillStyle = '#f8f8f8'; g.fillRect(bx + 1, by + 1, 30, 9);
+          g.fillStyle = '#282018'; g.fillRect(cdx + 6, by + 11, 3, 1); g.fillRect(cdx + 7, by + 12, 1, 1);
+          g.font = '6px "Press Start 2P", monospace'; g.textBaseline = 'top'; g.fillText('Meow!', bx + 2, by + 3);
+        }
+      };
+      if (CY <= Y) { drawCat(); g.drawImage(spr, dx, dy); } else { g.drawImage(spr, dx, dy); drawCat(); }
       g.setTransform(1, 0, 0, 1, 0, 0);
       // Pokémon-style battle wipe: black bars slide in from alternating sides, then white
       if (wipe) {
@@ -1216,8 +1296,8 @@ body[data-screen="map"] .hints .map-only { display: inline; }
     async function run(m, h = {}) {
       mode = m; hooks = h; active = true; $('#gbLinks').hidden = m !== 'contact'; locked = true; aura = 0; shake = 0; wipe = null; menuState = null; onA = null;
       menu.hidden = true; dlg.hidden = true;
-      if (m === 'boot') { px = 4; py = 5; dir = 'down'; whiteIn = 0; }
-      else { px = 8; py = 6; dir = 'down'; whiteIn = 1; }
+      if (m === 'boot') { px = 4; py = 5; dir = 'down'; whiteIn = 0; Object.assign(cat, { x: 11, y: 7, fx: 11, fy: 7, k: 1, sitting: true, next: 3, meowT: 5 }); }
+      else { px = 8; py = 6; dir = 'down'; whiteIn = 1; Object.assign(cat, { x: 5, y: 6, fx: 5, fy: 6, k: 1, face: 'right', sitting: true, next: 3, meowT: 2.5 }); }
       fit(); last = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
       if (m === 'boot') {
         await wait(400);
@@ -1321,7 +1401,11 @@ body[data-screen="map"] .hints .map-only { display: inline; }
     const w = $('#welcome'); w.hidden = false; w.classList.add('in');
     markBooted();
     landing = true;
-    await Promise.race([wait(fast ? 900 : 2200), new Promise(r => { landNow = r; })]);  // a click or Enter skips the wait
+    const skipped = new Promise(r => { landNow = r; });            // a click or Enter skips straight to the map
+    const beat = ms => Promise.race([wait(ms), skipped]);
+    await beat(fast ? 700 : 1500);
+    const ring = $('#ringScene'); ring.hidden = false; void ring.offsetWidth; ring.classList.add('in'); sfx.book();
+    await beat(fast ? 1400 : 2400);
     landing = false; go('map');
   }
   let landing = false, landNow = () => {};
