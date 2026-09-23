@@ -101,6 +101,15 @@
         ],
         "createdAt": "2026-09-22T19:23:21.377Z",
         "reason": "Claude: flagged text is near-white #e2e5ea on dark navy map shade (>12:1 contrast)"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "archive/og/og.html"
+        ],
+        "createdAt": "2026-09-23T04:56:07.397Z",
+        "reason": "Claude: preview-image source; light text on a dark photo overlay (detector assumes white ground); not deployed"
       }
     ]
   }

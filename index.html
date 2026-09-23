@@ -1,10 +1,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Greed Island: Qasem Ali</title>
-<meta name="description" content="Qasem Ali, software developer. A Hunter × Hunter Greed Island themed portfolio.">
+<meta name="description" content="Software developer building mobile apps, data pipelines and cloud backends. A Hunter × Hunter Greed Island–themed portfolio.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 56'%3E%3Crect x='4' y='2' width='36' height='50' rx='3' fill='%233a3372' stroke='%230e0f11' stroke-width='2'/%3E%3Cpath d='M11 11 q4 -5 8 0 t8 0 t8 0' fill='none' stroke='%23e59ad2' stroke-width='2.4' stroke-linecap='round'/%3E%3Crect x='10' y='18' width='24' height='22' fill='%23d6d6d0' stroke='%230e0f11' stroke-width='1.5'/%3E%3Ccircle cx='22' cy='29' r='7' fill='none' stroke='%230e0f11' stroke-width='1.6'/%3E%3Ccircle cx='22' cy='29' r='2.6' fill='%230e0f11'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://qasemali.vercel.app/">
+<meta property="og:site_name" content="Qasem Ali">
+<meta property="og:title" content="Qasem Ali · Software Developer">
+<meta property="og:description" content="Software developer building mobile apps, data pipelines and cloud backends. A Hunter × Hunter Greed Island–themed portfolio.">
+<meta property="og:image" content="https://qasemali.vercel.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Qasem Ali, Software Developer: Greed Island portfolio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Qasem Ali · Software Developer">
+<meta name="twitter:description" content="Software developer building mobile apps, data pipelines and cloud backends. A Hunter × Hunter Greed Island–themed portfolio.">
+<meta name="twitter:image" content="https://qasemali.vercel.app/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Shippori+Mincho+B1:wght@700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Press+Start+2P&family=Shippori+Mincho+B1:wght@700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
 <style>
 :root {
   color-scheme: dark;
@@ -115,7 +129,49 @@ a { color: inherit; }
 @keyframes wipe { 0% { transform: translateX(-120%) skewX(-18deg); } 45%, 55% { transform: translateX(0) skewX(-18deg); } 100% { transform: translateX(120%) skewX(-18deg); } }
 
 /* ---------- boot + arrival room ---------- */
-#s-boot { background: var(--room); }
+#s-boot { background: #0a0b0f; }
+/* ---------- the real world (8-bit) ---------- */
+.world-slot { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 45%, #1d1f2a, #08090c 75%); transition: opacity .4s; }
+.world-slot.gone { opacity: 0; pointer-events: none; }
+.gb { --s: 3; display: grid; justify-items: center; gap: 14px; }
+.gb-screen { position: relative; width: calc(240px * var(--s)); height: calc(160px * var(--s)); overflow: hidden; background: #000; border-radius: 6px;
+  box-shadow: 0 0 0 4px #15161b, 0 0 0 10px #3a3372, 0 0 0 12px #15161b, 0 24px 70px rgba(0,0,0,.65); }
+.gb-screen canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; }
+.gb-dialog { position: absolute; left: calc(4px * var(--s)); right: calc(4px * var(--s)); bottom: calc(4px * var(--s)); min-height: calc(42px * var(--s));
+  background: #f8f8f8; color: #282018; border: calc(2px * var(--s)) solid #282018; border-radius: calc(3px * var(--s));
+  box-shadow: inset 0 0 0 calc(1px * var(--s)) #f8f8f8, inset 0 0 0 calc(2px * var(--s)) #6878a8;
+  padding: calc(8px * var(--s)) calc(10px * var(--s)); font: calc(7px * var(--s))/1.9 "Press Start 2P", ui-monospace, monospace; cursor: pointer; }
+.gb-dialog p { margin: 0; }
+.gb-more { position: absolute; right: calc(8px * var(--s)); bottom: calc(5px * var(--s)); font-size: calc(6px * var(--s)); color: #cf2027; animation: bob .7s steps(2) infinite; }
+.gb-menu { position: absolute; right: calc(4px * var(--s)); bottom: calc(48px * var(--s)); margin: 0; padding: calc(6px * var(--s)) calc(8px * var(--s)); list-style: none;
+  background: #f8f8f8; color: #282018; border: calc(2px * var(--s)) solid #282018; border-radius: calc(3px * var(--s)); box-shadow: inset 0 0 0 calc(2px * var(--s)) #6878a8;
+  font: calc(7px * var(--s))/2.1 "Press Start 2P", ui-monospace, monospace; }
+.gb-menu li { cursor: pointer; padding-left: calc(9px * var(--s)); position: relative; white-space: nowrap; }
+.gb-menu li.on::before { content: "▶"; position: absolute; left: 0; font-size: .85em; top: .1em; }
+.gb-help { margin: 0; font-family: var(--f-ui); font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #8d9096; text-align: center; }
+.gb-help b { color: var(--pink); }
+.gb-pad { display: none; width: 100%; max-width: 420px; justify-content: space-between; align-items: center; padding: 0 8px; user-select: none; -webkit-user-select: none; touch-action: none; }
+.dpad { display: grid; grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(3, 52px); }
+.dpad button, .abtn { border: 0; color: #f3f3f0; background: #2a2c34; font: 700 18px/1 var(--f-ui); box-shadow: inset 0 -3px 0 rgba(0,0,0,.4); }
+.dpad [data-k="up"] { grid-area: 1 / 2; border-radius: 8px 8px 0 0; } .dpad [data-k="left"] { grid-area: 2 / 1; border-radius: 8px 0 0 8px; }
+.dpad [data-k="right"] { grid-area: 2 / 3; border-radius: 0 8px 8px 0; } .dpad [data-k="down"] { grid-area: 3 / 2; border-radius: 0 0 8px 8px; }
+.abtn { width: 70px; height: 70px; border-radius: 50%; background: #cf2027; font-size: 22px; }
+@media (pointer: coarse) { .gb-pad { display: flex; } .gb-help { display: none; } }
+.contact-plain { position: absolute; z-index: 4; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-size: 14px; font-weight: 700; color: #b9bcc2; padding: 0 var(--gutter); }
+.contact-plain a { color: #f3f3f0; text-decoration-color: var(--pink); text-underline-offset: 4px; }
+@media (pointer: coarse) { .contact-plain { position: static; } }
+.flash { position: absolute; inset: 0; z-index: 8; background: #fff; opacity: 0; pointer-events: none; }
+.flash.go { animation: flash 1.2s ease-out forwards; }
+@keyframes flash { 0% { opacity: 0; } 16% { opacity: 1; } 100% { opacity: 0; } }
+.welcome { position: absolute; z-index: 6; left: var(--gutter); right: var(--gutter); top: 16%; margin: 0; text-align: center; font-family: var(--f-title); font-weight: 800; font-size: clamp(42px, 7.4vw, 104px); line-height: 1; color: var(--ink);
+  text-shadow: 0 0 14px #f3f3f0, 0 0 30px #f3f3f0, 0 0 60px #f3f3f0; text-wrap: balance;
+  padding: 34px 0 40px; background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(243,243,240,.94) 45%, rgba(243,243,240,0) 100%); }
+.welcome span { display: block; font-family: var(--f-ui); font-weight: 700; font-size: clamp(13px, 1.9vw, 26px); letter-spacing: .5em; color: #2a2c30; margin-bottom: 14px; padding-left: .5em; }
+.welcome.in { animation: welcomeIn 1s cubic-bezier(.2,.9,.3,1) both; }
+@keyframes welcomeIn { from { opacity: 0; letter-spacing: .25em; filter: blur(10px); } to { opacity: 1; letter-spacing: normal; filter: none; } }
+.skip-intro { position: absolute; z-index: 20; right: calc(var(--gutter) + 54px); top: calc(env(safe-area-inset-top, 0px) + 13px); height: 38px; font-family: var(--f-ui); font-weight: 700; letter-spacing: .14em; font-size: 12px; text-transform: uppercase;
+  background: rgba(14,15,17,.72); color: #f3f3f0; border: 1px solid rgba(243,243,240,.35); padding: 0 14px; cursor: pointer; }
+.skip-intro:hover { border-color: var(--pink); }
 .maze { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .power { position: absolute; inset: 0; z-index: 5; background: #000; display: grid; place-items: center; text-align: center; transition: opacity .6s; }
 .power.gone { opacity: 0; pointer-events: none; }
@@ -124,14 +180,6 @@ a { color: inherit; }
 .power .bar { width: min(280px, 60vw); height: 3px; background: #222; margin: 22px auto 0; overflow: hidden; }
 .power .bar i { display: block; height: 100%; width: 0; background: var(--pink); animation: load 1.3s .6s ease-in-out forwards; }
 @keyframes load { to { width: 100%; } }
-.guide-img {
-  position: absolute; inset: 0; background-size: cover; background-position: 32% 18%;
-  -webkit-mask-image: radial-gradient(ellipse 85% 90% at 45% 40%, #000 68%, transparent 100%);
-          mask-image: radial-gradient(ellipse 85% 90% at 45% 40%, #000 68%, transparent 100%);
-  opacity: 0; transform: scale(1.06); transition: opacity 1s ease, transform 8s ease-out;
-}
-.guide-img.in { opacity: 1; transform: scale(1); }
-#s-contact .guide-img { background-position: 38% 22%; }
 
 .dialog {
   position: absolute; z-index: 10; left: 50%; transform: translateX(-50%);
@@ -159,10 +207,20 @@ a { color: inherit; }
 /* ---------- world map (main menu) ---------- */
 #s-map { background: var(--sea); }
 .map-stage { position: absolute; left: 50%; top: 50%; width: max(100vw, calc(100vh * 1.326)); aspect-ratio: 1057 / 797; transform: translate(-50%, -50%); }
-.map-stage img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; filter: saturate(.9) contrast(1.05); animation: drift 40s ease-in-out infinite alternate; }
+.map-stage { touch-action: none; cursor: grab; }
+.map-stage.dragging { cursor: grabbing; }
+.map-pan { position: absolute; inset: 0; transform-origin: 0 0; will-change: transform; }
+.map-stage img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; filter: saturate(.9) contrast(1.05); -webkit-user-drag: none; user-select: none; pointer-events: none; }
+.map-zoom { position: absolute; z-index: 6; left: 12px; top: 50%; transform: translateY(-50%); display: grid; gap: 6px; }
+.map-zoom button { width: 38px; height: 38px; display: grid; place-items: center; background: rgba(14,15,17,.8); color: var(--room); border: 1px solid rgba(243,243,240,.3); font: 700 20px/1 var(--f-ui); cursor: pointer; }
+.map-zoom button:hover { border-color: var(--pink); }
+#s-map .map-menu, #s-map .map-zoom, #s-map .credit, #s-map .pin { transition: opacity .35s; }
+#s-map.flying .map-menu, #s-map.flying .map-zoom, #s-map.flying .credit, #s-map.flying .pin:not(.sel) { opacity: 0; pointer-events: none; }
+.hints .map-only { display: none; }
+body[data-screen="map"] .hints .map-only { display: inline; }
 @keyframes drift { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.08) translate(-1.5%, 1%); } }
-.map-shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 40% 50%, transparent 40%, rgba(6,16,28,.75) 100%), linear-gradient(to left, rgba(8,10,14,.82), transparent 55%); pointer-events: none; }
-.pin { position: absolute; transform: translate(-50%, -50%); background: none; border: 0; padding: 0; cursor: pointer; display: grid; justify-items: center; gap: 6px; }
+.map-shade { position: absolute; z-index: 1; inset: 0; background: radial-gradient(ellipse at 40% 50%, transparent 40%, rgba(6,16,28,.75) 100%), linear-gradient(to left, rgba(8,10,14,.82), transparent 55%); pointer-events: none; }
+.pin { position: absolute; transform: translate(-50%, -50%) scale(calc(1 / var(--z, 1))); background: none; border: 0; padding: 0; cursor: pointer; display: grid; justify-items: center; gap: 6px; }
 .pin .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--room); border: 4px solid var(--ink); position: relative; }
 .pin .dot::after { content: ""; position: absolute; inset: -12px; border-radius: 50%; border: 2px solid var(--room); opacity: .0; animation: ping 2.2s ease-out infinite; }
 @keyframes ping { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.4); opacity: 0; } }
@@ -244,6 +302,21 @@ a { color: inherit; }
 @media (max-width: 1000px) {
   .binder-wrap { grid-template-columns: 1fr; }
 }
+.slot.gold.sel { box-shadow: 0 0 0 3px var(--ink), 0 0 0 6px #e8c25a, 0 0 24px rgba(232,194,90,.6); }
+.big.obtained .gi-card { animation: cardIn .6s cubic-bezier(.2,.9,.3,1), obtained 1.8s ease-in-out .6s 2; }
+@keyframes obtained { 50% { filter: drop-shadow(0 0 24px rgba(246,220,140,.95)) drop-shadow(0 0 60px rgba(232,194,90,.6)); } }
+.info button.link { border: 0; cursor: pointer; font: inherit; font-family: var(--f-ui); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: 14px; }
+.quiz .q { font-size: clamp(26px, 3vw, 38px); text-transform: none; letter-spacing: 0; line-height: 1.15; margin: 10px 0 18px; }
+.qdots { display: flex; gap: 6px; margin-top: 10px; }
+.qdots i { width: 26px; height: 6px; background: rgba(255,255,255,.14); }
+.qdots i.now { background: var(--room); } .qdots i.ok { background: #6fcf7f; } .qdots i.no { background: #ff6b62; }
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 560px; }
+.opt { text-align: left; font: 700 16px/1.3 var(--f-body); color: var(--ink); background: var(--room); border: 3px solid var(--ink); padding: 12px 14px; cursor: pointer; box-shadow: 4px 4px 0 rgba(0,0,0,.5); transition: transform .12s; }
+.opt:hover:not(:disabled) { transform: translate(-2px, -2px); }
+.opt.right { background: #6fcf7f; } .opt.wrong { background: #ff6b62; color: #fff; }
+.opt:disabled { cursor: default; }
+.qfb { min-height: 1.6em; margin-top: 14px; font-weight: 700; }
+@media (max-width: 460px) { .opts { grid-template-columns: 1fr; } }
 @media (max-width: 620px) {
   .card-view { grid-template-columns: 1fr; }
   .card-view .big { justify-self: center; font-size: 15px; }
@@ -369,10 +442,25 @@ a { color: inherit; }
 </style>
 
 <div id="app">
-  <!-- ============ BOOT: Joystation power-on, then Elena in the arrival room ============ -->
-  <section class="screen on" id="s-boot" aria-label="Welcome">
+  <!-- ============ BOOT: entering Greed Island through the Joystation ============ -->
+  <section class="screen on" id="s-boot" aria-label="Entering Greed Island">
     <canvas class="maze" aria-hidden="true"></canvas>
-    <div class="guide-img" style="background-image:url('assets/elena.webp')" role="img" aria-label="Elena, the Greed Island game guide"></div>
+    <div class="world-slot" id="bootWorld">
+      <div class="gb" id="gb" hidden>
+        <div class="gb-screen">
+          <canvas id="gbCanvas" width="240" height="160" role="img" aria-label="An 8-bit bedroom: Qasem's room, with a Joystation console on the rug"></canvas>
+          <div class="gb-dialog" id="gbDialog" hidden aria-live="polite"><p id="gbText"></p><span class="gb-more" aria-hidden="true">▼</span></div>
+          <ul class="gb-menu" id="gbMenu" hidden role="menu"></ul>
+        </div>
+        <div class="gb-pad">
+          <div class="dpad"><button data-k="up" aria-label="Up">▲</button><button data-k="left" aria-label="Left">◀</button><button data-k="right" aria-label="Right">▶</button><button data-k="down" aria-label="Down">▼</button></div>
+          <button class="abtn" data-k="a" aria-label="A: check or confirm">A</button>
+        </div>
+        <p class="gb-help"><b>Arrows / WASD</b> walk · <b>Enter</b> check &amp; confirm · <b>X</b> cancel</p>
+      </div>
+    </div>
+    <h1 class="welcome" id="welcome" hidden><span>Welcome to</span>Greed Island</h1>
+    <div class="flash" id="flash" aria-hidden="true"></div>
     <div class="power" id="power">
       <div>
         <div class="joy">JOYSTATION</div>
@@ -381,24 +469,29 @@ a { color: inherit; }
       </div>
     </div>
     <div class="dialog" id="bootDialog" hidden>
-      <span class="who">ELENA <small>GAME GUIDE</small></span>
+      <span class="who">GREED ISLAND <small>SYSTEM</small></span>
       <p class="line" aria-live="polite"></p>
       <ul class="choices" hidden></ul>
       <span class="more" aria-hidden="true">▼</span>
     </div>
+    <button class="skip-intro" id="skipIntro">Skip intro →</button>
   </section>
 
   <!-- ============ WORLD MAP (main menu) ============ -->
   <section class="screen" id="s-map" aria-label="Main menu">
-    <div class="map-stage">
-      <img src="assets/gi-map.webp" alt="">
-      <div class="map-shade"></div>
+    <div class="map-stage" aria-label="Map of Greed Island. Drag to explore, scroll or pinch to zoom.">
+      <div class="map-pan">
+      <img src="assets/gi-map.webp" alt="" draggable="false">
       <button class="pin" data-go="about" style="left:25%; top:50%"><span class="dot"></span><span class="plate">License</span></button>
       <button class="pin" data-go="projects" style="left:36%; top:34%"><span class="dot"></span><span class="plate">Binder</span></button>
       <button class="pin" data-go="experience" style="left:50%; top:22%"><span class="dot"></span><span class="plate">Quests</span></button>
       <button class="pin" data-go="skills" style="left:54%; top:58%"><span class="dot"></span><span class="plate">Nen</span></button>
       <button class="pin" data-go="contact" style="left:38%; top:78%"><span class="dot"></span><span class="plate">Harbor</span></button>
+      </div>
     </div>
+    <div class="map-shade"></div>
+    <div class="map-zoom" aria-label="Map zoom">
+      <button data-zoom="in" aria-label="Zoom in">+</button><button data-zoom="out" aria-label="Zoom out">−</button><button data-zoom="reset" aria-label="Reset the map">⟲</button>    </div>
     <div class="map-menu" role="menu" aria-label="Sections">
       <div class="head">
         <span class="ui-label">Greed Island · Player</span>
@@ -514,20 +607,10 @@ a { color: inherit; }
     </div>
   </section>
 
-  <!-- ============ CONTACT: Eeta ============ -->
+  <!-- ============ CONTACT: back in the real world ============ -->
   <section class="screen" id="s-contact" aria-label="Contact">
-    <canvas class="maze" aria-hidden="true"></canvas>
-    <div class="guide-img" style="background-image:url('assets/eeta.webp')" role="img" aria-label="Eeta, the Greed Island game guide"></div>
-    <div class="dialog" id="contactDialog">
-      <span class="who">EETA <small>GAME GUIDE</small></span>
-      <p class="line">Leaving already? Qasem is open to internships and new projects. How would you like to reach him?</p>
-      <ul class="choices" id="contactChoices">
-        <li><a href="mailto:qasemali200502@gmail.com"><span class="arrow">▶</span><span>Email</span><span class="detail">qasemali200502@gmail.com</span></a></li>
-        <li><a href="https://github.com/qalisem" target="_blank" rel="noopener"><span class="arrow">▶</span><span>GitHub</span><span class="detail">github.com/qalisem</span></a></li>
-        <li><a href="https://linkedin.com/in/qasem-ali1" target="_blank" rel="noopener"><span class="arrow">▶</span><span>LinkedIn</span><span class="detail">linkedin.com/in/qasem-ali1</span></a></li>
-        <li><button data-go="map"><span class="arrow">▶</span><span>Back to the map</span></button></li>
-      </ul>
-    </div>
+    <div class="world-slot" id="contactWorld"></div>
+    <p class="contact-plain">Reach Qasem: <a href="mailto:qasemali200502@gmail.com">qasemali200502@gmail.com</a><a href="https://github.com/qalisem" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/qasem-ali1" target="_blank" rel="noopener">LinkedIn</a></p>
   </section>
 
   <!-- shared chrome -->
@@ -547,7 +630,7 @@ a { color: inherit; }
     </svg>
   </button>
   <div id="cardZoom" hidden role="dialog" aria-modal="true" aria-label="Card close-up"><div class="cz-card"></div><button class="cz-close">Close · Esc</button></div>
-  <div class="hints" id="hints" hidden><span><kbd>↑↓</kbd>Select</span><span><kbd>⏎</kbd>Confirm</span><span><kbd>ESC</kbd>Back</span><span><kbd>B</kbd>Book</span></div>
+  <div class="hints" id="hints" hidden><span class="map-only"><kbd>Drag</kbd>Explore</span><span><kbd>↑↓</kbd>Select</span><span><kbd>⏎</kbd>Confirm</span><span><kbd>ESC</kbd>Back</span><span><kbd>B</kbd>Book</span></div>
 </div>
 
 <div id="wipe" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -604,6 +687,10 @@ a { color: inherit; }
       flip: () => swish(0.18),
       tick: () => tone(1800, 0.02, { vol: 0.02 }),                                          // dialogue text
       open: () => { swish(0.12); tone(880, 0.12, { type: 'triangle', vol: 0.05, to: 1320 }); },
+      charge: () => { tone(160, 1.3, { type: 'sawtooth', vol: 0.03, to: 1400 }); tone(320, 1.3, { type: 'triangle', vol: 0.04, to: 2200 }); },
+      warp: () => { swish(0.8); tone(1600, 0.7, { type: 'triangle', vol: 0.05, to: 200 }); },
+      whoosh: () => swish(0.5),
+      bump: () => tone(90, 0.09, { vol: 0.06, to: 70 }),
     };
   })();
 
@@ -656,6 +743,9 @@ a { color: inherit; }
     { kan: '放', jp: '放出系', en: 'Emitter', ch: 'leorio', who: 'Leorio Paradinight', aura: '#ff9a3d', area: 'Cloud & deployment', blurb: 'Emitters send their aura away from the body. Cloud work is shipping code to run somewhere else.', items: ['Google Cloud Run', 'AWS', 'S3', 'CloudFront', 'Elastic Beanstalk', 'Docker', 'GitHub Actions', 'Linux'] },
   ];
 
+  // Qasem as an 8-bit sprite (17 × 31), used in the room and on card 000
+  const QASEM_SPRITE = {"pal":{"k":"#290909","c":"#141414","G":"#3c3c46","e":"#c98a5c","E":"#a86c44","b":"#2a1a14","m":"#6e3a28","w":"#f0ece4","j":"#8a8a86","J":"#646460","t":"#2c3566","d":"#94b4d4","D":"#6a8cb0","s":"#55555a"},"frames":{"down_stand":["....k.kkk.kk.....","...kckcccckcck...","..kcccGcccGccck..",".kccGcccccccGcck.",".kccccccccccccck.",".kcccccGccccccck.",".kcceeceeceeecck.",".kcebbbeeebbbeck.",".kckkkkkkkkkkkck.",".kekebwkekwbekek.",".kekkkkeeekkkkek.",".kEeeeeeEeeeeeEk.","..keeebbbbbeeek..","..kbbeemmmeebbk..","...kbbbbbbbbbk...","....kbbbbbbbk....","..kjjjkeeekjjjk..",".kjjjjkttttkjjjjk","kjjjjktttttkjjjjk","kjJjjktttttkjjJjk","kjJjjktttttkjjJjk","kjJjjktttttkjjJjk","keekjktttttkjkeek",".kkkjjjjjjjjjkkk.","...kdddddddddk...","...kdddDkDdddk...","...kddddkddddk...","...kddDdkdDddk...","...kDddk.kddDk...","..kssssk.kssssk..","..kkkkkk.kkkkkk.."],"up_stand":["....k.kkk.kk.....","...kckcccckcck...","..kcccGcccGccck..",".kccGcccccccGcck.",".kccccccccccccck.",".kcccccGccccccck.",".kccccccccccccck.",".kcccGccccccccck.",".kccccccccccccck.",".kEcccccccccccEk.",".kEcccccGcccccEk.","..kccccccccccck..","...kcceeeeecck...","....keeeeeeek....","...kjjjjjjjjjk...","..kjjjjjjjjjjjk..",".kjjjjjjjjjjjjjk.","kjjjjjjjjjjjjjjjk","kjJjjjjjjjjjjjJjk","kjJjjjjjJjjjjjJjk","kjJjjjjjJjjjjjJjk","kjjjjjjjjjjjjjjjk","keekjjjjjjjjjkeek",".kkkjjjjjjjjjkkk.","...kdddddddddk...","...kddddkddddk...","...kddDdkdDddk...","...kddddkddddk...","...kDddk.kddDk...","..kssssk.kssssk..","..kkkkkk.kkkkkk.."],"left_stand":[".....k.kkk.k.....","....kckcccckk....","...kcccGccccck...","..kccccccGcccck..","..kcccccccccccck.","..kcccccccGcccck.","..keeeeeecccccck.","..kebbbeecccccck.",".kkkkkkkkkcccccck",".kebwkeekEcccccck",".kkkkkeeeEccccck.","keeeeeeeeEcccck..",".kbbbbeeeEEcck...",".kbmbbbeeeEk.....","..kbbbbbbbbk.....","...kbbbbbbk......","....kjjkeekjk....","...kjjjjjjjjjk...","...ktjjjJjjjjk...","...ktjjjJjjjjk...","...ktjjjJjjjjk...","...ktjjjJjjjjk...","...ktjjjeejjjk...","...kjjjjkkjjjk...","....kdddddddk....","....kdddddddk....","....kdddDdddk....","....kdddddddk....","....kdddDdddk....","...kssssssssk....","...kkkkkkkkkk...."],"down_stepA":["....k.kkk.kk.....","...kckcccckcck...","..kcccGcccGccck..",".kccGcccccccGcck.",".kccccccccccccck.",".kcccccGccccccck.",".kcceeceeceeecck.",".kcebbbeeebbbeck.",".kckkkkkkkkkkkck.",".kekebwkekwbekek.",".kekkkkeeekkkkek.",".kEeeeeeEeeeeeEk.","..keeebbbbbeeek..","..kbbeemmmeebbk..","...kbbbbbbbbbk...","....kbbbbbbbk....","..kjjjkeeekjjjk..",".kjjjjkttttkjjjjk","kjjjjktttttkjjjjk","kjJjjktttttkjjJjk","kjJjjktttttkjjJjk","kjJjjktttttkjjJjk","keekjktttttkjkeek",".kkkjjjjjjjjjkkk.","...kdddddddddk...","...kdddDkDdddk...","...kddddkddddk...","...kddDdkdDddk...","...kDddk.kddDk...","..kssssk..kssk...","..kkkkkk..kkkk..."],"up_stepA":["....k.kkk.kk.....","...kckcccckcck...","..kcccGcccGccck..",".kccGcccccccGcck.",".kccccccccccccck.",".kcccccGccccccck.",".kccccccccccccck.",".kcccGccccccccck.",".kccccccccccccck.",".kEcccccccccccEk.",".kEcccccGcccccEk.","..kccccccccccck..","...kcceeeeecck...","....keeeeeeek....","...kjjjjjjjjjk...","..kjjjjjjjjjjjk..",".kjjjjjjjjjjjjjk.","kjjjjjjjjjjjjjjjk","kjJjjjjjjjjjjjJjk","kjJjjjjjJjjjjjJjk","kjJjjjjjJjjjjjJjk","kjjjjjjjjjjjjjjjk","keekjjjjjjjjjkeek",".kkkjjjjjjjjjkkk.","...kdddddddddk...","...kddddkddddk...","...kddDdkdDddk...","...kddddkddddk...","...kDddk.kddDk...","..kssssk..kssk...","..kkkkkk..kkkk..."],"left_stepA":[".....k.kkk.k.....","....kckcccckk....","...kcccGccccck...","..kccccccGcccck..","..kcccccccccccck.","..kcccccccGcccck.","..keeeeeecccccck.","..kebbbeecccccck.",".kkkkkkkkkcccccck",".kebwkeekEcccccck",".kkkkkeeeEccccck.","keeeeeeeeEcccck..",".kbbbbeeeEEcck...",".kbmbbbeeeEk.....","..kbbbbbbbbk.....","...kbbbbbbk......","....kjjkeekjk....","...kjjjjjjjjjk...","...ktjjjJjjjjk...","...ktjjjJjjjjk...","...ktjjjJjjjjk...","...ktjjjJjjjjk...","...ktjjjeejjjk...","...kjjjjkkjjjk...","....kdddddddk....","....kdddddddk....","....kdddDdddk....","....kdddddddk....","....kdddk.kddk...","...kssssk.kssk...","...kkkkkk.kkkk..."],"down_stepB":["....k.kkk.kk.....","...kckcccckcck...","..kcccGcccGccck..",".kccGcccccccGcck.",".kccccccccccccck.",".kcccccGccccccck.",".kcceeceeceeecck.",".kcebbbeeebbbeck.",".kckkkkkkkkkkkck.",".kekebwkekwbekek.",".kekkkkeeekkkkek.",".kEeeeeeEeeeeeEk.","..keeebbbbbeeek..","..kbbeemmmeebbk..","...kbbbbbbbbbk...","....kbbbbbbbk....","..kjjjkeeekjjjk..",".kjjjjkttttkjjjjk","kjjjjktttttkjjjjk","kjJjjktttttkjjJjk","kjJjjktttttkjjJjk","kjJjjktttttkjjJjk","keekjktttttkjkeek",".kkkjjjjjjjjjkkk.","...kdddddddddk...","...kdddDkDdddk...","...kddddkddddk...","...kddDdkdDddk...","...kDddk.kddDk...","...kssk..kssssk..","...kkkk..kkkkkk.."],"up_stepB":["....k.kkk.kk.....","...kckcccckcck...","..kcccGcccGccck..",".kccGcccccccGcck.",".kccccccccccccck.",".kcccccGccccccck.",".kccccccccccccck.",".kcccGccccccccck.",".kccccccccccccck.",".kEcccccccccccEk.",".kEcccccGcccccEk.","..kccccccccccck..","...kcceeeeecck...","....keeeeeeek....","...kjjjjjjjjjk...","..kjjjjjjjjjjjk..",".kjjjjjjjjjjjjjk.","kjjjjjjjjjjjjjjjk","kjJjjjjjjjjjjjJjk","kjJjjjjjJjjjjjJjk","kjJjjjjjJjjjjjJjk","kjjjjjjjjjjjjjjjk","keekjjjjjjjjjkeek",".kkkjjjjjjjjjkkk.","...kdddddddddk...","...kddddkddddk...","...kddDdkdDddk...","...kddddkddddk...","...kDddk.kddDk...","...kssk..kssssk..","...kkkk..kkkkkk.."],"left_stepB":[".....k.kkk.k.....","....kckcccckk....","...kcccGccccck...","..kccccccGcccck..","..kcccccccccccck.","..kcccccccGcccck.","..keeeeeecccccck.","..kebbbeecccccck.",".kkkkkkkkkcccccck",".kebwkeekEcccccck",".kkkkkeeeEccccck.","keeeeeeeeEcccck..",".kbbbbeeeEEcck...",".kbmbbbeeeEk.....","..kbbbbbbbbk.....","...kbbbbbbk......","....kjjkeekjk....","...kjjjjjjjjjk...","...ktjjjJjjjjk...","...ktjjjJjjjjk...","...ktjjjJjjjjk...","...ktjjjJjjjjk...","...ktjjjeejjjk...","...kjjjjkkjjjk...","....kdddddddk....","....kdddddddk....","....kdddDdddk....","....kdddddddk....",".....kdddkdddk...",".....kssskssk....",".....kkkkkkkk...."]}};
+
   /* ================= Greed Island cards =================
      Built to the real card's proportions (1530 × 2130): three cream header plates joined by
      knobbed double rules, a cream-framed art window, and a marble-bordered text box
@@ -684,10 +774,12 @@ a { color: inherit; }
     }
     const pink = marble('#a8335f', ['#d9668f', '#7c1d43', '#f0a3c0', '#c24a78', '#5e1231'], '#2a0715');
     const blue = marble('#2c4a9a', ['#5f86d6', '#1b2d66', '#a8c3f3', '#3d64bf', '#101d45'], '#070f2a');
+    const gold = marble('#b8892a', ['#e8c25a', '#8a6418', '#f6dc8c', '#c99a2e', '#6a4a10'], '#3a2606');
     $('#gi-defs defs').insertAdjacentHTML('beforeend', `
       <pattern id="gi-hatch" width="400" height="400" patternUnits="userSpaceOnUse"><g fill="none" stroke="#000" stroke-linecap="round">${hatch}</g></pattern>
       <pattern id="gi-marble-pink" width="512" height="512" patternUnits="userSpaceOnUse"><image href="${pink}" width="512" height="512"/></pattern>
-      <pattern id="gi-marble-blue" width="512" height="512" patternUnits="userSpaceOnUse"><image href="${blue}" width="512" height="512"/></pattern>`);
+      <pattern id="gi-marble-blue" width="512" height="512" patternUnits="userSpaceOnUse"><image href="${blue}" width="512" height="512"/></pattern>
+      <pattern id="gi-marble-gold" width="512" height="512" patternUnits="userSpaceOnUse"><image href="${gold}" width="512" height="512"/></pattern>`);
   })();
 
   // Each art is one object, cel-shaded with heavy black outlines, sitting on a coloured field of
@@ -770,6 +862,14 @@ a { color: inherit; }
         <circle cx="697" cy="240" r="18" fill="#e2b53c" ${O}/>` },
   };
 
+  // card 000: the player himself, pixel by pixel (runs of same-coloured pixels merged into one rect)
+  ART.player = (() => {
+    const P = 19, rows = QASEM_SPRITE.frames.down_stand, x0 = 697 - Math.round(rows[0].length * P / 2), y0 = 400 - Math.round(rows.length * P / 2);
+    let px = '';
+    rows.forEach((r, y) => { let x = 0; while (x < r.length) { const ch = r[x]; let n = 1; while (r[x + n] === ch) n++; if (ch !== '.') px += `<rect x="${x0 + x * P}" y="${y0 + y * P}" width="${n * P}" height="${P}" fill="${QASEM_SPRITE.pal[ch]}"/>`; x += n; } });
+    const rays = Array.from({ length: 16 }, (_, i) => { const a = i / 16 * Math.PI * 2, b = a + 0.09; return `<path d="M697 400 L${(697 + Math.cos(a) * 1300).toFixed(0)} ${(400 + Math.sin(a) * 1300).toFixed(0)} L${(697 + Math.cos(b) * 1300).toFixed(0)} ${(400 + Math.sin(b) * 1300).toFixed(0)}Z"/>`; }).join('');
+    return { k: 1, bg: '#c99a2e', back: `<g fill="#fff1c4" opacity=".45">${rays}</g><circle cx="697" cy="400" r="250" fill="#fff6d8" opacity=".5"/>`, s: px };
+  })();
   function cardArt(kind) {
     const a = ART[kind];
     return `<rect width="1394" height="776" fill="${a.bg}"/><rect width="1394" height="776" fill="url(#gi-hatch)"/>
@@ -793,7 +893,7 @@ a { color: inherit; }
       <rect x="40" y="340" width="1450" height="830" fill="#e9e7cf" stroke="#111" stroke-width="7"/>
       <svg x="68" y="367" width="1394" height="776" viewBox="0 0 1394 776" preserveAspectRatio="xMidYMid slice">${cardArt(c.art)}</svg>
       <rect x="68" y="367" width="1394" height="776" fill="none" stroke="#111" stroke-width="7"/>
-      <rect x="32" y="1218" width="1466" height="836" fill="url(#gi-marble-${spell ? 'blue' : 'pink'})" stroke="#111" stroke-width="7"/>
+      <rect x="32" y="1218" width="1466" height="836" fill="url(#gi-marble-${c.marble || (spell ? 'blue' : 'pink')})" stroke="#111" stroke-width="7"/>
       <rect x="88" y="1272" width="1354" height="728" fill="#e4e4e2" stroke="#111" stroke-width="8"/>
       <foreignObject x="140" y="1318" width="1250" height="640"><div xmlns="http://www.w3.org/1999/xhtml" class="gi-desc">${esc(c.flavor)}</div></foreignObject>
       <text x="64" y="2104" font-family="Chakra Petch, sans-serif" font-weight="600" font-size="34" fill="#cfcfcf">©Q.ALI 2026</text>
@@ -804,7 +904,7 @@ a { color: inherit; }
   /* ================= the arrival room: glitchy maze, drawn live ================= */
   function Maze(canvas) {
     const ctx = canvas.getContext('2d');
-    let W = 0, H = 0, blocks = [], raf = 0, running = false;
+    let W = 0, H = 0, blocks = [], raf = 0, running = false, speed = 1;
     function size() {
       const dpr = Math.min(2, devicePixelRatio || 1), r = canvas.getBoundingClientRect();
       W = r.width; H = r.height; canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -831,7 +931,8 @@ a { color: inherit; }
         }
       }
       ctx.globalAlpha = 1;
-      for (const b of blocks) { b.z -= dt * 0.06; if (b.z < 0.22) Object.assign(b, spawn(1.45)); }
+      for (const b of blocks) { b.z -= dt * 0.06 * speed; if (b.z < 0.22) Object.assign(b, spawn(1.45)); }
+      speed += (1 - speed) * Math.min(1, dt * 1.4); // warp decays back to a drift
     }
     let last = 0;
     function loop(t) { raf = requestAnimationFrame(loop); const dt = Math.min(0.05, (t - (last || t)) / 1000); last = t; draw(dt); }
@@ -839,10 +940,305 @@ a { color: inherit; }
       start() { if (running) return; running = true; size(); if (reduced) draw(0); else { last = 0; raf = requestAnimationFrame(loop); } },
       stop() { running = false; cancelAnimationFrame(raf); },
       resize() { if (running) { size(); if (reduced) draw(0); } },
+      warp(k) { speed = k; },
     };
   }
-  const mazes = { boot: Maze($('#s-boot .maze')), contact: Maze($('#s-contact .maze')) };
+  const mazes = { boot: Maze($('#s-boot .maze')) };
   addEventListener('resize', () => Object.values(mazes).forEach(m => m.resize()));
+
+  /* ================= the real world: an 8-bit room you walk around in (boot intro + contact ending) ================= */
+  const world = (() => {
+    const PLAYER = QASEM_SPRITE;
+    const gb = $('#gb'), cv = $('#gbCanvas'), g = cv.getContext('2d');
+    const dlg = $('#gbDialog'), txt = $('#gbText'), menu = $('#gbMenu');
+    const COLS = 15, ROWS = 10, T = 16;
+    g.imageSmoothingEnabled = false;
+
+    /* ---- sprites: pre-render every frame (and a mirrored copy for facing right) ---- */
+    const frames = {};
+    Object.entries(PLAYER.frames).forEach(([name, rows]) => {
+      const c = document.createElement('canvas'); c.width = rows[0].length; c.height = rows.length; const x = c.getContext('2d');
+      rows.forEach((r, y) => [...r].forEach((ch, xx) => { if (ch !== '.') { x.fillStyle = PLAYER.pal[ch]; x.fillRect(xx, y, 1, 1); } }));
+      frames[name] = c;
+      if (name.startsWith('left')) {
+        const m = document.createElement('canvas'); m.width = c.width; m.height = c.height; const mx = m.getContext('2d');
+        mx.translate(c.width, 0); mx.scale(-1, 1); mx.drawImage(c, 0, 0); frames[name.replace('left', 'right')] = m;
+      }
+    });
+
+    /* ---- the room, painted once ---- */
+    const room = document.createElement('canvas'); room.width = 240; room.height = 160;
+    const r = room.getContext('2d');
+    const R = (x, y, w, h, c) => { r.fillStyle = c; r.fillRect(x, y, w, h); };
+    (function paint() {
+      // wooden floor
+      for (let y = 32; y < 160; y += 8) {
+        const odd = (y / 8) % 2; R(0, y, 240, 8, odd ? '#d6ac72' : '#dcb47c'); R(0, y + 7, 240, 1, '#b88a50');
+        for (let x = odd * 24; x < 240; x += 48) R(x, y, 1, 7, '#b88a50');
+      }
+      // wall + baseboard
+      R(0, 0, 240, 32, '#f2e8d2'); for (let x = 0; x < 240; x += 8) R(x, 0, 4, 26, '#ebdfc4');
+      R(0, 25, 240, 7, '#9a7652'); R(0, 25, 240, 1, '#6a5038'); R(0, 31, 240, 1, '#6a5038');
+      // window: a sunny Mississauga day
+      R(33, 3, 30, 21, '#6a5038'); R(35, 5, 26, 17, '#8cc8f0'); R(35, 5, 26, 6, '#bfe4fa'); R(39, 16, 8, 6, '#6fb05a'); R(50, 14, 11, 8, '#5f9c4c');
+      R(47, 5, 2, 17, '#f8f8f8'); R(35, 12, 26, 2, '#f8f8f8'); R(31, 23, 34, 3, '#f8f8f8'); R(38, 6, 3, 2, '#ffffff');
+      // One Piece wanted poster (Luffy, hand-drawn at wall size)
+      const WANTED = {"pal":{"T":"#9c6230","t":"#d9a45e","u":"#e6b874","W":"#4a2410","k":"#3a2010","b":"#7ec0ee","y":"#f2cc4a","Y":"#c99a2a","r":"#d8342c","h":"#1c1c1c","s":"#f4c79a","w":"#ffffff","m":"#7a2a1a"},"rows":["TTTTTTTTTTTTTTTTTT","TtWWtWWtWtWtWWWtWW","TtWtWtWtWWtWtWttWt","TtWWWtWtWtWWtWWtWW","TtkkkkkkkkkkkkkktT","TtkbbbbyyyybbbbktT","TtkbbyyyyyyyybbktT","TtkbyyYyyyyYyybktT","TtkyrrrrrrrrrryktT","TtkyhhsssssshhyktT","TtkbhsmmssmmshbktT","TtkbhsswwwwsshbktT","TtkbbswwwwwwsbbktT","TtkbbssmmmmssbbktT","TtkkkkkkkkkkkkkktT","TtWtWWtWWtWtWWWttT","TtuuuuuuuuuuuuuutT","TtWWWtWtWWtWWtWWtT","TtWtWtWtWtWWtWtWtT","TtuuuuuuuuuuuuuutT","TtWtWWWtWWWtWWWttT","TtuuuuuuuuuuuuuutT","TtWtWtWWttttWWWttT","TTTTTTTTTTTTTTTTTT"]};
+      WANTED.rows.forEach((row, y) => [...row].forEach((ch, x) => R(178 + x, 1 + y, 1, 1, WANTED.pal[ch])));
+      // bookshelf full of manga
+      R(208, 4, 32, 44, '#5a3014'); R(210, 6, 28, 40, '#8a5428'); R(210, 19, 28, 2, '#5a3014'); R(210, 32, 28, 2, '#5a3014');
+      const books = ['#d04040', '#4060c0', '#40a060', '#e0c040', '#8040a0', '#e07030', '#2c3a6e', '#e59ad2'];
+      [[8, 11], [21, 11], [34, 11]].forEach(([y, h], row) => { let x = 211; let i = row * 3; while (x < 236) { const w = 2 + (i * 7 % 3); R(x, y, w, h, books[i % books.length]); R(x, y, w, 1, '#00000030'); x += w + 1; i++; } });
+      // bed
+      R(16, 30, 32, 4, '#9a6030'); R(16, 33, 32, 47, '#6a3c18'); R(18, 35, 28, 11, '#f8f8f8'); R(20, 37, 24, 6, '#e8e8ee');
+      R(18, 46, 28, 32, '#4870d0'); R(18, 46, 28, 3, '#9ab8f0'); R(18, 75, 28, 3, '#3050a0'); R(26, 54, 12, 2, '#3a60c0');
+      // desk + laptop with code on screen
+      R(80, 30, 48, 7, '#9a6030'); R(80, 36, 48, 2, '#6a3c18'); R(82, 38, 4, 10, '#6a3c18'); R(122, 38, 4, 10, '#6a3c18'); R(104, 38, 18, 8, '#8a5028'); R(111, 41, 4, 1, '#d6ac72');
+      R(92, 27, 24, 5, '#a8a8b0'); R(92, 31, 24, 1, '#7a7a84'); R(94, 13, 20, 14, '#303848'); R(95, 14, 18, 12, '#141a26');
+      [[96, 16, 9, '#8cf07a'], [98, 18, 12, '#e59ad2'], [98, 20, 7, '#8cf07a'], [96, 22, 10, '#9ab8f0'], [98, 24, 6, '#8cf07a']].forEach(([x, y, w, c]) => R(x, y, w, 1, c));
+      R(119, 26, 5, 5, '#f8f8f8'); R(120, 27, 3, 2, '#6a3c18'); // mug
+      // chair
+      R(97, 49, 14, 11, '#6a3c18'); R(99, 51, 10, 7, '#c84860');
+      // rug under the console
+      R(104, 80, 80, 56, '#b83c54'); R(106, 82, 76, 52, '#c84860'); R(108, 84, 72, 1, '#e8a0b0'); R(108, 131, 72, 1, '#e8a0b0'); R(108, 84, 1, 48, '#e8a0b0'); R(179, 84, 1, 48, '#e8a0b0');
+      for (let x = 116; x < 176; x += 12) for (let y = 92; y < 128; y += 12) { R(x + 2, y, 1, 1, '#e8a0b0'); R(x + 1, y + 1, 3, 1, '#e8a0b0'); R(x + 2, y + 2, 1, 1, '#e8a0b0'); }
+      // TV on its stand
+      R(128, 62, 32, 18, '#5a3014'); R(130, 64, 28, 13, '#8a5428'); R(131, 70, 26, 1, '#5a3014');
+      R(129, 38, 30, 26, '#282018'); R(130, 39, 28, 24, '#50586a'); R(151, 58, 3, 3, '#282018'); R(146, 58, 3, 3, '#282018');
+      // Joystation on the rug, cable to the TV
+      R(143, 79, 1, 5, '#282018');
+      R(133, 83, 22, 11, '#282018'); R(134, 84, 20, 9, '#e8e9ee'); R(134, 84, 20, 3, '#fbfbfd'); R(136, 89, 7, 2, '#3a3b42');
+      R(140, 80, 8, 5, '#282018'); R(141, 80, 6, 4, '#3a3372'); R(142, 81, 4, 1, '#e59ad2');
+      // plant
+      R(226, 144, 12, 12, '#282018'); R(227, 145, 10, 10, '#b05030'); R(227, 145, 10, 2, '#d06840');
+      [[224, 132, 8, 8], [232, 130, 7, 9], [228, 126, 7, 8], [222, 138, 6, 6], [234, 138, 6, 6]].forEach(([x, y, w, h], i) => { R(x, y, w, h, i % 2 ? '#3a8a40' : '#50b058'); R(x + 1, y + 1, 2, 1, '#8ad890'); });
+      // door mat
+      R(110, 150, 20, 10, '#7a5a3a'); for (let x = 112; x < 128; x += 3) R(x, 152, 1, 6, '#9a7652');
+    })();
+
+    /* ---- what you can't walk through, and what you can check ---- */
+    const blocked = new Set(), things = {};
+    const area = (x0, y0, x1, y1, id, solid = true) => { for (let x = x0; x <= x1; x++) for (let y = y0; y <= y1; y++) { if (solid) blocked.add(x + ',' + y); if (id) things[x + ',' + y] = id; } };
+    area(0, 0, 14, 1); area(2, 1, 3, 1, 'window'); area(11, 1, 12, 1, 'poster');
+    area(1, 2, 2, 4, 'bed'); area(5, 2, 7, 2, 'laptop'); area(6, 3, 6, 3, 'chair'); area(13, 1, 14, 2, 'books');
+    area(8, 3, 9, 4, 'tv'); area(8, 5, 9, 5, 'joy'); area(14, 8, 14, 8, 'plant');
+    const free = (x, y) => x >= 0 && y >= 0 && x < COLS && y < ROWS && !blocked.has(x + ',' + y);
+    const D = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+
+    /* ---- state ---- */
+    let active = false, mode = null, hooks = {}, raf = 0, last = 0, t = 0;
+    let px = 4, py = 5, dir = 'down', moving = null, stepAlt = false, bumpCool = 0, locked = false;
+    let aura = 0, shake = 0, wipe = null, whiteIn = 0, hint = false;
+    const held = [];
+
+    /* ---- dialogue + menus, Pokémon style ---- */
+    let typing = null, onA = null, menuState = null;
+    function type(text) {
+      clearInterval(typing); txt.textContent = ''; let n = 0;
+      if (reduced) { txt.textContent = text; return; }
+      typing = setInterval(() => { txt.textContent = text.slice(0, ++n); if (n % 3 === 0) sfx.tick(); if (n >= text.length) { clearInterval(typing); typing = null; } }, 26);
+      type.full = text;
+    }
+    const finishTyping = () => { if (typing) { clearInterval(typing); typing = null; txt.textContent = type.full; return true; } return false; };
+    function say(lines, { auto = 0 } = {}) {
+      return new Promise(res => {
+        let i = 0; dlg.hidden = false; dlg.classList.remove('asking');
+        const next = () => {
+          if (i >= lines.length) { dlg.hidden = true; onA = null; res(); return; }
+          type(lines[i++]);
+          if (auto) setTimeout(() => { if (onA === advance) { finishTyping(); next(); } }, auto);
+        };
+        const advance = () => { if (!finishTyping()) next(); };
+        onA = advance; next();
+      });
+    }
+    function ask(question, options) {
+      return new Promise(res => {
+        dlg.hidden = false; type(question);
+        menuState = { i: 0, options, res };
+        menu.innerHTML = options.map((o, k) => `<li data-i="${k}" role="menuitem">${o}</li>`).join('');
+        renderMenu(); menu.hidden = false; onA = null;
+      });
+    }
+    function renderMenu() { [...menu.children].forEach((li, k) => li.classList.toggle('on', k === menuState.i)); }
+    function closeMenu(k) {
+      const m = menuState; menuState = null; menu.hidden = true; dlg.hidden = true; finishTyping(); m.res(k);
+    }
+    menu.addEventListener('click', e => { const li = e.target.closest('li'); if (li && menuState) { sfx.ok(); closeMenu(+li.dataset.i); } });
+    // follow the mouse only when it actually moves, so a resting pointer can't override the arrow keys
+    menu.addEventListener('mousemove', e => { if (!e.movementX && !e.movementY) return; const li = e.target.closest('li'); if (li && menuState && menuState.i !== +li.dataset.i) { menuState.i = +li.dataset.i; renderMenu(); sfx.move(); } });
+    dlg.addEventListener('click', () => pressA());
+
+    /* ---- input ---- */
+    function pressA() {
+      if (!active) return;
+      if (menuState) { sfx.ok(); closeMenu(menuState.i); return; }
+      if (onA) { onA(); return; }
+      if (locked || moving) return;
+      const [dx, dy] = D[dir], id = things[(px + dx) + ',' + (py + dy)];
+      if (id) { sfx.move(); interact(id); }
+      else if (dir === 'down' && py === ROWS - 1 && (px === 7)) { sfx.move(); interact('door'); }
+    }
+    function pressB() { if (menuState) { sfx.back(); closeMenu(menuState.options.length - 1); } }
+    function moveMenu(d) { if (!menuState) return false; menuState.i = (menuState.i + d + menuState.options.length) % menuState.options.length; renderMenu(); sfx.move(); return true; }
+    const KEY = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right' };
+    addEventListener('keydown', e => {
+      if (!active || e.metaKey || e.ctrlKey || e.altKey) return;
+      const k = KEY[e.key];
+      if (k) { e.preventDefault(); if (menuState) { if (k === 'up' || k === 'down') moveMenu(k === 'up' ? -1 : 1); return; } if (!held.includes(k)) held.push(k); return; }
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'z' || e.key === 'Z') { e.preventDefault(); if (!e.repeat) pressA(); }
+      if (e.key === 'x' || e.key === 'X' || e.key === 'Backspace') { e.preventDefault(); pressB(); }
+    });
+    addEventListener('keyup', e => { const k = KEY[e.key]; if (k) { const i = held.indexOf(k); if (i >= 0) held.splice(i, 1); } });
+    addEventListener('blur', () => { held.length = 0; });
+    // touch pad
+    $$('.gb-pad [data-k]').forEach(b => {
+      const k = b.dataset.k;
+      const down = e => { e.preventDefault(); if (k === 'a') return pressA(); if (menuState) { if (k === 'up' || k === 'down') moveMenu(k === 'up' ? -1 : 1); return; } if (!held.includes(k)) held.push(k); };
+      const up = () => { const i = held.indexOf(k); if (i >= 0) held.splice(i, 1); };
+      b.addEventListener('pointerdown', down); b.addEventListener('pointerup', up); b.addEventListener('pointerleave', up); b.addEventListener('pointercancel', up);
+    });
+
+    /* ---- things to check in the room ---- */
+    const LOOK = {
+      window: ['Mississauga, Ontario. Nice day to be a Hunter.'],
+      poster: ['WANTED: MONKEY D. LUFFY. Dead or alive.', 'Bounty: 300,000,000 berries. QASEM would never turn him in.'],
+      bed: ['No time to sleep. GREED ISLAND is waiting.'],
+      books: ['Hunter x Hunter, every volume so far.', 'Next to them: One Piece, 20th Century Boys and Blue Lock.'],
+      chair: ['A comfy desk chair. Many bugs were fixed here.'],
+      plant: ['It\'s a plant. QASEM remembers to water it. Mostly.'],
+      tv: ['The TV is showing the GREED ISLAND title screen.'],
+      door: ['Not yet! GREED ISLAND first.'],
+    };
+    async function interact(id) {
+      locked = true;
+      if (mode === 'contact' && id === 'laptop') { await contactMenu(); locked = false; return; }
+      if (id === 'laptop') await say(['QASEM\'s laptop. The Safr repo is open:', '47,000 lines and counting.']);
+      else if (id === 'joy') { mode === 'boot' ? await enterGame() : await backToIsland(); }
+      else if (id === 'door' && mode === 'contact') await say(['The real world can wait. Why not check the laptop first?']);
+      else await say(LOOK[id] || ['...']);
+      locked = false;
+    }
+
+    /* ---- boot: use Ren on the Joystation ---- */
+    async function enterGame() {
+      await say(['The GREED ISLAND cartridge is in the JOYSTATION.', 'To play, a Hunter holds both hands over the console and uses REN.']);
+      const k = await ask('Use REN?', ['YES', 'NO']);
+      if (k !== 0) { await say(['QASEM decided to wait a little.']); return; }
+      hint = false; dir = 'up'; locked = true;
+      await say(['QASEM used REN!'], { auto: 900 });
+      sfx.charge();
+      for (let i = 0; i < 26; i++) { aura = Math.min(1, i / 16); shake = i > 12 ? (i - 12) / 7 : 0; await wait(45); }
+      sfx.warp();
+      await new Promise(res => { wipe = { k: 0, done: res }; });
+      stop();
+      hooks.onEnter && hooks.onEnter();
+    }
+
+    /* ---- contact: back in the real world ---- */
+    const LINKS = [
+      ['EMAIL', 'mailto:qasemali200502@gmail.com', 'qasemali200502@gmail.com'],
+      ['GITHUB', 'https://github.com/qalisem', 'github.com/qalisem'],
+      ['LINKEDIN', 'https://linkedin.com/in/qasem-ali1', 'linkedin.com/in/qasem-ali1'],
+    ];
+    async function contactMenu() {
+      const k = await ask('Want to reach QASEM?', [...LINKS.map(l => l[0]), 'BACK TO ISLAND', 'STAY HERE']);
+      if (k < LINKS.length) {
+        const [name, href, shown] = LINKS[k];
+        if (href.startsWith('mailto:')) location.href = href; else window.open(href, '_blank', 'noopener');
+        await say([`${name}: ${shown}`, 'See you soon!']);
+      } else if (k === LINKS.length) { hooks.onBack && hooks.onBack(); }
+      else await say(['Walk around, or check the laptop to reach QASEM.']);
+    }
+    async function backToIsland() {
+      const k = await ask('Go back into GREED ISLAND?', ['YES', 'NO']);
+      if (k === 0) hooks.onBack && hooks.onBack();
+    }
+
+    /* ---- loop ---- */
+    function update(dt) {
+      t += dt; bumpCool -= dt;
+      if (moving) {
+        moving.k += dt / 0.2;
+        if (moving.k >= 1) { px = moving.tx; py = moving.ty; moving = null; }
+      }
+      if (!moving && !locked && !menuState && !onA && held.length) {
+        const d = held[held.length - 1]; dir = d;
+        const nx = px + D[d][0], ny = py + D[d][1];
+        if (free(nx, ny)) { moving = { fx: px, fy: py, tx: nx, ty: ny, k: 0 }; stepAlt = !stepAlt; }
+        else if (bumpCool <= 0) { sfx.bump(); bumpCool = 0.3; }
+      }
+      if (wipe) { wipe.k += dt / 0.7; if (wipe.k >= 1.35) { const d = wipe.done; wipe = null; d(); } }
+      if (whiteIn > 0) whiteIn = Math.max(0, whiteIn - dt / 0.9);
+    }
+    function draw() {
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      g.fillStyle = '#000'; g.fillRect(0, 0, 240, 160);
+      const sx = shake ? Math.round((Math.random() * 2 - 1) * 2 * shake) : 0, sy = shake ? Math.round((Math.random() * 2 - 1) * shake) : 0;
+      g.translate(sx, sy);
+      g.drawImage(room, 0, 0);
+      // TV glow + console LED
+      g.fillStyle = (Math.floor(t * 8) % 7) ? '#3a3372' : '#4a4390'; g.fillRect(132, 41, 24, 20);
+      g.fillStyle = '#e59ad2'; g.fillRect(136, 46, 16, 2); g.fillRect(138, 50, 12, 6);
+      g.fillStyle = Math.floor(t * 2) % 2 ? '#e59ad2' : '#7a4a70'; g.fillRect(150, 89, 2, 2);
+      // hint arrow over the Joystation until it's used
+      if (hint && !locked) { const b = Math.floor(t * 3) % 2; g.fillStyle = '#e59ad2'; g.fillRect(142, 68 + b, 5, 1); g.fillRect(143, 69 + b, 3, 1); g.fillRect(144, 70 + b, 1, 1); }
+      // player
+      let X = px, Y = py, fr = 'stand';
+      if (moving) { X = moving.fx + (moving.tx - moving.fx) * moving.k; Y = moving.fy + (moving.ty - moving.fy) * moving.k; fr = moving.k < 0.5 ? (stepAlt ? 'stepA' : 'stepB') : 'stand'; }
+      const spr = frames[`${dir}_${fr}`];
+      const dx = Math.round(X * T) - 1, dy = Math.round(Y * T) + T - spr.height; // feet on the tile's bottom edge
+      if (aura > 0) {
+        for (let i = 0; i < 70 * aura; i++) {
+          const a = Math.random() * Math.PI * 2, rr = 12 + Math.random() * 6 * aura;
+          g.fillStyle = Math.random() < 0.5 ? '#e59ad2' : '#ffffff';
+          g.fillRect(Math.round(dx + 8 + Math.cos(a) * rr * 0.8), Math.round(dy + 15 + Math.sin(a) * rr * 1.3 - Math.random() * 4 * aura), 1, 1);
+        }
+      }
+      g.drawImage(spr, dx, dy);
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      // Pokémon-style battle wipe: black bars slide in from alternating sides, then white
+      if (wipe) {
+        const k = Math.min(1, wipe.k);
+        g.fillStyle = '#000';
+        for (let i = 0; i < 10; i++) { const w = Math.round(240 * Math.min(1, k * 1.25 - i * 0.025)); if (w > 0) i % 2 ? g.fillRect(240 - w, i * 16, w, 16) : g.fillRect(0, i * 16, w, 16); }
+        if (wipe.k > 1) { g.fillStyle = `rgba(255,255,255,${Math.min(1, (wipe.k - 1) / 0.3)})`; g.fillRect(0, 0, 240, 160); }
+      }
+      if (whiteIn > 0) { g.fillStyle = `rgba(255,255,255,${whiteIn})`; g.fillRect(0, 0, 240, 160); }
+    }
+    function loop(now) { raf = requestAnimationFrame(loop); const dt = Math.min(0.05, (now - (last || now)) / 1000); last = now; update(dt); draw(); }
+
+    function fit() {
+      const coarse = matchMedia('(pointer: coarse)').matches;
+      const s = Math.min((innerWidth - 32) / 240, (innerHeight - (coarse ? 210 : 150)) / 160);
+      gb.style.setProperty('--s', s >= 2 ? Math.floor(s) : Math.max(1, s).toFixed(3));
+    }
+    addEventListener('resize', () => { if (active) fit(); });
+
+    function stop() { active = false; cancelAnimationFrame(raf); held.length = 0; }
+    async function run(m, h = {}) {
+      mode = m; hooks = h; active = true; locked = true; aura = 0; shake = 0; wipe = null; menuState = null; onA = null;
+      menu.hidden = true; dlg.hidden = true;
+      if (m === 'boot') { px = 4; py = 5; dir = 'down'; whiteIn = 0; }
+      else { px = 8; py = 6; dir = 'down'; whiteIn = 1; }
+      fit(); last = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
+      if (m === 'boot') {
+        await wait(400);
+        await say(['Mississauga, Ontario. QASEM\'s room.', 'The JOYSTATION is on, and GREED ISLAND is loaded.', 'Walk with the arrow keys and press A (Enter) to check things.']);
+        hint = true;
+      } else {
+        await wait(300);
+        await say(['QASEM used LEAVE!', 'QASEM returned to the real world.']);
+        await contactMenu();
+      }
+      locked = false;
+    }
+    return {
+      mount(slot) { slot.appendChild(gb); gb.hidden = false; },
+      run, stop,
+      active: () => active,
+    };
+  })();
 
   /* ================= screens + transitions ================= */
   const SCREENS = {
@@ -852,7 +1248,7 @@ a { color: inherit; }
     about: { ep: 'EP 03', words: ['License', 'And', 'Player'], tag: 'About me' },
     experience: { ep: 'EP 04', words: ['Quest', 'And', 'Record'], tag: 'Experience' },
     skills: { ep: 'EP 05', words: ['Aura', 'And', 'Ability'], tag: 'Skills' },
-    contact: { ep: 'EP 06', words: ['Departure', 'And', 'Contact'], tag: 'Contact' },
+    contact: { ep: 'EP 06', words: ['Leave', 'And', 'Return'], tag: 'Contact' },
   };
   let current = 'boot', busy = false;
   const seen = new Set();
@@ -890,15 +1286,16 @@ a { color: inherit; }
     name === 'skills' ? sprite.start() : sprite.stop();
     music.play(name);
     Object.entries(mazes).forEach(([k, m]) => (k === name ? m.start() : m.stop()));
-    if (name === 'contact') { requestAnimationFrame(() => $('#s-contact .guide-img').classList.add('in')); selectChoice(0); }
+    if (name === 'contact') { world.mount($('#contactWorld')); world.run('contact', { onBack: () => go('map') }); } else if (name !== 'boot') world.stop();
     const scroller = $('#s-' + name + ' .scroll'); if (scroller) scroller.scrollTop = 0;
     const h = $('#s-' + name + ' [tabindex="-1"]'); if (h) h.focus({ preventScroll: true });
-    if (name === 'map') { selectMenu(menuIdx); layoutMap(); }
+    document.body.dataset.screen = name;
+    if (name === 'map') { selectMenu(menuIdx); layoutMap(); mapScreen.classList.remove('flying'); resetPan(0); }
   }
-  async function go(name, { push = true } = {}) {
+  async function go(name, { push = true, quiet = false } = {}) {
     if (busy || name === current || !SCREENS[name]) return;
     busy = true;
-    (name === 'projects' ? sfx.book : name === 'map' && current !== 'boot' ? sfx.back : sfx.ok)();
+    if (!quiet) (name === 'projects' ? sfx.book : name === 'map' && current !== 'boot' ? sfx.back : sfx.ok)();
     if (push && location.hash !== '#' + name) history.pushState(null, '', '#' + name);
     if (!seen.has(name) && name !== 'boot') {
       seen.add(name);
@@ -911,19 +1308,19 @@ a { color: inherit; }
     busy = false;
   }
   addEventListener('popstate', () => go(location.hash.slice(1) || 'map', { push: false }));
-  document.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t) { e.preventDefault(); go(t.dataset.go); } });
+  document.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (!t) return; e.preventDefault(); current === 'map' && t.closest('#s-map') ? flyTo(t.dataset.go) : go(t.dataset.go); });
   $('#bookBtn').addEventListener('click', () => go('projects'));
   document.addEventListener('click', e => {
     const t = e.target.closest('a, button');
-    if (!t || t.closest('[data-go], .slot, #license, .card-btn, #musicBtn, #cardZoom, #bookBtn')) return;
+    if (!t || t.closest('[data-go], .slot, #license, .card-btn, #musicBtn, #cardZoom, #bookBtn, .gb, .map-zoom')) return;
     sfx.ok();
   });
 
   /* ================= boot ================= */
   const LINES = [
-    'Welcome to Greed Island.',
-    'You\'re about to enter the portfolio of player Qasem Ali, a software developer from Mississauga, Ontario.',
+    'Player registered: Qasem Ali, a software developer from Mississauga, Ontario.',
     'Players here collect cards. Every project Qasem has built is a card in his Binder.',
+    'Say "Book" at any time (press B) to open it.',
   ];
   const bootDlg = $('#bootDialog');
   let lineIdx = 0, typing = null, bootChoices = false;
@@ -948,18 +1345,26 @@ a { color: inherit; }
     selectChoice(0);
   }
   bootDlg.addEventListener('click', e => { if (!e.target.closest('button')) advanceBoot(); });
+  const markBooted = () => { try { sessionStorage.setItem('gi-booted', '1'); } catch (_) {} };
+  async function arrive(fast) {
+    world.stop(); $('#bootWorld').classList.add('gone'); $('#skipIntro').hidden = true;
+    mazes.boot.start(); if (!fast) mazes.boot.warp(14);
+    const w = $('#welcome'); w.hidden = false; w.classList.add('in');
+    markBooted();
+    await wait(fast ? 300 : 1300);
+    bootDlg.hidden = false; typeLine(LINES[0]);
+  }
+  $('#skipIntro').addEventListener('click', () => { world.stop(); markBooted(); go('map'); });
   async function boot() {
     const direct = location.hash.slice(1);
-    const skipIntro = (() => { try { return sessionStorage.getItem('gi-booted') === '1'; } catch (_) { return false; } })();
-    mazes.boot.start();
+    const again = (() => { try { return sessionStorage.getItem('gi-booted') === '1'; } catch (_) { return false; } })();
     music.play('boot');
     if (SCREENS[direct] && direct !== 'boot') { $('#power').classList.add('gone'); seen.add('map'); show(direct); if (direct !== 'map') seen.add(direct); return; }
-    if (!skipIntro) await wait(2100);
+    if (again) { $('#power').classList.add('gone'); arrive(true); return; }  // returning visitors skip straight to the arrival room
+    await wait(2100);
     $('#power').classList.add('gone');
-    try { sessionStorage.setItem('gi-booted', '1'); } catch (_) {}
-    $('#s-boot .guide-img').classList.add('in');
-    await wait(500);
-    bootDlg.hidden = false; typeLine(LINES[0]);
+    world.mount($('#bootWorld'));
+    world.run('boot', { onEnter: () => { $('#flash').classList.add('go'); arrive(false); } });
   }
 
   /* ================= dialog choices (boot + contact) ================= */
@@ -997,33 +1402,161 @@ a { color: inherit; }
     const left = Math.max(Math.min((W - S) / 2, limit - PIN_MAX * S), 50 - PIN_MIN * S); // never push the left-most pin off screen
     Object.assign(stage.style, { width: S + 'px', left: left + 'px', top: (H - S * 797 / 1057) / 2 + 'px', transform: 'none' });
   }
-  addEventListener('resize', layoutMap);
+  addEventListener('resize', () => { layoutMap(); applyPan(); });
+
+  // ---- camera: drag to pan, wheel / pinch / buttons to zoom, and fly into a pin before a screen opens
+  const pan = $('.map-pan'), mapScreen = $('#s-map');
+  let Z = 1, TX = 0, TY = 0, dragMoved = false, flying = false, dragStart = null, pinch = null;
+  const ptrs = new Map();
+  function applyPan(ms = 0) {
+    const r = stage.getBoundingClientRect(), w = stage.offsetWidth, h = stage.offsetHeight;
+    const vx0 = -r.left, vy0 = -r.top;
+    TX = Math.min(vx0, Math.max(vx0 + innerWidth - w * Z, TX));   // never show past the map's edges
+    TY = Math.min(vy0, Math.max(vy0 + innerHeight - h * Z, TY));
+    pan.style.transition = ms ? `transform ${ms}ms cubic-bezier(.65,0,.2,1)` : 'none';
+    pan.style.transform = `translate(${TX}px, ${TY}px) scale(${Z})`;
+    stage.style.setProperty('--z', Z);
+  }
+  function zoomAt(x, y, nz, ms = 0) {
+    const r = stage.getBoundingClientRect(); nz = Math.min(3.2, Math.max(1, nz));
+    const sx = x - r.left, sy = y - r.top, cx = (sx - TX) / Z, cy = (sy - TY) / Z;
+    Z = nz; TX = sx - cx * Z; TY = sy - cy * Z; applyPan(ms);
+  }
+  function resetPan(ms = 0) { Z = 1; TX = 0; TY = 0; applyPan(ms); }
+  stage.addEventListener('wheel', e => { if (flying) return; e.preventDefault(); zoomAt(e.clientX, e.clientY, Z * Math.exp(-e.deltaY * 0.0015)); }, { passive: false });
+  stage.addEventListener('pointerdown', e => {
+    if (flying) return;
+    ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); dragMoved = false;
+    if (ptrs.size === 1) dragStart = { x: e.clientX, y: e.clientY, tx: TX, ty: TY };
+    if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, z: Z }; }
+  });
+  stage.addEventListener('pointermove', e => {
+    if (!ptrs.has(e.pointerId)) return;
+    ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (ptrs.size === 2 && pinch) { const [a, b] = [...ptrs.values()]; dragMoved = true; zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, pinch.z * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d); return; }
+    if (!dragStart) return;
+    const dx = e.clientX - dragStart.x, dy = e.clientY - dragStart.y;
+    if (!dragMoved && Math.hypot(dx, dy) < 6) return;          // small wobble still counts as a click
+    if (!dragMoved) { dragMoved = true; stage.classList.add('dragging'); try { stage.setPointerCapture(e.pointerId); } catch (_) {} }
+    TX = dragStart.tx + dx; TY = dragStart.ty + dy; applyPan();
+  });
+  const endPtr = e => { ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null; if (!ptrs.size) { dragStart = null; stage.classList.remove('dragging'); } };
+  stage.addEventListener('pointerup', endPtr); stage.addEventListener('pointercancel', endPtr);
+  stage.addEventListener('click', e => { if (dragMoved) { e.stopPropagation(); e.preventDefault(); dragMoved = false; } }, true);
+  stage.addEventListener('dblclick', e => { if (!e.target.closest('.pin')) zoomAt(e.clientX, e.clientY, Z * 1.7, 380); });
+  $('.map-zoom').addEventListener('click', e => {
+    const b = e.target.closest('[data-zoom]'); if (!b) return; e.stopPropagation(); sfx.move();
+    if (b.dataset.zoom === 'reset') return resetPan(450);
+    const cx = (menuEl.getBoundingClientRect().left > innerWidth * 0.5 ? menuEl.getBoundingClientRect().left : innerWidth) / 2;
+    zoomAt(cx, innerHeight / 2, Z * (b.dataset.zoom === 'in' ? 1.5 : 1 / 1.5), 320);
+  });
+  async function flyTo(name) {
+    const pin = $(`.pin[data-go="${name}"]`);
+    if (busy || flying || !pin) return go(name);
+    flying = true; sfx.ok(); sfx.whoosh();
+    selectMenu(menuItems.findIndex(m => m.dataset.go === name));
+    mapScreen.classList.add('flying');
+    const r = stage.getBoundingClientRect(), w = stage.offsetWidth, h = stage.offsetHeight;
+    const cx = parseFloat(pin.style.left) / 100 * w, cy = parseFloat(pin.style.top) / 100 * h;
+    Z = 3; TX = innerWidth / 2 - r.left - cx * Z; TY = innerHeight / 2 - r.top - cy * Z;
+    applyPan(reduced ? 0 : 950);
+    await wait(900);
+    await go(name, { quiet: true });
+    flying = false;
+  }
   $$('.pin').forEach(p => p.addEventListener('mouseenter', () => selectMenu(menuItems.findIndex(m => m.dataset.go === p.dataset.go))));
 
   /* ================= binder ================= */
   const slotsEl = $('#slots');
-  $('#slotCount').textContent = `${PROJECTS.length} / ${SLOT_TOTAL - 1} filled`;
-  const slotData = Array.from({ length: SLOT_TOTAL }, (_, i) => i === 0 ? { zero: true, no: '000' } : (PROJECTS[i - 1] || { empty: true, no: String(i).padStart(3, '0') }));
-  slotsEl.innerHTML = slotData.map((s, i) => `<button class="slot${s.zero ? ' zero' : ''}" role="option" data-i="${i}" aria-label="${s.name ? `Card ${s.no}: ${s.name}` : s.zero ? 'Card 000: coming soon' : `Slot ${s.no}: empty`}">${s.name ? cardHTML(s) : `<span class="num">${s.no}</span>`}</button>`).join('');
+  // Card 000 works like the real thing: in Greed Island the final card goes to whoever wins a quiz about the game.
+  const CARD000 = { no: '000', name: "Ruler's Blessing", rank: 'SS-1', art: 'player', marble: 'gold',
+    flavor: 'The final card. Awarded to the player who knows this portfolio best. Every card in the binder, collected.' };
+  let won000 = false;
+  try { won000 = localStorage.getItem('gi-card000') === 'won'; } catch (_) {}
+  const QUIZ = [
+    ['How many mosques does Safr cover?', '3,373', ['2,904', '47,000', '30']],
+    ['Who did Qasem build SherpaVoiceKit for?', 'LiveAI', ['Stush Foods', 'AI SYNT', 'Riipen']],
+    ["What is Qasem's Nen type?", 'Conjurer', ['Enhancer', 'Specialist', 'Emitter']],
+    ['What does Hardball keep track of?', 'NBA salary caps', ['Baseball stats', 'Stock prices', 'Lost items']],
+    ['How big was the reporting error Qasem found at Stush Foods?', '$6,900', ['$690', '$69,000', '$6.9 million']],
+  ];
+  const PASS = 4;
+  let slotData = [], quiz = null;
+  const shuffle = a => a.map(v => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map(v => v[1]);
+  function renderSlots() {
+    slotData = Array.from({ length: SLOT_TOTAL }, (_, i) => i === 0 ? (won000 ? CARD000 : { zero: true, no: '000' }) : (PROJECTS[i - 1] || { empty: true, no: String(i).padStart(3, '0') }));
+    slotsEl.innerHTML = slotData.map((s, i) => `<button class="slot${s.zero ? ' zero' : ''}${s.marble ? ' gold' : ''}" role="option" data-i="${i}" aria-label="${s.name ? `Card ${s.no}: ${s.name}` : s.zero ? 'Card 000: not yet obtained' : `Slot ${s.no}: empty`}">${s.name ? cardHTML(s) : `<span class="num">${s.no}</span>`}</button>`).join('');
+    $('#slotCount').textContent = `${PROJECTS.length + (won000 ? 1 : 0)} / ${SLOT_TOTAL - 1} filled`;
+  }
+  renderSlots();
   let slotIdx = 1;
-  function selectSlot(i) {
+  function selectSlot(i, { fresh = false } = {}) {
     const prev = slotIdx; slotIdx = (i + SLOT_TOTAL) % SLOT_TOTAL; if (prev !== slotIdx) sfx.move();
+    quiz = null;
     $$('.slot').forEach((el, k) => { el.classList.toggle('sel', k === slotIdx); el.setAttribute('aria-selected', String(k === slotIdx)); });
     const s = slotData[slotIdx], view = $('#cardView');
-    if (s.name) {
+    if (s === CARD000) {
+      view.innerHTML = `<div class="big${fresh ? ' obtained' : ''}">${cardHTML(s)}</div><div class="info">
+        <span class="ui-label">${fresh ? 'Card 000 obtained!' : 'Card 000 · Rank SS'}</span><h2>${s.name}</h2><p class="kind">The final card · Quiz winner</p>
+        <p>You won the quiz and claimed the last card in the binder. In Greed Island, this is the card that finishes the game.</p>
+        <p>Thanks for playing through Qasem's portfolio. The only thing left is to use Leave.</p>
+        <a class="link" href="#contact" data-go="contact">Use Leave: contact Qasem →</a></div>`;
+    } else if (s.name) {
       view.innerHTML = `<div class="big">${cardHTML(s)}</div><div class="info">
         <span class="ui-label">Card ${s.no} · Rank ${s.rank.split('-')[0]}</span><h2>${s.name}</h2><p class="kind">${s.kind}</p>
         <p>${s.summary}</p><ul>${s.points.map(p => `<li>${p}</li>`).join('')}</ul>
         <dl><dt>Built with</dt><dd>${s.stack}</dd></dl>
         ${s.link ? `<a class="link" href="${s.link[1]}" target="_blank" rel="noopener">${s.link[0]} ↗</a>` : ''}</div>`;
     } else if (s.zero) {
-      view.innerHTML = `<div class="info"><span class="ui-label">Card 000 · Coming soon</span><h2>???</h2><p class="kind">The final card</p>
-        <p>In Greed Island, card 000 is the last and rarest card in the game. This slot is saved for whatever I build next.</p>
-        <a class="link" href="https://github.com/qalisem" target="_blank" rel="noopener">See what I'm building on GitHub ↗</a></div>`;
+      view.innerHTML = `<div class="info"><span class="ui-label">Card 000 · Not yet obtained</span><h2>???</h2><p class="kind">The final card</p>
+        <p>In Greed Island, card 000 goes to the player who wins a quiz about the game. Here, the quiz is about this portfolio: ${QUIZ.length} questions, and every answer is somewhere on the site.</p>
+        <p>Get ${PASS} right to claim it.</p>
+        <button class="link" id="quizStart">Start the quiz →</button></div>`;
     } else {
       view.innerHTML = `<div class="info"><span class="ui-label">Slot ${s.no} · Empty</span><h2>—</h2><p>No card here yet. The next project goes in this slot.</p></div>`;
     }
   }
+  function renderQuiz() {
+    const [q, right, wrongs] = QUIZ[quiz.i];
+    const opts = shuffle([right, ...wrongs]);
+    $('#cardView').innerHTML = `<div class="info quiz">
+      <span class="ui-label">Greed Island quiz · Question ${quiz.i + 1} / ${QUIZ.length}</span>
+      <div class="qdots" aria-hidden="true">${QUIZ.map((_, k) => `<i class="${k < quiz.i ? (quiz.marks[k] ? 'ok' : 'no') : k === quiz.i ? 'now' : ''}"></i>`).join('')}</div>
+      <h2 class="q">${q}</h2>
+      <div class="opts">${opts.map(o => `<button class="opt" data-o="${o}">${o}</button>`).join('')}</div>
+      <p class="qfb" aria-live="polite"></p></div>`;
+    $$('#cardView .opt')[0].focus({ preventScroll: true });
+  }
+  const reveal = () => $('#cardView').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
+  function startQuiz() { quiz = { i: 0, score: 0, marks: [] }; sfx.open(); renderQuiz(); reveal(); }
+  function answer(btn) {
+    if (!quiz || quiz.locked) return;
+    const [, right] = QUIZ[quiz.i], ok = btn.dataset.o === right;
+    quiz.locked = true; quiz.marks.push(ok); if (ok) quiz.score++;
+    $$('#cardView .opt').forEach(b => { b.disabled = true; if (b.dataset.o === right) b.classList.add('right'); });
+    if (!ok) btn.classList.add('wrong');
+    $('#cardView .qfb').textContent = ok ? 'Correct!' : `Not quite. It's ${right}.`;
+    ok ? sfx.ok() : sfx.back();
+    setTimeout(() => {
+      if (!quiz) return;
+      quiz.locked = false; quiz.i++;
+      if (quiz.i < QUIZ.length) return renderQuiz();
+      const score = quiz.score;
+      if (score >= PASS) {
+        won000 = true; try { localStorage.setItem('gi-card000', 'won'); } catch (_) {}
+        renderSlots(); sfx.book(); selectSlot(0, { fresh: true }); reveal();
+      } else {
+        quiz = null;
+        $('#cardView').innerHTML = `<div class="info"><span class="ui-label">Quiz over · ${score} / ${QUIZ.length}</span><h2>So close</h2><p class="kind">You need ${PASS} to claim card 000</p>
+          <p>Every answer is on the site. Try the project cards, the Experience quest log and the Nen chart, then come back.</p>
+          <button class="link" id="quizStart">Try again →</button></div>`;
+      }
+    }, 1200);
+  }
+  $('#cardView').addEventListener('click', e => {
+    if (e.target.closest('#quizStart')) { startQuiz(); return; }
+    const o = e.target.closest('.opt'); if (o) answer(o);
+  });
   slotsEl.addEventListener('click', e => { const b = e.target.closest('.slot'); if (b) selectSlot(+b.dataset.i); });
   selectSlot(1);
 
@@ -1209,13 +1742,14 @@ a { color: inherit; }
   addEventListener('keydown', e => {
     if (busy || e.metaKey || e.ctrlKey || e.altKey) return;
     const k = e.key;
+    if (world.active() && k !== 'Escape') return;
     if (!zoom.hidden) { if (k === 'Escape' || k === 'Enter' || k === ' ') { e.preventDefault(); closeCard(); } return; }
     if ((k === 'b' || k === 'B') && current !== 'boot') { go('projects'); return; }
     if ((k === 'Escape' || k === 'Backspace') && !['boot', 'map'].includes(current)) { e.preventDefault(); go('map'); return; }
     const up = k === 'ArrowUp', down = k === 'ArrowDown', left = k === 'ArrowLeft', right = k === 'ArrowRight', ok = k === 'Enter';
     if (!(up || down || left || right || ok)) return;
     if (current === 'boot') {
-      if (!bootChoices) { if (ok || down || right) { e.preventDefault(); advanceBoot(); } return; }
+      if (!bootChoices) { if (ok || down || right) { e.preventDefault(); if (!bootDlg.hidden) advanceBoot(); } return; }
       e.preventDefault();
       if (up || down) selectChoice(choiceIdx + (down ? 1 : -1));
       if (ok) activeChoices()[choiceIdx].click();
@@ -1223,8 +1757,9 @@ a { color: inherit; }
       e.preventDefault();
       if (up || left) selectMenu(menuIdx - 1);
       if (down || right) selectMenu(menuIdx + 1);
-      if (ok) go(menuItems[menuIdx].dataset.go);
+      if (ok) flyTo(menuItems[menuIdx].dataset.go);
     } else if (current === 'projects') {
+      if (quiz) return;  // the quiz uses normal focus + Enter
       e.preventDefault();
       const cols = getComputedStyle(slotsEl).gridTemplateColumns.split(' ').length;
       if (left) selectSlot(slotIdx - 1); if (right) selectSlot(slotIdx + 1);
