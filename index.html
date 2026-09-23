@@ -157,9 +157,11 @@ a { color: inherit; }
 .dpad [data-k="right"] { grid-area: 2 / 3; border-radius: 0 8px 8px 0; } .dpad [data-k="down"] { grid-area: 3 / 2; border-radius: 0 0 8px 8px; }
 .abtn { width: 70px; height: 70px; border-radius: 50%; background: #cf2027; font-size: 22px; }
 @media (pointer: coarse) { .gb-pad { display: flex; } .gb-help { display: none; } }
-.contact-plain { position: absolute; z-index: 4; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; font-size: 14px; font-weight: 700; color: #b9bcc2; padding: 0 var(--gutter); }
-.contact-plain a { color: #f3f3f0; text-decoration-color: var(--pink); text-underline-offset: 4px; }
-@media (pointer: coarse) { .contact-plain { position: static; } }
+.gb-links { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin: 2px 0 0; padding: 0; list-style: none; }
+.gb-links span { font-family: var(--f-ui); font-weight: 600; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #8d9096; margin-right: 4px; }
+.gb-links a { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-ui); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-decoration: none;
+  color: #f3f3f0; background: rgba(255,255,255,.06); border: 1px solid rgba(243,243,240,.22); padding: 8px 14px; transition: border-color .15s, background .15s; }
+.gb-links a:hover { border-color: var(--pink); background: rgba(229,154,210,.12); }
 .flash { position: absolute; inset: 0; z-index: 8; background: #fff; opacity: 0; pointer-events: none; }
 .flash.go { animation: flash 1.2s ease-out forwards; }
 @keyframes flash { 0% { opacity: 0; } 16% { opacity: 1; } 100% { opacity: 0; } }
@@ -457,6 +459,7 @@ body[data-screen="map"] .hints .map-only { display: inline; }
           <button class="abtn" data-k="a" aria-label="A: check or confirm">A</button>
         </div>
         <p class="gb-help"><b>Arrows / WASD</b> walk · <b>Enter</b> check &amp; confirm · <b>X</b> cancel</p>
+        <p class="gb-links" id="gbLinks" hidden><span>Or reach Qasem directly</span><a href="mailto:qasemali200502@gmail.com">qasemali200502@gmail.com</a><a href="https://github.com/qalisem" target="_blank" rel="noopener">GitHub ↗</a><a href="https://linkedin.com/in/qasem-ali1" target="_blank" rel="noopener">LinkedIn ↗</a></p>
       </div>
     </div>
     <h1 class="welcome" id="welcome" hidden><span>Welcome to</span>Greed Island</h1>
@@ -610,7 +613,6 @@ body[data-screen="map"] .hints .map-only { display: inline; }
   <!-- ============ CONTACT: back in the real world ============ -->
   <section class="screen" id="s-contact" aria-label="Contact">
     <div class="world-slot" id="contactWorld"></div>
-    <p class="contact-plain">Reach Qasem: <a href="mailto:qasemali200502@gmail.com">qasemali200502@gmail.com</a><a href="https://github.com/qalisem" target="_blank" rel="noopener">GitHub</a><a href="https://linkedin.com/in/qasem-ali1" target="_blank" rel="noopener">LinkedIn</a></p>
   </section>
 
   <!-- shared chrome -->
@@ -1210,14 +1212,15 @@ body[data-screen="map"] .hints .map-only { display: inline; }
 
     function fit() {
       const coarse = matchMedia('(pointer: coarse)').matches;
-      const s = Math.min((innerWidth - 32) / 240, (innerHeight - (coarse ? 210 : 150)) / 160);
+      const extra = mode === 'contact' ? 60 : 0; // room for the links row
+      const s = Math.min((innerWidth - 32) / 240, (innerHeight - (coarse ? 210 : 150) - extra) / 160);
       gb.style.setProperty('--s', s >= 2 ? Math.floor(s) : Math.max(1, s).toFixed(3));
     }
     addEventListener('resize', () => { if (active) fit(); });
 
     function stop() { active = false; cancelAnimationFrame(raf); held.length = 0; }
     async function run(m, h = {}) {
-      mode = m; hooks = h; active = true; locked = true; aura = 0; shake = 0; wipe = null; menuState = null; onA = null;
+      mode = m; hooks = h; active = true; $('#gbLinks').hidden = m !== 'contact'; locked = true; aura = 0; shake = 0; wipe = null; menuState = null; onA = null;
       menu.hidden = true; dlg.hidden = true;
       if (m === 'boot') { px = 4; py = 5; dir = 'down'; whiteIn = 0; }
       else { px = 8; py = 6; dir = 'down'; whiteIn = 1; }
