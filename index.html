@@ -1,3 +1,6 @@
+<!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Greed Island: Qasem Ali</title>
@@ -165,21 +168,9 @@ a { color: inherit; }
 .flash { position: absolute; inset: 0; z-index: 8; background: #fff; opacity: 0; pointer-events: none; }
 .flash.go { animation: flash 1.2s ease-out forwards; }
 @keyframes flash { 0% { opacity: 0; } 16% { opacity: 1; } 100% { opacity: 0; } }
-.welcome { position: absolute; z-index: 6; left: var(--gutter); right: var(--gutter); top: 16%; margin: 0; text-align: center; font-family: var(--f-title); font-weight: 800; font-size: clamp(42px, 7.4vw, 104px); line-height: 1; color: var(--ink);
-  text-shadow: 0 0 14px #f3f3f0, 0 0 30px #f3f3f0, 0 0 60px #f3f3f0; text-wrap: balance;
-  padding: 34px 0 40px; background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(243,243,240,.94) 45%, rgba(243,243,240,0) 100%); }
-.welcome span { display: block; font-family: var(--f-ui); font-weight: 700; font-size: clamp(13px, 1.9vw, 26px); letter-spacing: .5em; color: #2a2c30; margin-bottom: 14px; padding-left: .5em; }
-.welcome.in { animation: welcomeIn 1s cubic-bezier(.2,.9,.3,1) both; }
-@keyframes welcomeIn { from { opacity: 0; letter-spacing: .25em; filter: blur(10px); } to { opacity: 1; letter-spacing: normal; filter: none; } }
-.ring-scene { position: absolute; z-index: 6; left: var(--gutter); right: var(--gutter); top: calc(16% + clamp(120px, 15vw, 200px)); display: grid; justify-items: center; gap: 10px; text-align: center;
-  padding: 20px 0 26px; background: radial-gradient(ellipse 50% 55% at 50% 50%, rgba(243,243,240,.95) 50%, rgba(243,243,240,0) 100%); opacity: 0; transform: translateY(18px); transition: opacity .5s, transform .6s cubic-bezier(.2,.9,.3,1); }
-.ring-scene.in { opacity: 1; transform: none; }
-.gi-ring { width: min(200px, 46vw); height: auto; animation: ringSpin 2.6s linear infinite; filter: drop-shadow(0 10px 14px rgba(0,0,0,.25)); }
-@keyframes ringSpin { from { transform: perspective(700px) rotateY(0deg); } to { transform: perspective(700px) rotateY(360deg); } }
-.ring-cap { margin: 0; display: grid; gap: 2px; color: var(--ink); }
-.ring-cap span { font-family: var(--f-body); font-weight: 900; font-size: 15px; letter-spacing: .2em; color: #4a4d53; }
-.ring-cap b { font-family: var(--f-ui); font-weight: 700; font-size: clamp(22px, 2.6vw, 30px); letter-spacing: .06em; text-transform: uppercase; }
-.ring-cap small { font-family: var(--f-ui); font-weight: 600; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #5a5d64; }
+.gi-title { position: absolute; inset: 0; z-index: 6; display: grid; place-items: center; overflow: hidden; cursor: pointer; background: #0b0a1f; }
+.gi-title canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+.gi-title h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); margin: 0; }
 .skip-intro { position: absolute; z-index: 20; right: calc(var(--gutter) + 54px); top: calc(env(safe-area-inset-top, 0px) + 13px); height: 38px; font-family: var(--f-ui); font-weight: 700; letter-spacing: .14em; font-size: 12px; text-transform: uppercase;
   background: rgba(14,15,17,.72); color: #f3f3f0; border: 1px solid rgba(243,243,240,.35); padding: 0 14px; cursor: pointer; }
 .skip-intro:hover { border-color: var(--pink); }
@@ -452,6 +443,8 @@ body[data-screen="map"] .hints .map-only { display: inline; }
 /* ---------- contact ---------- */
 #s-contact { background: var(--room); }
 </style>
+</head>
+<body>
 
 <div id="app">
   <!-- ============ BOOT: entering Greed Island through the Joystation ============ -->
@@ -472,18 +465,9 @@ body[data-screen="map"] .hints .map-only { display: inline; }
         <p class="gb-links" id="gbLinks" hidden><span>Or reach Qasem directly</span><a href="mailto:qasemali200502@gmail.com">qasemali200502@gmail.com</a><a href="https://github.com/qalisem" target="_blank" rel="noopener">GitHub ↗</a><a href="https://linkedin.com/in/qasem-ali1" target="_blank" rel="noopener">LinkedIn ↗</a></p>
       </div>
     </div>
-    <h1 class="welcome" id="welcome" hidden><span>Welcome to</span>Greed Island</h1>
-    <div class="ring-scene" id="ringScene" hidden>
-      <svg class="gi-ring" viewBox="0 0 220 150" aria-hidden="true">
-        <defs><linearGradient id="ringMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f6f9"/><stop offset=".45" stop-color="#aeb5bf"/><stop offset=".7" stop-color="#e4e8ee"/><stop offset="1" stop-color="#7d848f"/></linearGradient></defs>
-        <ellipse cx="110" cy="84" rx="86" ry="46" fill="none" stroke="#2a2c30" stroke-width="26"/>
-        <ellipse cx="110" cy="84" rx="86" ry="46" fill="none" stroke="url(#ringMetal)" stroke-width="20"/>
-        <ellipse cx="110" cy="84" rx="86" ry="46" fill="none" stroke="#6b717b" stroke-width="2" stroke-dasharray="3 7"/>
-        <g transform="translate(110 38)"><rect x="-26" y="-22" width="52" height="30" rx="8" fill="#2a2c30"/><rect x="-22" y="-19" width="44" height="24" rx="6" fill="#aeb5bf"/>
-          <ellipse cx="-11" cy="-7" rx="8" ry="7" fill="#3fae49" stroke="#1b5e22" stroke-width="2"/><ellipse cx="11" cy="-7" rx="8" ry="7" fill="#3fae49" stroke="#1b5e22" stroke-width="2"/>
-          <ellipse cx="-13" cy="-9" rx="3" ry="2" fill="#bff5c4"/><ellipse cx="9" cy="-9" rx="3" ry="2" fill="#bff5c4"/></g>
-      </svg>
-      <p class="ring-cap"><span lang="ja">プレイヤー登録完了</span><b>Player: Qasem Ali</b><small>Registration complete · Ring received</small></p>
+    <div class="gi-title" id="giTitle" hidden>
+      <h1>Welcome to Greed Island</h1>
+      <canvas id="titleCanvas" width="240" height="160" role="img" aria-label="8-bit title screen: Welcome to Greed Island. Player 1, Qasem Ali. Press Enter or tap to start."></canvas>
     </div>
     <div class="flash" id="flash" aria-hidden="true"></div>
     <div class="power" id="power">
@@ -1393,20 +1377,184 @@ body[data-screen="map"] .hints .map-only { display: inline; }
     sfx.ok();
   });
 
+  /* ================= 8-bit title screen (after the Ren warp) ================= */
+  const title = (() => {
+    const el = $('#giTitle'), cv = $('#titleCanvas'), g = cv.getContext('2d');
+    const W = 240, H = 160, HORIZON = 112;         // content box; the canvas itself stretches to fill the screen
+    let VW = W, VH = H, ox = 0, oy = 0;
+    let raf = 0, t0 = 0, pressedAt = 0, done = null, chimed = false;
+    const seeded = (s => () => (s = (s * 16807) % 2147483647) / 2147483647)(7);
+
+    // ---- pixel text: Press Start 2P thresholded to hard pixels ----
+    const cache = {};
+    function mask(str, size) {
+      const key = str + '|' + size; if (cache[key]) return cache[key];
+      const m = document.createElement('canvas'), c = m.getContext('2d'); c.font = size + 'px "Press Start 2P"';
+      m.width = Math.ceil(c.measureText(str).width) || 1; m.height = size + 2;
+      c.font = size + 'px "Press Start 2P"'; c.textBaseline = 'top'; c.fillStyle = '#fff'; c.fillText(str, 0, 1);
+      const d = c.getImageData(0, 0, m.width, m.height); for (let i = 3; i < d.data.length; i += 4) d.data[i] = d.data[i] >= 110 ? 255 : 0;
+      c.putImageData(d, 0, 0); return cache[key] = m;
+    }
+    function tint(str, size, bands) {
+      const key = str + '|' + size + '|' + bands.join(); if (cache[key]) return cache[key];
+      const m = mask(str, size), c = document.createElement('canvas'); c.width = m.width; c.height = m.height;
+      const x = c.getContext('2d'); x.drawImage(m, 0, 0); x.globalCompositeOperation = 'source-atop';
+      for (let i = 0; i < bands.length; i += 2) { x.fillStyle = bands[i + 1]; x.fillRect(0, bands[i], c.width, c.height); }
+      return cache[key] = c;
+    }
+    function text(str, size, y, { fill = ['0', '#fff'], outline = '#0b0a1f', shadow = null, x = null } = {}) {
+      const w = mask(str, size).width, left = x === null ? Math.round((W - w) / 2) : x;
+      if (shadow) g.drawImage(tint(str, size, ['0', shadow]), left, y + 2);
+      if (outline) { const o = tint(str, size, ['0', outline]); for (const [dx, dy] of [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]]) g.drawImage(o, left + dx, y + dy); }
+      g.drawImage(tint(str, size, fill), left, y);
+    }
+
+    // ---- the Ring, rasterised from the same geometry as the reference (1px = 4.6 design units) ----
+    const ring = (() => {
+      const k = 4, RW = 64, RH = 60, a = 16 * Math.PI / 180, ca = Math.cos(a), sa = Math.sin(a);
+      const px = [], gem = [], aura1 = [], aura2 = [];
+      for (let j = 0; j < RH; j++) for (let i = 0; i < RW; i++) {
+        const sx = (i + .5) * k - 3, sy = (j + .5) * k - 2;                       // screen → ring-local (undo the -16° tilt)
+        const lx = 125 + (sx - 125) * ca - (sy - 120) * sa, ly = 120 + (sx - 125) * sa + (sy - 120) * ca;
+        const e = (cx, cy, rx, ry) => ((lx - cx) / rx) ** 2 + ((ly - cy) / ry) ** 2;
+        const inn = (cx, cy, rx, ry) => e(cx, cy, rx, ry) <= 1;
+        const shade = (lx + ly - 245) / 180;
+        let c = null;
+        const hole = inn(116, 110, 76, 48);
+        if (!hole) {
+          if (inn(125, 122, 109, 97)) c = '#ffffff';
+          if (inn(125, 122, 104, 92)) c = '#0b0d12';
+          if (inn(125, 122, 99, 87)) {
+            c = shade < -.35 ? '#f4f7fb' : shade < .35 ? '#d3dae3' : '#a3aebc';
+            const th = Math.atan2((ly - 122) / 81, (lx - 125) / 93);
+            if (!inn(125, 122, 88, 76) && inn(125, 122, 95, 83) && Math.floor((th / (2 * Math.PI) + 1) * 30) % 2) c = '#6b7686';
+          }
+          if (inn(130, 130, 85, 69)) c = '#0b0d12';
+          if (inn(130, 130, 80, 64)) {
+            c = shade < -.1 ? '#3f4b59' : shade < .45 ? '#6f8092' : '#a2b2c1';
+            const th = Math.atan2((ly - 127) / 58, (lx - 123) / 74), q = e(123, 127, 74, 58);
+            if (q > .93 && q < 1.03 && [0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1][Math.floor((th / (2 * Math.PI) + 1) * 56) % 14]) c = '#2c3542';
+          }
+        }
+        if (inn(116, 110, 80, 52) && !inn(116, 110, 74, 46)) c = '#0b0d12';
+        if (inn(125, 38, 49, 30) || inn(72, 52, 21, 26) || inn(178, 52, 21, 26)) c = '#0b0d12';
+        if (inn(125, 38, 43, 24) || inn(72, 52, 15, 20) || inn(178, 52, 15, 20)) c = inn(125, 30, 40, 16) ? '#5d6d87' : '#4a5870';
+        if (inn(125, 38, 36, 22) || inn(72, 53, 11, 15) || inn(178, 53, 11, 15)) c = '#0b0d12';
+        const gems = [[125, 38, 31, 17], [72, 53, 7, 11], [178, 53, 7, 11]];
+        for (const [gx, gy, rx, ry] of gems) if (inn(gx, gy, rx, ry)) {
+          const d = (lx - gx) / rx + (ly - gy) / ry;
+          c = d < -.75 ? '#b4fbd6' : d < .45 ? '#55e8a6' : '#0a8250';
+          if (inn(gx - rx * .4, gy - ry * .45, rx * .32, ry * .3)) c = '#f2fffb';
+          if (rx > 20) gem.push([i, j]);
+        }
+        if (c) px.push([i, j, c]);
+        else if (!hole && inn(125, 122, 115, 103)) aura1.push([i, j]);
+        else if (!hole && inn(125, 122, 121, 109)) aura2.push([i, j]);
+      }
+      const spr = document.createElement('canvas'); spr.width = RW; spr.height = RH; const s = spr.getContext('2d');
+      for (const [i, j, c] of px) { s.fillStyle = c; s.fillRect(i, j, 1, 1); }
+      const gx0 = Math.min(...gem.map(p => p[0])), gx1 = Math.max(...gem.map(p => p[0]));
+      return { spr, RW, RH, gem, gx0, gx1, aura1, aura2 };
+    })();
+
+    // ---- scenery ----
+    const stars = Array.from({ length: 90 }, () => [seeded(), seeded(), seeded() * 6.28, .8 + seeded() * 1.6]);
+    const shimmer = Array.from({ length: 60 }, () => [seeded(), 3 + Math.floor(seeded() * 15) * 3, 2 + Math.floor(seeded() * 7), 2 + seeded() * 5]);
+    const SKY = [[0, '#0b0a1f'], [34, '#120f30'], [62, '#1a1542'], [86, '#241c55'], [102, '#30246a']];
+    const SEA = [[HORIZON, '#22346e'], [HORIZON + 6, '#1a2a5e'], [HORIZON + 18, '#142150'], [HORIZON + 32, '#0e1840']];
+    const isle = x => 15 * Math.exp(-(((x - 124) / 17) ** 2)) + 9 * Math.exp(-(((x - 100) / 15) ** 2)) + 8 * Math.exp(-(((x - 150) / 14) ** 2)) + 4 * Math.exp(-(((x - 78) / 12) ** 2));
+    function bands(list, from, to) {
+      for (let b = 0; b < list.length; b++) {
+        const y = b ? list[b][0] + oy : from, y2 = b + 1 < list.length ? list[b + 1][0] + oy : to;
+        g.fillStyle = list[b][1]; g.fillRect(0, y, VW, y2 - y);
+        if (b > 0) { g.fillStyle = list[b - 1][1]; for (let x = 0; x < VW; x += 2) g.fillRect(x + (y % 2), y, 1, 1); }  // dithered seam
+      }
+    }
+    function scenery(t) {
+      const hz = HORIZON + oy;
+      bands(SKY, 0, hz);
+      for (const [fx, fy, ph, sp] of stars) { const v = Math.sin(t * sp + ph); if (v > -.2) { g.fillStyle = v > .75 ? '#ffffff' : '#8d96cf'; g.fillRect(Math.floor(fx * VW), Math.floor(fy * (hz - 6)), 1, 1); } }
+      bands(SEA, hz, VH);
+      for (let x = 0; x < W; x++) { const h = Math.round(isle(x)); if (h < 1) continue;
+        g.fillStyle = '#10302c'; g.fillRect(ox + x, hz - h, 1, h);
+        g.fillStyle = '#2f6b4a'; g.fillRect(ox + x, hz - h, 1, 1);
+        g.fillStyle = '#0d2324'; if (x % 2 === 0) g.fillRect(ox + x, hz + 1, 1, Math.min(4, Math.ceil(h / 4))); }   // reflection
+      for (const [fx, dy, len, sp] of shimmer) { const x = Math.round((fx * (VW + 20) + t * sp) % (VW + 20)) - 10; g.fillStyle = dy < 12 ? '#5a79c4' : '#34509a'; g.fillRect(x, hz + dy, len, 1); }
+    }
+
+    // ---- frame ----
+    const ease = p => 1 - (1 - Math.min(1, Math.max(0, p))) ** 3;
+    function frame(now) {
+      raf = requestAnimationFrame(frame);
+      const t = (now - t0) / 1000;
+      g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, VW, VH); scenery(t); g.translate(ox, oy);
+
+      // logo drops in, lands with a one-pixel bounce
+      const ly = t < .25 ? -30 : Math.round(-30 + 52 * ease((t - .25) / .45)) + (t > .7 && t < .78 ? 1 : 0);
+      if (t > .25) text('GREED ISLAND', 16, ly, { fill: ['0', '#fff1a8', '6', '#ffd23f', '11', '#ff9a3d'], outline: '#1a0f2e', shadow: '#6b2f8a' });
+      // "WELCOME TO" types in
+      if (t > .8) { const n = Math.min(10, Math.floor((t - .8) / .05)); if (n) text('WELCOME TO'.slice(0, n), 8, 9, { fill: ['0', '#c9d2ff'], outline: '#0b0a1f', x: Math.round((W - 80) / 2) }); }
+
+      // the Ring rises out of the glow, then bobs on a two-frame loop
+      if (t > 1.05) {
+        if (!chimed) { chimed = true; sfx.book(); }
+        const rise = Math.round(10 * (1 - ease((t - 1.05) / .5))), bob = Math.floor(t * 2) % 2;
+        const rx = Math.round((W - ring.RW) / 2), ry = 42 + rise - bob;
+        const bright = Math.floor(t * 4) % 2 === 0;
+        g.fillStyle = bright ? '#36fd45' : '#1fae2c'; for (const [i, j] of ring.aura1) g.fillRect(rx + i, ry + j, 1, 1);
+        if (bright) { g.fillStyle = '#157a22'; for (const [i, j] of ring.aura2) g.fillRect(rx + i, ry + j, 1, 1); }
+        g.drawImage(ring.spr, rx, ry);
+        const cyc = (t - 1.6) % 2.6;                                                  // shine sweeps across the big gem
+        if (t > 1.6 && cyc < .5) { const p = ring.gx0 - 4 + (ring.gx1 - ring.gx0 + 10) * cyc / .5; g.fillStyle = '#ffffff';
+          for (const [i, j] of ring.gem) { const d = i + j * .6 - p; if (d >= 0 && d < 2.2) g.fillRect(rx + i, ry + j, 1, 1); } }
+        if (t > 1.6 && (t % 1.3) < .35) { const sx = rx + ring.gx1 - 1, sy = ry + 3; g.fillStyle = '#ffffff';     // twinkle
+          g.fillRect(sx, sy - 2, 1, 5); g.fillRect(sx - 2, sy, 5, 1); }
+      }
+
+      // PRESS START: slow blink, fast strobe once pressed
+      if (t > 1.7) {
+        const on = pressedAt ? Math.floor((now - pressedAt) / 70) % 2 === 0 : (reduced || (t % 1.0) < .62);
+        if (on) text('PRESS START', 8, 124, { fill: ['0', '#ffffff', '6', '#c9d2ff'], outline: '#0b0a1f' });
+        text('PLAYER 1  QASEM ALI', 8, 146, { fill: ['0', '#8394cc'], outline: '#0e1840' });
+      }
+      if (pressedAt && now - pressedAt > 720 && done) { const d = done; done = null; d(); }
+    }
+    function fit() {                                            // whole-pixel scale when big enough, content box always fully visible
+      let s = Math.min(innerWidth / W, innerHeight / H); if (s >= 2) s = Math.floor(s);
+      VW = Math.ceil(innerWidth / s); VH = Math.ceil(innerHeight / s); ox = Math.floor((VW - W) / 2); oy = Math.floor((VH - H) / 2);
+      cv.width = VW; cv.height = VH; g.imageSmoothingEnabled = false;
+      cv.style.width = VW * s + 'px'; cv.style.height = VH * s + 'px';
+    }
+    addEventListener('resize', () => { if (!el.hidden) fit(); });
+    return {
+      async start(skipIntro) {
+        try { await document.fonts.load('16px "Press Start 2P"'); } catch (_) {}
+        el.hidden = false; fit(); g.imageSmoothingEnabled = false;
+        pressedAt = 0; chimed = !!skipIntro;
+        t0 = performance.now() - (skipIntro || reduced ? 1800 : 0);
+        cancelAnimationFrame(raf); raf = requestAnimationFrame(frame);
+      },
+      press() {                                                    // resolves once the strobe finishes
+        if (pressedAt) return Promise.resolve();
+        const t = (performance.now() - t0) / 1000; if (t < 1.8) t0 = performance.now() - 1800;
+        pressedAt = performance.now(); sfx.ok();
+        return new Promise(r => { done = r; });
+      },
+      stop() { cancelAnimationFrame(raf); el.hidden = true; },
+    };
+  })();
+
   /* ================= boot ================= */
   const markBooted = () => { try { sessionStorage.setItem('gi-booted', '1'); } catch (_) {} };
   async function arrive(fast) {
     world.stop(); $('#bootWorld').classList.add('gone'); $('#skipIntro').hidden = true;
-    mazes.boot.start(); if (!fast) mazes.boot.warp(14);
-    const w = $('#welcome'); w.hidden = false; w.classList.add('in');
     markBooted();
+    await title.start(fast);
     landing = true;
-    const skipped = new Promise(r => { landNow = r; });            // a click or Enter skips straight to the map
-    const beat = ms => Promise.race([wait(ms), skipped]);
-    await beat(fast ? 700 : 1500);
-    const ring = $('#ringScene'); ring.hidden = false; void ring.offsetWidth; ring.classList.add('in'); sfx.book();
-    await beat(fast ? 1400 : 2400);
-    landing = false; go('map');
+    await new Promise(r => { landNow = r; });                         // click, tap or Enter = PRESS START
+    landing = false;
+    await title.press();
+    await go('map'); title.stop();
   }
   let landing = false, landNow = () => {};
   $('#s-boot').addEventListener('click', e => { if (landing && !e.target.closest('#skipIntro, #musicBtn')) landNow(); });
@@ -1833,3 +1981,5 @@ body[data-screen="map"] .hints .map-only { display: inline; }
   boot();
 })();
 </script>
+</body>
+</html>
