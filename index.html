@@ -182,6 +182,8 @@ a { color: inherit; }
 .power .bar { width: min(280px, 60vw); height: 3px; background: #222; margin: 22px auto 0; overflow: hidden; }
 .power .bar i { display: block; height: 100%; width: 0; background: var(--pink); animation: load 1.3s .6s ease-in-out forwards; }
 @keyframes load { to { width: 100%; } }
+.gb-screen.iris { animation: iris .9s steps(9, end) both; }
+@keyframes iris { from { clip-path: circle(0% at 50% 58%); } to { clip-path: circle(75% at 50% 58%); } }
 
 .dialog {
   position: absolute; z-index: 10; left: 50%; transform: translateX(-50%);
@@ -470,7 +472,7 @@ body[data-screen="map"] .hints .map-only { display: inline; }
       <canvas id="titleCanvas" width="240" height="160" role="img" aria-label="8-bit title screen: Welcome to Greed Island. Player 1, Qasem Ali. Press Enter or tap to start."></canvas>
     </div>
     <div class="flash" id="flash" aria-hidden="true"></div>
-    <div class="power" id="power">
+    <div class="power" id="power" hidden>
       <div>
         <div class="joy">JOYSTATION</div>
         <div class="bar"><i></i></div>
@@ -1563,12 +1565,20 @@ body[data-screen="map"] .hints .map-only { display: inline; }
     const direct = location.hash.slice(1);
     const again = (() => { try { return sessionStorage.getItem('gi-booted') === '1'; } catch (_) { return false; } })();
     music.play('boot');
-    if (SCREENS[direct] && direct !== 'boot') { $('#power').classList.add('gone'); seen.add('map'); show(direct); if (direct !== 'map') seen.add(direct); return; }
-    if (again) { $('#power').classList.add('gone'); arrive(true); return; }  // returning visitors skip straight to the arrival room
-    await wait(2100);
-    $('#power').classList.add('gone');
+    if (SCREENS[direct] && direct !== 'boot') { seen.add('map'); show(direct); if (direct !== 'map') seen.add(direct); return; }
+    if (again) { arrive(true); return; }                               // returning visitors skip straight to the title screen
+    await Promise.race([document.fonts.load('8px "Press Start 2P"'), wait(900)]).catch(() => {});
     world.mount($('#bootWorld'));
-    world.run('boot', { onEnter: () => { $('#flash').classList.add('go'); arrive(false); } });
+    const scr = $('#bootWorld .gb-screen'); scr.classList.remove('iris'); void scr.offsetWidth; scr.classList.add('iris');   // 8-bit iris opens on the room
+    world.run('boot', { onEnter: joystation });
+  }
+  // after Ren: the console boots (JOYSTATION loading), then a white flash into the Greed Island title
+  async function joystation() {
+    const pw = $('#power'); pw.classList.remove('gone'); pw.hidden = false; $('#skipIntro').hidden = true; sfx.open();
+    await wait(2300);
+    $('#flash').classList.add('go'); pw.classList.add('gone');
+    arrive(false);
+    setTimeout(() => { pw.hidden = true; }, 700);
   }
 
   /* ================= dialog choices (boot + contact) ================= */
